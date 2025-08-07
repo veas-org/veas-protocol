@@ -1,234 +1,262 @@
 # Veas Protocol
 
-MCP (Model Context Protocol) implementation for AI tool integration.
+[![npm version](https://badge.fury.io/js/@veas%2Fprotocol.svg)](https://www.npmjs.com/package/@veas/protocol)
+[![npm downloads](https://img.shields.io/npm/dm/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Protocol Version](https://img.shields.io/badge/protocol-v1.0-blue)](SPECIFICATION.md)
 
-## Overview
+**Universal Protocol for Knowledge & Project Management Systems**
 
-Veas Protocol provides a complete implementation of the Model Context Protocol (MCP), enabling seamless integration between AI models and external tools. This package is designed to be framework-agnostic and can be used in various environments.
+A standardized, open-source protocol that enables seamless interoperability between knowledge bases, project management tools, and AI assistants. Build once, integrate everywhere.
 
-## Features
+## 🎯 Why This Protocol?
 
-- 🚀 **MCP Server** - Full-featured MCP server implementation with stdio transport
-- 🔌 **MCP Client** - Flexible client for connecting to MCP servers
-- 🛠️ **Standalone Tools** - Built-in tools for common operations
-- 🔐 **Authentication** - Support for multiple auth methods (PAT, Bearer tokens)
-- 💾 **Caching** - Built-in cache manager for improved performance
-- 🔄 **SSE Support** - Server-Sent Events for real-time communication
+The modern workspace is fragmented across dozens of tools - Notion for documentation, Jira for project management, Confluence for knowledge bases, GitHub for code, and countless others. Each tool has its own API, data format, and integration requirements. This creates:
 
-## Installation
+- **Integration Complexity**: Every tool needs custom integrations with every other tool
+- **Data Silos**: Information is locked within individual platforms
+- **AI Limitations**: AI assistants need separate implementations for each platform
+- **Vendor Lock-in**: Switching tools means losing integrations and automation
 
-```bash
-npm install @veas-org/veas-protocol
+**Veas Protocol** solves this by providing a universal language that any tool can speak, enabling:
+
+- ✅ **Write Once, Integrate Everywhere**: Implement the protocol once, work with any compatible tool
+- ✅ **AI-Native**: Built with AI assistants in mind, following the Model Context Protocol (MCP) standard
+- ✅ **Data Portability**: Move your data between platforms without losing functionality
+- ✅ **Future-Proof**: As new tools emerge, they can adopt the protocol and instantly work with existing integrations
+
+## 🏗️ Protocol Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Applications                          │
+│  (Notion, Obsidian, Jira, Linear, GitHub, Custom Tools)     │
+└─────────────┬───────────────────────────────┬───────────────┘
+              │                               │
+              ▼                               ▼
+┌─────────────────────────┐     ┌─────────────────────────────┐
+│   Protocol Providers    │     │      Protocol Consumers      │
+│  (Implement Protocol)   │◄────┤   (Use Protocol via SDK)     │
+└─────────────────────────┘     └─────────────────────────────┘
+              │                               │
+              ▼                               ▼
+┌───────────────────────────────────────────────────────────┐
+│                      Veas Protocol                         │
+├─────────────────────────────────────────────────────────────┤
+│  📚 Knowledge Base  │  📋 Project Management  │  🔜 More   │
+│  • Articles         │  • Projects             │  • CRM      │
+│  • Folders          │  • Issues               │  • Calendar │
+│  • Tags             │  • Sprints              │  • Chat     │
+│  • Search           │  • Teams                │  • Files    │
+└───────────────────────────────────────────────────────────┘
 ```
 
-## Quick Start
+## 📦 Protocol Domains
 
-### Setting up an MCP Server
+### Knowledge Base Protocol
+Standardized operations for content management systems:
+- **Articles**: Create, read, update, delete, publish
+- **Folders**: Hierarchical organization
+- **Tags**: Flexible categorization
+- **Search**: Full-text and metadata search
+- **Versioning**: Track changes over time
+
+### Project Management Protocol
+Unified interface for project tracking systems:
+- **Projects**: Multi-tenant project spaces
+- **Issues**: Tasks, bugs, features with full lifecycle
+- **Sprints**: Time-boxed iterations
+- **Teams**: User and permission management
+- **Workflows**: Customizable state machines
+
+### Coming Soon
+- **CRM Protocol**: Customer relationship management
+- **Calendar Protocol**: Event and scheduling systems
+- **Communication Protocol**: Chat and messaging platforms
+- **File Storage Protocol**: Document and asset management
+
+## 🚀 Quick Start
+
+### For Implementers (Building a Compatible Tool)
 
 ```typescript
-import { MCPServer } from '@veas-org/veas-protocol/server';
+import { ProtocolProvider, KnowledgeBaseProtocol } from '@veas/protocol';
 
-const server = new MCPServer({
-  port: 3000,
-  cacheOptions: {
-    enabled: true,
-    ttl: 300 // 5 minutes
+class MyKnowledgeBase implements KnowledgeBaseProtocol {
+  async listArticles(params) {
+    // Your implementation
+    return { items: [...], total: 100 };
   }
+  
+  async createArticle(data) {
+    // Your implementation
+    return { id: '...', ...data };
+  }
+  
+  // Implement other protocol methods...
+}
+
+// Register your implementation
+const provider: ProtocolProvider = {
+  name: 'my-knowledge-base',
+  version: '1.0.0',
+  knowledgeBase: new MyKnowledgeBase(),
+  authenticate: async (credentials) => { /* ... */ },
+  isConnected: () => true,
+  disconnect: async () => { /* ... */ }
+};
+```
+
+### For Consumers (Using Protocol-Compatible Tools)
+
+```typescript
+import { ProtocolProvider } from '@veas/protocol';
+
+// Connect to any protocol-compatible tool
+const provider = await connectToProvider('notion'); // or 'obsidian', 'confluence', etc.
+
+// Use the same API regardless of the underlying tool
+const articles = await provider.knowledgeBase.listArticles({
+  limit: 10,
+  filters: { status: 'published' }
 });
 
-await server.start();
+// AI assistants can use the protocol via MCP
+const mcpAdapter = new MCPAdapter(provider);
+await mcpAdapter.serve(); // Now accessible to Claude, GPT, etc.
 ```
 
-### Using the MCP Client
+## 📋 Implementation Status
+
+| Platform | Knowledge Base | Project Management | Status |
+|----------|:--------------:|:------------------:|:------:|
+| Veas Cloud | ✅ | ✅ | Production |
+| Notion | 🚧 | 🚧 | In Progress |
+| Obsidian | 📋 | - | Planned |
+| Confluence | 📋 | - | Planned |
+| Jira | - | 📋 | Planned |
+| Linear | - | 📋 | Planned |
+| GitHub | 📋 | ✅ | Partial |
+
+Legend: ✅ Complete | 🚧 In Progress | 📋 Planned | - Not Applicable
+
+## 🔧 For AI/MCP Integration
+
+The protocol is designed to work seamlessly with AI assistants through the Model Context Protocol (MCP):
 
 ```typescript
-import { MCPClient } from '@veas-org/veas-protocol/client';
+import { MCPAdapter } from '@veas/protocol/adapters/mcp';
 
-const client = new MCPClient('http://localhost:3000', 'your-auth-token');
+// Expose any protocol provider as an MCP server
+const adapter = new MCPAdapter(provider);
 
-// List available tools
-const tools = await client.listTools();
-
-// Call a tool
-const result = await client.call('tool-name', {
-  param1: 'value1',
-  param2: 'value2'
-});
+// AI assistants can now:
+// - Browse and search knowledge bases
+// - Create and manage projects
+// - Update issues and track progress
+// - Access any protocol-compatible tool
 ```
 
-### Direct Server Mode
+## 📚 Documentation
 
-For scenarios where you need direct tool execution:
+- **[Protocol Specification](SPECIFICATION.md)** - Formal protocol definition
+- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Step-by-step implementation instructions  
+- **[API Reference](https://docs.veas.org/protocol/api)** - Complete API documentation
+- **[Examples](EXAMPLES.md)** - Real-world implementation examples
+- **[Migration Guide](MIGRATION.md)** - Migrate from proprietary APIs
 
-```typescript
-import { DirectMCPServer } from '@veas-org/veas-protocol/server';
+## 🤝 Community & Governance
 
-const directServer = new DirectMCPServer();
-await directServer.initialize();
-await directServer.start();
-```
+Veas Protocol is an open standard developed by the community:
 
-## Architecture
+- **Protocol Evolution**: Changes are proposed through VIPs (Veas Improvement Proposals)
+- **Compatibility**: Semantic versioning ensures backward compatibility
+- **Certification**: Tools can be certified as protocol-compliant
+- **Working Groups**: Domain-specific groups drive protocol development
 
-```
-@veas-org/veas-protocol
-├── server/          # MCP server implementations
-├── client/          # MCP client implementations
-├── tools/           # Tool definitions and registry
-├── auth/            # Authentication helpers
-├── cache/           # Cache management
-├── types/           # TypeScript type definitions
-└── utils/           # Utility functions
-```
+### Contributing
 
-## Authentication
+We welcome contributions from everyone! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- How to propose protocol changes
+- Implementation guidelines
+- Testing requirements
+- Code of conduct
 
-The protocol supports multiple authentication methods:
-
-1. **Personal Access Tokens (PAT)**
-   ```typescript
-   const client = new MCPClient(url, patToken);
-   ```
-
-2. **Bearer Tokens**
-   ```typescript
-   const client = new MCPClient(url, bearerToken);
-   ```
-
-3. **Environment Variables**
-   - `VEAS_PAT` - Personal Access Token
-   - `VEAS_API_URL` - API endpoint URL
-
-## Tools
-
-### Built-in Tools
-
-The protocol includes several built-in tools:
-
-- `cache-get` - Retrieve cached values
-- `cache-set` - Store values in cache
-- `cache-clear` - Clear cache entries
-- `system-info` - Get system information
-
-### Custom Tools
-
-You can register custom tools:
-
-```typescript
-import { registerTool } from '@veas-org/veas-protocol/tools';
-
-registerTool({
-  name: 'my-custom-tool',
-  description: 'Description of your tool',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      param1: { type: 'string' }
-    }
-  },
-  handler: async (params) => {
-    // Tool implementation
-    return { result: 'success' };
-  }
-});
-```
-
-## Configuration
-
-### Server Configuration
-
-```typescript
-interface MCPServerOptions {
-  port?: number;
-  cacheOptions?: {
-    enabled?: boolean;
-    ttl?: number; // Time to live in seconds
-  };
-}
-```
-
-### Client Configuration
-
-```typescript
-interface MCPClientOptions {
-  timeout?: number; // Request timeout in milliseconds
-  retries?: number; // Number of retry attempts
-}
-```
-
-## Development
-
-### Building
+## 🛠️ Installation
 
 ```bash
-npm run build
+# NPM
+npm install @veas/protocol
+
+# Yarn
+yarn add @veas/protocol
+
+# PNPM
+pnpm add @veas/protocol
 ```
 
-### Testing
+## 📦 What's Included
 
-```bash
-npm test
+```
+@veas/protocol
+├── /protocols      # Protocol definitions and interfaces
+│   ├── /knowledge-base    # Knowledge management protocol
+│   ├── /project-management # Project tracking protocol
+│   └── /common            # Shared types and utilities
+├── /adapters       # Protocol adapters
+│   └── /mcp              # Model Context Protocol adapter
+├── /providers      # Reference implementations
+│   └── /veas             # Veas cloud provider
+└── /sdk           # Helper libraries for implementers
 ```
 
-### Type Checking
+## 🌟 Use Cases
 
-```bash
-npm run typecheck
-```
+### For Organizations
+- **Tool Migration**: Switch between platforms without losing integrations
+- **Multi-Tool Workflows**: Seamlessly work across different tools
+- **Custom Integrations**: Build once, work with all protocol-compatible tools
 
-## API Reference
+### For Tool Developers
+- **Instant Ecosystem**: Immediately compatible with all protocol tools
+- **Reduced Development**: No need to build individual integrations
+- **AI-Ready**: Automatic compatibility with AI assistants
 
-### MCPServer
+### For AI/Automation
+- **Universal Access**: One protocol to access all tools
+- **Consistent Interface**: Same operations across different platforms
+- **Rich Capabilities**: Full CRUD operations, search, and more
 
-Main server class for handling MCP requests.
+## 🎯 Roadmap
 
-```typescript
-class MCPServer {
-  constructor(options?: MCPServerOptions)
-  start(): Promise<void>
-  stop(): Promise<void>
-}
-```
+### Phase 1: Foundation (Current)
+- ✅ Knowledge Base Protocol v1.0
+- ✅ Project Management Protocol v1.0
+- ✅ MCP Adapter
+- ✅ Reference Implementation (Veas)
 
-### MCPClient
+### Phase 2: Ecosystem (Q1 2025)
+- 🚧 Notion Provider
+- 📋 Obsidian Provider
+- 📋 Confluence Provider
+- 📋 Protocol Certification Program
 
-Client for interacting with MCP servers.
+### Phase 3: Expansion (Q2 2025)
+- 📋 CRM Protocol
+- 📋 Calendar Protocol
+- 📋 File Storage Protocol
+- 📋 Communication Protocol
 
-```typescript
-class MCPClient {
-  constructor(baseUrl: string, token: string)
-  call(method: string, params?: any): Promise<any>
-  listTools(): Promise<Tool[]>
-}
-```
+## 📄 License
 
-## Error Handling
+MIT © Veas Protocol Contributors
 
-The protocol uses typed errors for better error handling:
+---
 
-```typescript
-try {
-  const result = await client.call('tool-name', params);
-} catch (error) {
-  if (error.code === 'TOOL_NOT_FOUND') {
-    // Handle tool not found
-  } else if (error.code === 'AUTH_FAILED') {
-    // Handle authentication failure
-  }
-}
-```
+<div align="center">
 
-## Contributing
+**[Documentation](https://docs.veas.org/protocol)** • **[API Reference](https://docs.veas.org/protocol/api)** • **[Discord Community](https://discord.gg/veas)** • **[GitHub](https://github.com/veas-org/veas-protocol)**
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+Built with ❤️ by the open-source community
 
-## License
-
-MIT © Veas Team
-
-## Support
-
-- 📧 Email: support@veas.org
-- 💬 Discord: [Join our community](https://discord.gg/veas)
-- 📚 Documentation: [docs.veas.org](https://docs.veas.org)
-- 🐛 Issues: [GitHub Issues](https://github.com/veas-org/veas-protocol/issues)
+</div>
