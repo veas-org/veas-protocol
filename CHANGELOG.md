@@ -1,3 +1,10 @@
+## [0.1.7] - 2025-08-07
+
+### Changes
+
+- fix: Tests
+- Merge branch 'main' of github.com:veas-org/veas-protocol
+
 ## [0.1.6] - 2025-08-07
 
 ### Changes
