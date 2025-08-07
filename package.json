@@ -1,0 +1,85 @@
+{
+  "name": "@veas-org/veas-protocol",
+  "version": "0.1.0",
+  "description": "Veas Protocol - MCP (Model Context Protocol) implementation for AI tool integration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/veas-org/veas-protocol.git"
+  },
+  "bugs": {
+    "url": "https://github.com/veas-org/veas-protocol/issues"
+  },
+  "homepage": "https://github.com/veas-org/veas-protocol#readme",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.1",
+    "axios": "^1.7.2",
+    "node-cache": "^5.1.2",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.17.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/ui": "^2.1.9",
+    "eslint": "^9.18.0",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.9"
+  },
+  "peerDependencies": {
+    "@clack/prompts": "^0.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@clack/prompts": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "veas",
+    "protocol",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "claude",
+    "llm",
+    "tools",
+    "integration"
+  ],
+  "license": "MIT",
+  "author": "Veas Team"
+}
