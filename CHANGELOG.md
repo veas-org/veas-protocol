@@ -1,3 +1,11 @@
+## [0.1.5] - 2025-08-07
+
+### Changes
+
+- fix: Update docs
+- Merge branch 'main' of github.com:veas-org/veas-protocol
+- fix: Update docs
+
 ## [0.1.4] - 2025-08-07
 
 ### Changes
