@@ -1,24 +1,18 @@
-// Server exports
-export { MCPServer, type MCPServerOptions } from './server/index.js';
-export { DirectMCPServer, type DirectMCPServerOptions } from './server/direct.js';
+/**
+ * Veas Protocol - Formal interfaces for provider-agnostic MCP servers
+ * 
+ * @packageDocumentation
+ */
 
-// Client exports
-export { MCPClient } from './client/index.js';
-export { LocalMCPClient } from './client/mcp-client.js';
-export * from './client/sse.js';
+// Export all protocol interfaces and types
+export * from './protocols'
 
-// Tools exports
-export * from './tools/standalone.js';
-export * from './tools/registry.js';
+// Export adapters
+export * from './adapters/mcp'
 
-// Auth exports
-export * from './auth/wrapper.js';
+// Export providers
+export * from './providers/veas'
 
-// Type exports
-export * from './types/index.js';
-
-// Cache exports
-export { CacheManager } from './cache/cache-manager.js';
-
-// Utility exports
-export { logger, LogLevel } from './utils/logger.js';
+// Convenience exports
+export { VeasProtocolProvider } from './providers/veas'
+export { MCPAdapter } from './adapters/mcp'
