@@ -31,17 +31,17 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.12.1
           run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Get pnpm store directory
         shell: bash
@@ -58,17 +58,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Try frozen lockfile first, fall back to regular install if it fails
-          if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile || {
-              echo "Frozen lockfile install failed, regenerating lockfile..."
-              rm pnpm-lock.yaml
-              pnpm install
-            }
-          else
-            echo "No lockfile found, generating new one..."
-            pnpm install
-          fi
+          # Always regenerate lockfile in CI to avoid version mismatch issues
+          echo "Installing dependencies with pnpm..."
+          pnpm install --no-frozen-lockfile
 
       - name: Run tests
         run: pnpm test
