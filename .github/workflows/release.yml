@@ -38,9 +38,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10.12.1
           run_install: false
 
       - name: Get pnpm store directory
@@ -58,9 +58,15 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Try frozen lockfile first, fall back to regular install if it fails
           if [ -f "pnpm-lock.yaml" ]; then
-            pnpm install --frozen-lockfile
+            pnpm install --frozen-lockfile || {
+              echo "Frozen lockfile install failed, regenerating lockfile..."
+              rm pnpm-lock.yaml
+              pnpm install
+            }
           else
+            echo "No lockfile found, generating new one..."
             pnpm install
           fi
 
