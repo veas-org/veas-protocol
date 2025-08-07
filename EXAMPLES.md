@@ -4,12 +4,91 @@ This document provides practical examples of implementing the Veas Protocol for 
 
 ## Table of Contents
 
-1. [Notion Provider](#notion-provider)
-2. [GitHub Provider](#github-provider)
-3. [Local Markdown Files Provider](#local-markdown-files-provider)
-4. [Multi-Provider Aggregator](#multi-provider-aggregator)
-5. [AI Assistant Integration](#ai-assistant-integration)
-6. [Custom Business Application](#custom-business-application)
+1. [Quick MCP Server Setup](#quick-mcp-server-setup)
+2. [Notion Provider](#notion-provider)
+3. [GitHub Provider](#github-provider)
+4. [Local Markdown Files Provider](#local-markdown-files-provider)
+5. [Multi-Provider Aggregator](#multi-provider-aggregator)
+6. [AI Assistant Integration](#ai-assistant-integration)
+7. [Custom Business Application](#custom-business-application)
+
+## Quick MCP Server Setup
+
+The fastest way to create an MCP server for Claude Desktop:
+
+```typescript
+#!/usr/bin/env node
+// mcp-server.js
+
+import { MCPAdapter } from '@veas/protocol/adapters/mcp';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+// Create a minimal protocol provider
+const provider = {
+  name: 'my-tools',
+  version: '1.0.0',
+  
+  async authenticate() {
+    return { userId: 'user', permissions: ['all'] };
+  },
+  
+  isConnected() { return true; },
+  async disconnect() {},
+  
+  // Implement knowledge base protocol
+  knowledgeBase: {
+    async listArticles(params) {
+      // Your implementation here
+      return {
+        items: [
+          {
+            id: '1',
+            title: 'Sample Article',
+            content: 'This is a sample article',
+            status: 'published',
+            slug: 'sample-article',
+            authorId: 'user',
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        ],
+        total: 1,
+        limit: params.limit || 20,
+        offset: params.offset || 0
+      };
+    },
+    
+    async searchArticles(query) {
+      // Implement search
+      return { items: [], total: 0, limit: 20, offset: 0 };
+    },
+    
+    // ... implement other required methods
+  }
+};
+
+// Create and start MCP server
+async function main() {
+  const adapter = new MCPAdapter(provider);
+  const transport = new StdioServerTransport();
+  await adapter.connect(transport);
+  console.error('MCP Server running');
+}
+
+main().catch(console.error);
+```
+
+Add to Claude Desktop config:
+```json
+{
+  "mcpServers": {
+    "my-tools": {
+      "command": "node",
+      "args": ["/path/to/mcp-server.js"]
+    }
+  }
+}
+```
 
 ## Notion Provider
 

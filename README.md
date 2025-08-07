@@ -28,27 +28,35 @@ The modern workspace is fragmented across dozens of tools - Notion for documenta
 ## 🏗️ Protocol Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        Applications                          │
-│  (Notion, Obsidian, Jira, Linear, GitHub, Custom Tools)     │
-└─────────────┬───────────────────────────────┬───────────────┘
-              │                               │
-              ▼                               ▼
-┌─────────────────────────┐     ┌─────────────────────────────┐
-│   Protocol Providers    │     │      Protocol Consumers      │
-│  (Implement Protocol)   │◄────┤   (Use Protocol via SDK)     │
-└─────────────────────────┘     └─────────────────────────────┘
-              │                               │
-              ▼                               ▼
-┌───────────────────────────────────────────────────────────┐
-│                      Veas Protocol                         │
-├─────────────────────────────────────────────────────────────┤
-│  📚 Knowledge Base  │  📋 Project Management  │  🔜 More   │
-│  • Articles         │  • Projects             │  • CRM      │
-│  • Folders          │  • Issues               │  • Calendar │
-│  • Tags             │  • Sprints              │  • Chat     │
-│  • Search           │  • Teams                │  • Files    │
-└───────────────────────────────────────────────────────────┘
+                        AI Assistants
+                    (Claude, GPT, Copilot)
+                             │
+                             ▼
+                    ┌─────────────────┐
+                    │   MCP Adapter   │
+                    └────────┬────────┘
+                             │
+┌────────────────────────────┼────────────────────────────┐
+│                     Veas Protocol                        │
+├───────────────────────────────────────────────────────────┤
+│  📚 Knowledge Base  │  📋 Project Management  │  🔜 More  │
+│  • Articles         │  • Projects             │  • CRM     │
+│  • Folders          │  • Issues               │  • Calendar│
+│  • Tags             │  • Sprints              │  • Chat    │
+│  • Search           │  • Teams                │  • Files   │
+└────────────┬───────────────┴───────────────┬────────────┘
+             │                                │
+             ▼                                ▼
+┌─────────────────────────┐     ┌─────────────────────────┐
+│   Protocol Providers    │     │   Protocol Consumers     │
+│  (Implement Protocol)   │     │  (Use Protocol via SDK)  │
+└─────────────────────────┘     └─────────────────────────┘
+             │                                │
+    ┌────────┼────────┬──────────┬──────────┼────────┐
+    ▼        ▼        ▼          ▼          ▼        ▼
+┌────────┐┌──────┐┌──────┐  ┌────────┐┌────────┐┌──────┐
+│ Notion ││GitHub││ Jira │  │Your App││ CLI    ││  API │
+└────────┘└──────┘└──────┘  └────────┘└────────┘└──────┘
 ```
 
 ## 📦 Protocol Domains
@@ -120,10 +128,44 @@ const articles = await provider.knowledgeBase.listArticles({
   limit: 10,
   filters: { status: 'published' }
 });
+```
 
-// AI assistants can use the protocol via MCP
-const mcpAdapter = new MCPAdapter(provider);
-await mcpAdapter.serve(); // Now accessible to Claude, GPT, etc.
+### For AI Assistants (MCP Server)
+
+```typescript
+import { MCPAdapter } from '@veas/protocol/adapters/mcp';
+import { YourProvider } from './your-provider';
+
+// Create your protocol provider
+const provider = new YourProvider();
+await provider.authenticate({ /* credentials */ });
+
+// Create MCP adapter
+const adapter = new MCPAdapter(provider, {
+  name: 'your-knowledge-base',
+  description: 'Access your knowledge base via MCP'
+});
+
+// Start for Claude Desktop (stdio transport)
+await adapter.serve({ transport: 'stdio' });
+
+// Or start as HTTP server for web-based assistants
+await adapter.serve({ 
+  transport: 'http',
+  port: 3000 
+});
+```
+
+Configure in Claude Desktop (`claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "your-kb": {
+      "command": "node",
+      "args": ["/path/to/mcp-server.js"]
+    }
+  }
+}
 ```
 
 ## 📋 Implementation Status
@@ -150,6 +192,9 @@ import { MCPAdapter } from '@veas/protocol/adapters/mcp';
 // Expose any protocol provider as an MCP server
 const adapter = new MCPAdapter(provider);
 
+// Start MCP server for Claude Desktop
+await adapter.serve({ transport: 'stdio' });
+
 // AI assistants can now:
 // - Browse and search knowledge bases
 // - Create and manage projects
@@ -157,10 +202,18 @@ const adapter = new MCPAdapter(provider);
 // - Access any protocol-compatible tool
 ```
 
+**📘 See the complete [MCP Integration Guide](MCP_INTEGRATION.md) for:**
+- Setting up MCP servers with different transports (stdio, WebSocket, SSE)
+- Configuring Claude Desktop and other AI assistants
+- Advanced patterns like multi-provider aggregation
+- Authentication and security best practices
+- Troubleshooting and performance optimization
+
 ## 📚 Documentation
 
 - **[Protocol Specification](SPECIFICATION.md)** - Formal protocol definition
-- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Step-by-step implementation instructions  
+- **[Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Step-by-step implementation instructions
+- **[MCP Integration Guide](MCP_INTEGRATION.md)** - Complete guide for AI assistant integration
 - **[API Reference](https://docs.veas.org/protocol/api)** - Complete API documentation
 - **[Examples](EXAMPLES.md)** - Real-world implementation examples
 - **[Migration Guide](MIGRATION.md)** - Migrate from proprietary APIs
