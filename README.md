@@ -1,6 +1,6 @@
 # Veas Protocol
 
-[![npm version](https://badge.fury.io/js/@veas%2Fprotocol.svg)](https://www.npmjs.com/package/@veas/protocol)
+[![npm version](https://img.shields.io/npm/v/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![npm downloads](https://img.shields.io/npm/dm/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Protocol Version](https://img.shields.io/badge/protocol-v1.0-blue)](SPECIFICATION.md)
