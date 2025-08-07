@@ -25,11 +25,11 @@ export class LocalMCPClient {
     
     if (this.authProvider) {
       const session = await this.authProvider.getSession();
-      token = (session as any)?.patToken || session?.token;
+      token = (session as any)?.patToken || session?.token || null;
     }
     
     // Fallback to environment variable
-    token = token || process.env.VEAS_PAT;
+    token = token || process.env.VEAS_PAT || null;
     
     if (!token) {
       throw new Error('Authentication token not found. Please provide auth or set VEAS_PAT.');
@@ -103,7 +103,7 @@ export class LocalMCPClient {
       token = (session as any)?.patToken || session?.token;
     }
     
-    token = token || process.env.VEAS_PAT;
+    token = token || process.env.VEAS_PAT || null;
     
     if (!token) {
       throw new Error('Authentication token not found.');
@@ -137,16 +137,16 @@ export class LocalMCPClient {
 
       const result = await response.json();
       
-      if (result.error) {
+      if ((result as any).error) {
         return {
           success: false,
-          error: result.error.message || 'Unknown error',
+          error: (result as any).error.message || 'Unknown error',
         };
       }
 
       return {
         success: true,
-        data: result.result,
+        data: (result as any).result,
       };
     } catch (error) {
       return {
@@ -159,6 +159,6 @@ export class LocalMCPClient {
 
 // Export convenience function
 export async function callMCPTool(toolName: string, params: any): Promise<MCPResult> {
-  const client = MCPClient.getInstance();
+  const client = new LocalMCPClient();
   return client.callTool(toolName, params);
 }

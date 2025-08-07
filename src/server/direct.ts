@@ -88,15 +88,15 @@ export class DirectMCPServer {
 
       const result = await response.json();
       
-      if (result.error) {
-        throw new Error(`MCP error: ${result.error.message}`);
+      if ((result as any).error) {
+        throw new Error(`MCP error: ${(result as any).error.message}`);
       }
       
-      if (!result.result?.tools) {
+      if (!(result as any).result?.tools) {
         throw new Error('No tools in response');
       }
 
-      const mcpTools = result.result.tools;
+      const mcpTools = (result as any).result.tools;
       logger.debug(`Received ${mcpTools.length} tools via direct MCP connection`);
       
       for (const tool of mcpTools) {

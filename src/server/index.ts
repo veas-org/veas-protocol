@@ -98,8 +98,8 @@ export class MCPServer {
         
         if (response.ok) {
           const result = await response.json();
-          if (result.result?.tools) {
-            mcpTools = result.result.tools;
+          if ((result as any).result?.tools) {
+            mcpTools = (result as any).result.tools;
             logger.debug(`Received ${mcpTools.length} tools via simple MCP endpoint`);
             useStandalone = false;
           } else {
@@ -147,11 +147,6 @@ export class MCPServer {
       }
 
       try {
-        const token = process.env.VEAS_PAT || await this.authManager.getToken();
-        if (!token && !process.env.VEAS_PAT) {
-          await this.authManager.refreshToken();
-        }
-
         const result = await this.executeTool(name, args);
         
         await this.cache.set(name, args, result);
@@ -162,13 +157,9 @@ export class MCPServer {
       } catch (error) {
         logger.error(`Error executing tool ${name}:`, error);
         
-        if ((error as any).message?.includes('authentication') && !process.env.VEAS_PAT) {
-          await this.authManager.refreshToken();
-          const result = await this.executeTool(name, args);
-          await this.cache.set(name, args, result);
-          return {
-            content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
-          };
+        // If authentication fails, throw error for the application to handle
+        if ((error as any).message?.includes('authentication')) {
+          throw new Error('Authentication failed. Please check your credentials.');
         }
 
         throw error;
@@ -201,6 +192,8 @@ export class MCPServer {
       logger.debug('Executing tool via mcp-simple endpoint...');
       
       const apiUrl = process.env.VEAS_API_URL || 'https://veas.app';
+      const authToken = await getBestAuthToken(this.authProvider);
+      const token = authToken.token;
       
       const response = await fetch(`${apiUrl}/api/mcp-simple`, {
         method: 'POST',
@@ -227,13 +220,13 @@ export class MCPServer {
 
       const result = await response.json();
       
-      if (result?.error) {
-        logger.debug(`Tool error: ${JSON.stringify(result.error)}`);
-        throw new Error(result.error.message);
+      if ((result as any)?.error) {
+        logger.debug(`Tool error: ${JSON.stringify((result as any).error)}`);
+        throw new Error((result as any).error.message);
       }
 
       logger.debug(`Tool executed successfully via mcp-simple`);
-      return result?.result;
+      return (result as any)?.result;
     } catch (error: any) {
       logger.error(`MCP simple execution failed: ${error.message}`);
       throw error;

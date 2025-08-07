@@ -1,5 +1,6 @@
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { prepareMCPHeaders, type AuthToken, getBestAuthToken } from './auth-wrapper.js';
+import { prepareMCPHeaders, getBestAuthToken } from '../auth/wrapper.js';
+import type { AuthToken } from '../auth/types.js';
 
 export async function getMCPTools(tokenOrAuthToken?: string | AuthToken): Promise<Tool[]> {
   const apiUrl = process.env.VEAS_API_URL || 'https://veas.app';
@@ -10,7 +11,7 @@ export async function getMCPTools(tokenOrAuthToken?: string | AuthToken): Promis
     // Legacy support - convert string token to AuthToken
     authToken = {
       token: tokenOrAuthToken,
-      type: tokenOrAuthToken.includes('_') ? 'pat' : 'cli'
+      type: tokenOrAuthToken.includes('_') ? 'pat' : 'bearer'
     };
   } else if (tokenOrAuthToken) {
     authToken = tokenOrAuthToken;

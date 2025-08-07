@@ -45,16 +45,8 @@ export async function getBestAuthToken(authProvider?: AuthProvider): Promise<Aut
     }
   }
   
-  // Fall back to CLI token
-  const cliToken = await authManager.getToken();
-  
-  if (cliToken) {
-    logger.debug('Using CLI token from device authentication');
-    return {
-      token: cliToken,
-      type: 'bearer'
-    };
-  }
+  // If no token is found, we'll throw an error
+  // The authManager should be provided by the consuming application
 
   throw new Error('No authentication token available. Please run "veas login" or set VEAS_PAT environment variable.');
 }

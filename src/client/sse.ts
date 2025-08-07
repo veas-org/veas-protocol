@@ -1,5 +1,6 @@
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { prepareMCPHeaders, type AuthToken, getBestAuthToken } from './auth-wrapper.js';
+import { prepareMCPHeaders, getBestAuthToken } from '../auth/wrapper.js';
+import type { AuthToken } from '../auth/types.js';
 
 /**
  * Get MCP tools using SSE transport
@@ -14,7 +15,7 @@ export async function getMCPToolsViaSSE(tokenOrAuthToken?: string | AuthToken): 
     // Legacy support - convert string token to AuthToken
     authToken = {
       token: tokenOrAuthToken,
-      type: tokenOrAuthToken.includes('_') ? 'pat' : 'cli'
+      type: tokenOrAuthToken.includes('_') ? 'pat' : 'bearer'
     };
   } else if (tokenOrAuthToken) {
     authToken = tokenOrAuthToken;
@@ -101,7 +102,7 @@ export async function executeMCPToolViaSSE(
     // Legacy support - convert string token to AuthToken
     authToken = {
       token: tokenOrAuthToken,
-      type: tokenOrAuthToken.includes('_') ? 'pat' : 'cli'
+      type: tokenOrAuthToken.includes('_') ? 'pat' : 'bearer'
     };
   } else if (tokenOrAuthToken) {
     authToken = tokenOrAuthToken;

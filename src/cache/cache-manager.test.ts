@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { CacheManager } from './cache-manager';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { CacheManager } from './cache-manager.js';
 
 describe('CacheManager', () => {
   let cacheManager: CacheManager;

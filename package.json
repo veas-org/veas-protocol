@@ -1,5 +1,5 @@
 {
-  "name": "@veas-org/veas-protocol",
+  "name": "@veas/protocol",
   "version": "0.1.0",
   "description": "Veas Protocol - MCP (Model Context Protocol) implementation for AI tool integration",
   "type": "module",
