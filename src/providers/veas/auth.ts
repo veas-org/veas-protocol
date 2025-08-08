@@ -2,8 +2,8 @@
  * Veas provider authentication implementation
  */
 
-import type { AuthContext, AuthCredentials } from '../../protocols/common'
-import { AuthenticationError } from '../../protocols/common'
+import type { AuthContext, AuthCredentials } from '../../protocols/common/index.js'
+import { AuthenticationError } from '../../protocols/common/index.js'
 
 export class VeasAuthProvider {
   private authContext: AuthContext | null = null

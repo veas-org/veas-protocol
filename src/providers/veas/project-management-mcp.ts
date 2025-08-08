@@ -2,8 +2,8 @@
  * Veas MCP provider implementation for Project Management protocol
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../../protocols/common'
-import { NotFoundError } from '../../protocols/common'
+import type { ListParams, ListResponse, OutputFormat } from '../../protocols/common/index.js'
+import { NotFoundError } from '../../protocols/common/index.js'
 import type {
   Comment,
   CreateCommentData,
@@ -20,8 +20,8 @@ import type {
   UpdateIssueData,
   UpdateProjectData,
   UpdateSprintData,
-} from '../../protocols/project-management'
-import { BaseMCPProvider } from './base-mcp-provider'
+} from '../../protocols/project-management/index.js'
+import { BaseMCPProvider } from './base-mcp-provider.js'
 
 export class VeasProjectManagementMCPProvider extends BaseMCPProvider implements ProjectManagementProtocol {
   // Project operations

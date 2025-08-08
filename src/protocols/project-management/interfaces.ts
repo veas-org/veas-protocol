@@ -2,7 +2,7 @@
  * Project Management protocol interfaces
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../common'
+import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
 import type {
   Project,
   CreateProjectData,
@@ -18,7 +18,7 @@ import type {
   Comment,
   CreateCommentData,
   UpdateCommentData,
-} from './types'
+} from './types.js'
 
 export interface ProjectManagementProtocol {
   // Project operations

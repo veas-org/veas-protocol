@@ -1,3 +1,3 @@
-export * from './types'
-export * from './interfaces'
-export * from './schemas'
+export * from './types.js'
+export * from './interfaces.js'
+export * from './schemas.js'

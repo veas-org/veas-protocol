@@ -2,7 +2,7 @@
  * Knowledge Base protocol interfaces
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../common'
+import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
 import type {
   Article,
   CreateArticleData,
@@ -20,7 +20,7 @@ import type {
   EditorCommand,
   CreateEditorCommandData,
   UpdateEditorCommandData,
-} from './types'
+} from './types.js'
 
 export interface KnowledgeBaseProtocol {
   // Article operations

@@ -4,10 +4,10 @@
  * Converts protocol interfaces to MCP tools
  */
 
-import type { MCPAdapterConfig, MCPTool } from './types'
-import type { AuthContext } from '../../protocols/common'
-import { createProjectManagementTools } from './project-management-tools'
-import { createKnowledgeBaseTools } from './knowledge-base-tools'
+import type { MCPAdapterConfig, MCPTool } from './types.js'
+import type { AuthContext } from '../../protocols/common/index.js'
+import { createProjectManagementTools } from './project-management-tools.js'
+import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
 
 export class MCPAdapter {
   private tools: MCPTool[] = []

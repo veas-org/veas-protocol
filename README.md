@@ -11,7 +11,7 @@ A standardized, open-source protocol that enables seamless interoperability betw
 
 ## 🎯 Why This Protocol?
 
-The modern workspace is fragmented across dozens of tools - Notion for documentation, Jira for project management, Confluence for knowledge bases, GitHub for code, and countless others. Each tool has its own API, data format, and integration requirements. This creates:
+The modern workspace relies on various knowledge management and project tracking tools, each with its own API, data format, and integration requirements. This fragmentation creates:
 
 - **Integration Complexity**: Every tool needs custom integrations with every other tool
 - **Data Silos**: Information is locked within individual platforms
@@ -52,11 +52,12 @@ The modern workspace is fragmented across dozens of tools - Notion for documenta
 │  (Implement Protocol)   │     │  (Use Protocol via SDK)  │
 └─────────────────────────┘     └─────────────────────────┘
              │                                │
-    ┌────────┼────────┬──────────┬──────────┼────────┐
-    ▼        ▼        ▼          ▼          ▼        ▼
-┌────────┐┌──────┐┌──────┐  ┌────────┐┌────────┐┌──────┐
-│ Notion ││GitHub││ Jira │  │Your App││ CLI    ││  API │
-└────────┘└──────┘└──────┘  └────────┘└────────┘└──────┘
+                       │
+                       ▼
+        Current Implementation: Veas Cloud
+        
+    Future Providers: Notion, GitHub, Jira, Confluence,
+                     Obsidian, Linear, and more
 ```
 
 ## 📦 Protocol Domains
@@ -118,16 +119,22 @@ const provider: ProtocolProvider = {
 ### For Consumers (Using Protocol-Compatible Tools)
 
 ```typescript
-import { ProtocolProvider } from '@veas/protocol';
+import { VeasProvider } from '@veas/protocol/providers/veas';
 
-// Connect to any protocol-compatible tool
-const provider = await connectToProvider('notion'); // or 'obsidian', 'confluence', etc.
+// Connect to Veas Cloud (currently supported)
+const provider = new VeasProvider({
+  apiUrl: 'https://api.veas.org',
+  token: process.env.VEAS_PAT
+});
 
-// Use the same API regardless of the underlying tool
+// Use the protocol interface
 const articles = await provider.knowledgeBase.listArticles({
   limit: 10,
   filters: { status: 'published' }
 });
+
+// Future: Connect to any protocol-compatible tool
+// const provider = await connectToProvider('notion'); // Coming soon
 ```
 
 ### For AI Assistants (MCP Server)
@@ -170,17 +177,26 @@ Configure in Claude Desktop (`claude_desktop_config.json`):
 
 ## 📋 Implementation Status
 
+### Currently Supported
+
 | Platform | Knowledge Base | Project Management | Status |
 |----------|:--------------:|:------------------:|:------:|
-| Veas Cloud | ✅ | ✅ | Production |
-| Notion | 🚧 | 🚧 | In Progress |
-| Obsidian | 📋 | - | Planned |
-| Confluence | 📋 | - | Planned |
-| Jira | - | 📋 | Planned |
-| Linear | - | 📋 | Planned |
-| GitHub | 📋 | ✅ | Partial |
+| Veas Cloud | ✅ | ✅ | **Production Ready** |
 
-Legend: ✅ Complete | 🚧 In Progress | 📋 Planned | - Not Applicable
+### Roadmap - Future Provider Support
+
+The protocol architecture is designed to support multiple providers. Future implementations planned:
+
+| Platform | Knowledge Base | Project Management | Target |
+|----------|:--------------:|:------------------:|:------:|
+| Notion | 📋 | 📋 | Q4 2025 |
+| GitHub | 📋 | 📋 | Q4 2025 |
+| Obsidian | 📋 | - | Q1 2026 |
+| Confluence | 📋 | - | Q2 2026 |
+| Jira | - | 📋 | Q2 2026 |
+| Linear | - | 📋 | Q3 2026 |
+
+Legend: ✅ Complete | 📋 Planned | - Not Applicable
 
 ## 🔧 For AI/MCP Integration
 
@@ -288,13 +304,16 @@ pnpm add @veas/protocol
 - ✅ MCP Adapter
 - ✅ Reference Implementation (Veas)
 
-### Phase 2: Ecosystem (Q1 2025)
-- 🚧 Notion Provider
+### Phase 2: Ecosystem (Q4 2025 - Q1 2026)
+- 📋 Notion Provider
+- 📋 GitHub Provider
 - 📋 Obsidian Provider
-- 📋 Confluence Provider
 - 📋 Protocol Certification Program
 
-### Phase 3: Expansion (Q2 2025)
+### Phase 3: Expansion (2026)
+- 📋 Confluence Provider
+- 📋 Jira Provider
+- 📋 Linear Provider
 - 📋 CRM Protocol
 - 📋 Calendar Protocol
 - 📋 File Storage Protocol

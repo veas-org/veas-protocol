@@ -2,7 +2,7 @@
  * Knowledge Base protocol type definitions
  */
 
-import type { Entity } from '../common'
+import type { Entity } from '../common/index.js'
 
 // Article types
 export interface Article extends Entity {

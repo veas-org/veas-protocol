@@ -2,13 +2,13 @@
  * Main protocol provider interface
  */
 
-import type { AuthContext, AuthCredentials } from './common'
-import type { ProjectManagementProtocol } from './project-management'
-import type { KnowledgeBaseProtocol } from './knowledge-base'
+import type { AuthContext, AuthCredentials } from './common/index.js'
+import type { ProjectManagementProtocol } from './project-management/index.js'
+import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
 
-export * from './common'
-export * from './project-management'
-export * from './knowledge-base'
+export * from './common/index.js'
+export * from './project-management/index.js'
+export * from './knowledge-base/index.js'
 
 /**
  * Protocol provider interface

@@ -1,3 +1,3 @@
-export * from './adapter'
-export * from './types'
-export * from './utils'
+export * from './adapter.js'
+export * from './types.js'
+export * from './utils.js'
