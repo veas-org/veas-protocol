@@ -1,3 +1,9 @@
+## [0.1.8] - 2025-08-08
+
+### Changes
+
+- fix: Fix CLI compilation issue
+
 ## [0.1.7] - 2025-08-07
 
 ### Changes
