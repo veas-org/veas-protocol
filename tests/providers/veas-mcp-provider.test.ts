@@ -3,7 +3,7 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { AuthenticationError } from '../../src'
+// import { AuthenticationError } from '../../src'
 import { VeasMCPProtocolProvider } from '../../src/providers/veas'
 
 // Mock fetch
@@ -85,7 +85,7 @@ describe('VeasMCPProtocolProvider', () => {
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Authorization': 'Bearer mya_valid_token',
+            Authorization: 'Bearer mya_valid_token',
           }),
         })
       )

@@ -37,90 +37,78 @@ export class VeasAuthProvider {
     
     // Handle token credentials
     if ('token' in credentials) {
-      try {
-        const response = await fetch(`${apiUrl}/auth/verify`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${credentials.token}`,
-          },
-        })
-        
-        if (!response.ok) {
-          throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
-        }
-        
-        const data = await response.json() as any
-        this.authContext = {
-          userId: data.user?.id || data.userId,
-          organizationId: data.user?.organizationId || data.organizationId,
-          scopes: data.scopes || [],
-          expiresAt: data.expiresAt ? new Date(data.expiresAt) : undefined,
-        }
-        
-        return this.authContext
-      } catch (error: any) {
-        throw error
+      const response = await fetch(`${apiUrl}/auth/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${credentials.token}`,
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
       }
+      
+      const data = await response.json() as any
+      this.authContext = {
+        userId: data.user?.id || data.userId,
+        organizationId: data.user?.organizationId || data.organizationId,
+        scopes: data.scopes || [],
+        expiresAt: data.expiresAt ? new Date(data.expiresAt) : undefined,
+      }
+      
+      return this.authContext
     }
     
     // Handle API key credentials
     if ('apiKey' in credentials) {
-      try {
-        const response = await fetch(`${apiUrl}/auth/verify`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': credentials.apiKey,
-          },
-        })
-        
-        if (!response.ok) {
-          throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
-        }
-        
-        const data = await response.json() as any
-        this.authContext = {
-          userId: data.user?.id || data.userId,
-          organizationId: data.user?.organizationId || data.organizationId,
-          scopes: data.scopes || [],
-        }
-        
-        return this.authContext
-      } catch (error: any) {
-        throw error
+      const response = await fetch(`${apiUrl}/auth/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': credentials.apiKey,
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
       }
+      
+      const data = await response.json() as any
+      this.authContext = {
+        userId: data.user?.id || data.userId,
+        organizationId: data.user?.organizationId || data.organizationId,
+        scopes: data.scopes || [],
+      }
+      
+      return this.authContext
     }
     
     // Handle username/password credentials
     if ('username' in credentials && 'password' in credentials) {
-      try {
-        const response = await fetch(`${apiUrl}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: credentials.username,
-            password: credentials.password,
-          }),
-        })
-        
-        if (!response.ok) {
-          throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
-        }
-        
-        const data = await response.json() as any
-        this.authContext = {
-          userId: data.user?.id || data.userId,
-          organizationId: data.user?.organizationId || data.organizationId,
-          scopes: data.scopes || [],
-        }
-        
-        return this.authContext
-      } catch (error: any) {
-        throw error
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password,
+        }),
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
       }
+      
+      const data = await response.json() as any
+      this.authContext = {
+        userId: data.user?.id || data.userId,
+        organizationId: data.user?.organizationId || data.organizationId,
+        scopes: data.scopes || [],
+      }
+      
+      return this.authContext
     }
     
     throw new Error('Unsupported authentication method')

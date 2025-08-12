@@ -3,7 +3,10 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { VeasMCPProtocolProvider, MCPAdapter } from '../../src'
+import { 
+  // VeasMCPProtocolProvider, 
+  MCPAdapter 
+} from '../../src'
 import { MockProvider } from '../utils/mock-provider'
 
 describe('End-to-End Integration', () => {
@@ -307,7 +310,7 @@ describe('End-to-End Integration', () => {
       ])
       
       // Create articles in folders
-      const articles = await Promise.all([
+      const _articles = await Promise.all([
         provider.knowledgeBase.createArticle({
           title: 'Functional Requirements',
           content: 'Requirements content',

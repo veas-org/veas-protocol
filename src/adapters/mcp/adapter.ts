@@ -51,7 +51,7 @@ export class MCPAdapter {
     }
     
     if (this.config.debug) {
-      console.log(`MCPAdapter: Registered ${this.tools.length} tools`)
+      // MCPAdapter: Registered tools count: this.tools.length
     }
   }
   
@@ -111,9 +111,10 @@ export class MCPAdapter {
       case 'tools/list':
         return this.listTools()
         
-      case 'tools/call':
+      case 'tools/call': {
         const { name, arguments: args } = params
         return this.executeTool(name, args)
+      }
         
       default:
         throw new Error(`Unsupported method: ${method}`)

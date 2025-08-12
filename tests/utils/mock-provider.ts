@@ -41,7 +41,7 @@ export class MockProvider implements ProtocolProvider {
     this.knowledgeBase = createMockKnowledgeBase()
   }
   
-  async authenticate(credentials: AuthCredentials): Promise<AuthContext> {
+  async authenticate(_credentials: AuthCredentials): Promise<AuthContext> {
     if (this.failAuth) {
       throw new AuthenticationError('Mock authentication failed')
     }

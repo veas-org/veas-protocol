@@ -48,7 +48,7 @@ export class VeasMCPProtocolProvider implements ProtocolProvider {
       this.mcpClient = new MCPClient({
         endpoint: this.config.mcpEndpoint,
         headers: {
-          'Authorization': `Bearer ${credentials.token}`
+          Authorization: `Bearer ${credentials.token}`
         }
       })
       this._communication = new VeasCommunicationMCP(this.mcpClient)

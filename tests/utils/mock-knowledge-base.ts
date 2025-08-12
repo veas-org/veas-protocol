@@ -16,7 +16,7 @@ import type {
   ArticleStatistics,
   TagStatistics,
 } from '../../src'
-import type { ListParams, ListResponse } from '../../src'
+// import type { ListParams, ListResponse } from '../../src'
 import { NotFoundError } from '../../src'
 import {
   mockArticle,

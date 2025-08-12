@@ -53,7 +53,7 @@ describe('VeasAuthProvider', () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer test-token-123'
+            Authorization: 'Bearer test-token-123'
           }
         })
       )

@@ -351,6 +351,43 @@ Tests are written using Vitest and include:
 - 📋 File Storage Protocol
 - 📋 Communication Protocol
 
+## 🛠️ Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Build the package
+npm run build
+
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
+```
+
+### Test Coverage
+
+This project maintains high test coverage standards:
+- **Target coverage**: 80% for statements, branches, functions, and lines
+- **Automated reporting**: Coverage reports are generated in CI/CD pipeline
+- **Local coverage**: Run `npm run test:coverage` to view coverage locally
+- **Coverage badge**: Shows real-time coverage status from Codecov
+
+To set up Codecov for your fork:
+1. Sign up at [codecov.io](https://codecov.io)
+2. Add your repository
+3. Get your CODECOV_TOKEN
+4. Add it as a GitHub secret
+5. Update the badge URL in README with your repository path
+
 ## 📄 License
 
 MIT © Veas Protocol Contributors

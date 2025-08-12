@@ -17,7 +17,7 @@ import type {
   CreateCommentData,
   UpdateCommentData,
 } from '../../src'
-import type { ListParams, ListResponse } from '../../src'
+// import type { ListParams, ListResponse } from '../../src'
 import { NotFoundError } from '../../src'
 import {
   mockProject,
