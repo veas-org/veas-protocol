@@ -5,35 +5,267 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type (patch, minor, major)'
+        required: false
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
-env:
-  NODE_VERSION: 22
-  PNPM_VERSION: 10.12.1
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  checks: write
+  pull-requests: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
         with:
-          version: ${{ env.PNPM_VERSION }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
 
-      - name: Run tests with coverage
-        run: pnpm test -- --coverage
+      - name: Lint
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Test with coverage
+        run: npm test -- --run --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: veas-protocol
+          fail_ci_if_error: false
 
       - name: Build
-        run: pnpm build
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check for release trigger
+        id: check_release
+        run: |
+          # Check if this is a manual release or if commit message indicates release
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.release_type }}" ]; then
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "Release triggered manually"
+          elif git log -1 --pretty=%B | grep -qE "^(chore|ci): release"; then
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "Skipping release (release commit detected)"
+          elif git log -1 --pretty=%B | grep -qE "^(feat|fix|perf)(\(.+\))?!?:"; then
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "Release triggered by commit message"
+          else
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "No release trigger found"
+          fi
+
+      - name: Determine version bump
+        if: steps.check_release.outputs.should_release == 'true'
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.release_type }}" ]; then
+            BUMP_TYPE="${{ github.event.inputs.release_type }}"
+          else
+            # Auto-detect from commit messages
+            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s" 2>/dev/null || git log --pretty=format:"%s")
+            
+            if echo "$COMMITS" | grep -qE "^(feat|feature)(\(.+\))?!:"; then
+              BUMP_TYPE="major"
+            elif echo "$COMMITS" | grep -qE "^(feat|feature)(\(.+\))?:"; then
+              BUMP_TYPE="minor"
+            else
+              BUMP_TYPE="patch"
+            fi
+          fi
+          
+          echo "bump_type=${BUMP_TYPE}" >> $GITHUB_OUTPUT
+          echo "Version bump type: ${BUMP_TYPE}"
+
+      - name: Bump version
+        if: steps.check_release.outputs.should_release == 'true'
+        id: bump
+        run: |
+          npm version ${{ steps.version.outputs.bump_type }} --no-git-tag-version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "New version: ${VERSION}"
+
+      - name: Generate changelog
+        if: steps.check_release.outputs.should_release == 'true'
+        run: |
+          VERSION="${{ steps.bump.outputs.new_version }}"
+          DATE=$(date +"%Y-%m-%d")
+          
+          # Create or update CHANGELOG.md
+          if [ ! -f CHANGELOG.md ]; then
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "All notable changes to @veas/protocol will be documented in this file." >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+          fi
+          
+          # Add new version entry
+          TEMP_FILE=$(mktemp)
+          echo "## [${VERSION}] - ${DATE}" > $TEMP_FILE
+          echo "" >> $TEMP_FILE
+          
+          # Get commit messages since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            COMMITS=$(git log --pretty=format:"%s (%h)" --reverse)
+          else
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s (%h)" --reverse)
+          fi
+          
+          # Categorize commits
+          FEATURES=$(echo "$COMMITS" | grep -E "^feat(\(.+\))?:" || true)
+          FIXES=$(echo "$COMMITS" | grep -E "^fix(\(.+\))?:" || true)
+          BREAKING=$(echo "$COMMITS" | grep -E "^[a-z]+(\(.+\))?!:" || true)
+          OTHER=$(echo "$COMMITS" | grep -vE "^(feat|fix)(\(.+\))?!?:" || true)
+          
+          if [ -n "$BREAKING" ]; then
+            echo "### ⚠ BREAKING CHANGES" >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+            echo "$BREAKING" | sed 's/^/- /' >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+          fi
+          
+          if [ -n "$FEATURES" ]; then
+            echo "### Features" >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+            echo "$FEATURES" | sed 's/^/- /' >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+          fi
+          
+          if [ -n "$FIXES" ]; then
+            echo "### Bug Fixes" >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+            echo "$FIXES" | sed 's/^/- /' >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+          fi
+          
+          if [ -n "$OTHER" ]; then
+            echo "### Other Changes" >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+            echo "$OTHER" | sed 's/^/- /' >> $TEMP_FILE
+            echo "" >> $TEMP_FILE
+          fi
+          
+          # Prepend to existing changelog (skip the first line if it's the header)
+          if grep -q "^# Changelog" CHANGELOG.md; then
+            tail -n +5 CHANGELOG.md >> $TEMP_FILE 2>/dev/null || true
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            echo "All notable changes to @veas/protocol will be documented in this file." >> CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            tail -n +5 $TEMP_FILE >> CHANGELOG.md
+          else
+            cat CHANGELOG.md >> $TEMP_FILE
+            mv $TEMP_FILE CHANGELOG.md
+          fi
+          
+          rm -f $TEMP_FILE
+
+      - name: Commit changes
+        if: steps.check_release.outputs.should_release == 'true'
+        run: |
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "chore: release v${{ steps.bump.outputs.new_version }}"
+
+      - name: Create and push tag
+        if: steps.check_release.outputs.should_release == 'true'
+        run: |
+          git tag -a "v${{ steps.bump.outputs.new_version }}" -m "Release v${{ steps.bump.outputs.new_version }}"
+          git push origin main --follow-tags
+
+      - name: Create GitHub Release
+        if: steps.check_release.outputs.should_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump.outputs.new_version }}
+          name: Release v${{ steps.bump.outputs.new_version }}
+          body: |
+            ## What's Changed
+            
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+            
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ steps.bump.outputs.new_version }}...HEAD
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to NPM
+        if: steps.check_release.outputs.should_release == 'true'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish success notification
+        if: steps.check_release.outputs.should_release == 'true' && success()
+        run: |
+          echo "✅ Successfully published @veas/protocol@${{ steps.bump.outputs.new_version }}"
+          echo "📦 NPM: https://www.npmjs.com/package/@veas/protocol"
+          echo "🏷️ Tag: v${{ steps.bump.outputs.new_version }}"
+          echo "📊 Coverage: Check https://codecov.io/gh/${{ github.repository }}"

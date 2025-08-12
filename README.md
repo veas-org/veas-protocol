@@ -1,5 +1,7 @@
 # Veas Protocol
 
+[![CI](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/m9sh/veas-protocol/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/m9sh/veas-protocol)
 [![npm version](https://img.shields.io/npm/v/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![npm downloads](https://img.shields.io/npm/dm/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

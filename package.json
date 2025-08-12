@@ -53,6 +53,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "vitest",
     "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "prepublishOnly": "npm run build && npm run test",
     "version:patch": "npm version patch --no-git-tag-version",
