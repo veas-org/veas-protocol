@@ -1,7 +1,8 @@
 # Veas Protocol
 
 [![CI](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/m9sh/veas-protocol/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/m9sh/veas-protocol)
+[![Tests](https://img.shields.io/github/actions/workflow/status/m9sh/veas-protocol/ci.yml?label=tests)](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-%3E70%25-green)](https://github.com/m9sh/veas-protocol/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![npm downloads](https://img.shields.io/npm/dm/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -376,17 +377,17 @@ npm run lint
 ### Test Coverage
 
 This project maintains high test coverage standards:
-- **Target coverage**: 80% for statements, branches, functions, and lines
-- **Automated reporting**: Coverage reports are generated in CI/CD pipeline
+- **Minimum threshold**: 70% for statements and lines
+- **Automated reporting**: Coverage reports are generated in GitHub Actions
 - **Local coverage**: Run `npm run test:coverage` to view coverage locally
-- **Coverage badge**: Shows real-time coverage status from Codecov
+- **GitHub integration**: Coverage summaries appear in PR checks and workflow runs
+- **Artifacts**: Coverage reports are saved as workflow artifacts for 30 days
 
-To set up Codecov for your fork:
-1. Sign up at [codecov.io](https://codecov.io)
-2. Add your repository
-3. Get your CODECOV_TOKEN
-4. Add it as a GitHub secret
-5. Update the badge URL in README with your repository path
+Coverage is enforced automatically:
+- Tests run with coverage on every push and PR
+- Build fails if coverage drops below 70%
+- Coverage summary is displayed in GitHub Actions job summary
+- HTML coverage reports are available as downloadable artifacts
 
 ## 📄 License
 

@@ -51,14 +51,83 @@ jobs:
       - name: Test with coverage
         run: npm test -- --run --coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Generate coverage summary
+        if: always()
+        run: |
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f coverage/coverage-summary.json ]; then
+            node -e "
+              const coverage = require('./coverage/coverage-summary.json');
+              const total = coverage.total;
+              const pct = (value) => value.pct + '%';
+              console.log('| Metric | Coverage |');
+              console.log('|--------|----------|');
+              console.log('| Statements | ' + pct(total.statements) + ' |');
+              console.log('| Branches | ' + pct(total.branches) + ' |');
+              console.log('| Functions | ' + pct(total.functions) + ' |');
+              console.log('| Lines | ' + pct(total.lines) + ' |');
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Coverage report not found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/coverage-final.json
-          flags: unittests
-          name: veas-protocol
-          fail_ci_if_error: false
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: Coverage check
+        run: |
+          node -e "
+            const coverage = require('./coverage/coverage-summary.json');
+            const total = coverage.total;
+            const threshold = 70; // Minimum coverage threshold
+            
+            console.log('Coverage: Lines=' + total.lines.pct + '% Statements=' + total.statements.pct + '%');
+            
+            if (total.lines.pct < threshold || total.statements.pct < threshold) {
+              console.error('Coverage below threshold of ' + threshold + '%');
+              process.exit(1);
+            }
+          "
+
+      - name: Create coverage badge
+        if: github.ref == 'refs/heads/main'
+        run: |
+          node -e "
+            const fs = require('fs');
+            const coverage = require('./coverage/coverage-summary.json');
+            const pct = Math.round(coverage.total.lines.pct);
+            
+            let color = 'red';
+            if (pct >= 90) color = 'brightgreen';
+            else if (pct >= 80) color = 'green';
+            else if (pct >= 70) color = 'yellowgreen';
+            else if (pct >= 60) color = 'yellow';
+            else if (pct >= 50) color = 'orange';
+            
+            const badge = {
+              schemaVersion: 1,
+              label: 'coverage',
+              message: pct + '%',
+              color: color
+            };
+            
+            fs.writeFileSync('coverage-badge.json', JSON.stringify(badge, null, 2));
+            console.log('Badge created: coverage=' + pct + '% color=' + color);
+          "
+
+      - name: Upload coverage badge
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: coverage-badge.json
+          retention-days: 90
 
       - name: Build
         run: npm run build
@@ -268,4 +337,4 @@ jobs:
           echo "✅ Successfully published @veas/protocol@${{ steps.bump.outputs.new_version }}"
           echo "📦 NPM: https://www.npmjs.com/package/@veas/protocol"
           echo "🏷️ Tag: v${{ steps.bump.outputs.new_version }}"
-          echo "📊 Coverage: Check https://codecov.io/gh/${{ github.repository }}"
+          echo "📊 Coverage: Check workflow artifacts and job summary"
