@@ -114,7 +114,7 @@ describe('VeasAuthProvider', () => {
       const context = await authProvider.authenticate(credentials)
       
       expect(context.userId).toBe('user-789')
-      expect(context.metadata?.token).toBe('generated-token')
+      expect(context.scopes).toEqual(['user'])
       
       expect(global.fetch).toHaveBeenCalledWith(
         'https://api.test.com/auth/login',

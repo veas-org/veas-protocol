@@ -2,7 +2,7 @@
  * Main protocol provider interface
  */
 
-import type { AuthContext, AuthCredentials } from './common/index.js'
+import type { AuthContext } from './common/index.js'
 import type { ProjectManagementProtocol } from './project-management/index.js'
 import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
 import type { CommunicationProtocol } from './communication/index.js'
@@ -42,7 +42,7 @@ export interface ProtocolProvider {
   /**
    * Authenticate with the provider
    */
-  authenticate(credentials: AuthCredentials): Promise<AuthContext>
+  authenticate(credentials: any): Promise<AuthContext>
   
   /**
    * Project management protocol implementation

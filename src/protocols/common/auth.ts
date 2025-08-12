@@ -2,6 +2,7 @@
  * Authentication protocol interfaces
  */
 
+// Legacy interface for backward compatibility
 export interface AuthCredentials {
   type: 'token' | 'oauth' | 'basic'
   token?: string

@@ -3,7 +3,6 @@
  */
 
 import type { AuthContext } from '../../protocols/common/index.js'
-import { AuthenticationError } from '../../protocols/common/index.js'
 
 interface TokenCredentials {
   token: string
@@ -18,7 +17,7 @@ interface UsernamePasswordCredentials {
   password: string
 }
 
-type AuthCredentials = TokenCredentials | ApiKeyCredentials | UsernamePasswordCredentials
+export type AuthCredentials = TokenCredentials | ApiKeyCredentials | UsernamePasswordCredentials
 
 export class VeasAuthProvider {
   private authContext: AuthContext | null = null
@@ -51,7 +50,7 @@ export class VeasAuthProvider {
           throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
         }
         
-        const data = await response.json()
+        const data = await response.json() as any
         this.authContext = {
           userId: data.user?.id || data.userId,
           organizationId: data.user?.organizationId || data.organizationId,
@@ -80,7 +79,7 @@ export class VeasAuthProvider {
           throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
         }
         
-        const data = await response.json()
+        const data = await response.json() as any
         this.authContext = {
           userId: data.user?.id || data.userId,
           organizationId: data.user?.organizationId || data.organizationId,
@@ -111,13 +110,11 @@ export class VeasAuthProvider {
           throw new Error(`Authentication failed: ${response.status} ${response.statusText}`)
         }
         
-        const data = await response.json()
+        const data = await response.json() as any
         this.authContext = {
           userId: data.user?.id || data.userId,
+          organizationId: data.user?.organizationId || data.organizationId,
           scopes: data.scopes || [],
-          metadata: {
-            token: data.token,
-          },
         }
         
         return this.authContext
