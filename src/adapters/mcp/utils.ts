@@ -4,6 +4,7 @@
 
 import type { ProtocolError } from '../../protocols/common/index.js'
 import type { ListResponse } from '../../protocols/common/index.js'
+import type { MCPTool } from './types.js'
 
 /**
  * Convert protocol errors to MCP response format
@@ -83,13 +84,19 @@ function isListResponse(data: unknown): data is ListResponse<unknown> {
 
 function formatListResponseAsMarkdown(response: ListResponse<unknown>): string {
   const { items, total, hasMore } = response
-  let markdown = `## Results (${items.length} items`
+  let markdown = `## Results`
   
   if (total !== undefined) {
-    markdown += ` of ${total}`
+    markdown += `\n\nFound ${total} items`
+  } else {
+    markdown += ` (${items.length} items`
+    if (total !== undefined) {
+      markdown += ` of ${total}`
+    }
+    markdown += ')'
   }
   
-  markdown += ')\n\n'
+  markdown += '\n\n'
   markdown += formatArrayAsMarkdown(items)
   
   if (hasMore) {
@@ -146,4 +153,40 @@ export function getOutputFormat(params: any): 'json' | 'markdown' | undefined {
  */
 export function createToolName(prefix: string, domain: string, operation: string): string {
   return `${prefix}_${domain}_${operation}`
+}
+
+/**
+ * Create a standard MCP tool
+ */
+export function createTool(config: {
+  name: string
+  description: string
+  handler: (params: any) => Promise<any>
+  inputSchema: Record<string, any>
+  required?: string[]
+}): MCPTool {
+  return {
+    name: config.name,
+    description: config.description,
+    inputSchema: {
+      type: 'object',
+      properties: config.inputSchema,
+      required: config.required || [],
+      additionalProperties: false,
+    },
+    handler: config.handler,
+  }
+}
+
+/**
+ * Create a paginated MCP tool
+ */
+export function createPaginatedTool(config: {
+  name: string
+  description: string
+  handler: (params: any) => Promise<any>
+  inputSchema: Record<string, any>
+  required?: string[]
+}): MCPTool {
+  return createTool(config)
 }

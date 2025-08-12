@@ -5,10 +5,12 @@
 import type { AuthContext, AuthCredentials } from './common/index.js'
 import type { ProjectManagementProtocol } from './project-management/index.js'
 import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
+import type { CommunicationProtocol } from './communication/index.js'
 
 export * from './common/index.js'
 export * from './project-management/index.js'
 export * from './knowledge-base/index.js'
+export * from './communication/index.js'
 
 /**
  * Protocol provider interface
@@ -51,6 +53,11 @@ export interface ProtocolProvider {
    * Knowledge base protocol implementation
    */
   knowledgeBase?: KnowledgeBaseProtocol
+  
+  /**
+   * Communication protocol implementation
+   */
+  communication?: CommunicationProtocol
   
   /**
    * Check if provider is connected and authenticated

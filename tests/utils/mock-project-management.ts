@@ -55,7 +55,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async getProject(id) {
       const project = projects.get(id)
       if (!project) {
-        throw new NotFoundError('Project', id)
+        throw new NotFoundError(`Project with id '${id}' not found`, { resource: 'Project', id })
       }
       return project
     },
@@ -78,7 +78,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async updateProject(id, data) {
       const project = projects.get(id)
       if (!project) {
-        throw new NotFoundError('Project', id)
+        throw new NotFoundError(`Project with id '${id}' not found`, { resource: 'Project', id })
       }
       const updated = { ...project, ...data, updatedAt: new Date() }
       projects.set(id, updated)
@@ -87,7 +87,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     
     async deleteProject(id) {
       if (!projects.has(id)) {
-        throw new NotFoundError('Project', id)
+        throw new NotFoundError(`Project with id '${id}' not found`, { resource: 'Project', id })
       }
       projects.delete(id)
     },
@@ -119,7 +119,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async getIssue(id) {
       const issue = issues.get(id)
       if (!issue) {
-        throw new NotFoundError('Issue', id)
+        throw new NotFoundError(`Issue with id '${id}' not found`, { resource: 'Issue', id })
       }
       return issue
     },
@@ -142,7 +142,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async updateIssue(id, data) {
       const issue = issues.get(id)
       if (!issue) {
-        throw new NotFoundError('Issue', id)
+        throw new NotFoundError(`Issue with id '${id}' not found`, { resource: 'Issue', id })
       }
       const updated = { ...issue, ...data, updatedAt: new Date() }
       issues.set(id, updated)
@@ -151,7 +151,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     
     async deleteIssue(id) {
       if (!issues.has(id)) {
-        throw new NotFoundError('Issue', id)
+        throw new NotFoundError(`Issue with id '${id}' not found`, { resource: 'Issue', id })
       }
       issues.delete(id)
     },
@@ -169,7 +169,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async getSprint(id) {
       const sprint = sprints.get(id)
       if (!sprint) {
-        throw new NotFoundError('Sprint', id)
+        throw new NotFoundError(`Sprint with id '${id}' not found`, { resource: 'Sprint', id })
       }
       return sprint
     },
@@ -190,7 +190,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async updateSprint(id, data) {
       const sprint = sprints.get(id)
       if (!sprint) {
-        throw new NotFoundError('Sprint', id)
+        throw new NotFoundError(`Sprint with id '${id}' not found`, { resource: 'Sprint', id })
       }
       const updated = { ...sprint, ...data, updatedAt: new Date() }
       sprints.set(id, updated)
@@ -199,7 +199,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     
     async deleteSprint(id) {
       if (!sprints.has(id)) {
-        throw new NotFoundError('Sprint', id)
+        throw new NotFoundError(`Sprint with id '${id}' not found`, { resource: 'Sprint', id })
       }
       sprints.delete(id)
     },
@@ -230,7 +230,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     async updateComment(id, data) {
       const comment = comments.get(id)
       if (!comment) {
-        throw new NotFoundError('Comment', id)
+        throw new NotFoundError(`Comment with id '${id}' not found`, { resource: 'Comment', id })
       }
       const updated = { ...comment, ...data, updatedAt: new Date(), editedAt: new Date() }
       comments.set(id, updated)
@@ -239,7 +239,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     
     async deleteComment(id) {
       if (!comments.has(id)) {
-        throw new NotFoundError('Comment', id)
+        throw new NotFoundError(`Comment with id '${id}' not found`, { resource: 'Comment', id })
       }
       comments.delete(id)
     },

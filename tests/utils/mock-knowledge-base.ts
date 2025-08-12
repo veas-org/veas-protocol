@@ -67,7 +67,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getArticle(id) {
       const article = articles.get(id)
       if (!article) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       return article
     },
@@ -75,7 +75,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getArticleBySlug(slug) {
       const article = Array.from(articles.values()).find(a => a.slug === slug)
       if (!article) {
-        throw new NotFoundError('Article', slug)
+        throw new NotFoundError(`Article with slug '${slug}' not found`, { resource: 'Article', slug })
       }
       return article
     },
@@ -97,7 +97,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async updateArticle(id, data) {
       const article = articles.get(id)
       if (!article) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       const updated = { 
         ...article, 
@@ -111,7 +111,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     
     async deleteArticle(id) {
       if (!articles.has(id)) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       articles.delete(id)
     },
@@ -119,7 +119,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async publishArticle(id) {
       const article = articles.get(id)
       if (!article) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       const published = { 
         ...article, 
@@ -134,7 +134,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async unpublishArticle(id) {
       const article = articles.get(id)
       if (!article) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       const unpublished = { 
         ...article, 
@@ -165,7 +165,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getFolder(id) {
       const folder = folders.get(id)
       if (!folder) {
-        throw new NotFoundError('Folder', id)
+        throw new NotFoundError(`Folder with id '${id}' not found`, { resource: 'Folder', id })
       }
       return folder
     },
@@ -186,7 +186,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async updateFolder(id, data) {
       const folder = folders.get(id)
       if (!folder) {
-        throw new NotFoundError('Folder', id)
+        throw new NotFoundError(`Folder with id '${id}' not found`, { resource: 'Folder', id })
       }
       const updated = { 
         ...folder, 
@@ -200,7 +200,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     
     async deleteFolder(id) {
       if (!folders.has(id)) {
-        throw new NotFoundError('Folder', id)
+        throw new NotFoundError(`Folder with id '${id}' not found`, { resource: 'Folder', id })
       }
       folders.delete(id)
     },
@@ -224,7 +224,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getTag(id) {
       const tag = tags.get(id)
       if (!tag) {
-        throw new NotFoundError('Tag', id)
+        throw new NotFoundError(`Tag with id '${id}' not found`, { resource: 'Tag', id })
       }
       return tag
     },
@@ -232,7 +232,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getTagBySlug(slug) {
       const tag = Array.from(tags.values()).find(t => t.slug === slug)
       if (!tag) {
-        throw new NotFoundError('Tag', slug)
+        throw new NotFoundError(`Tag with slug '${slug}' not found`, { resource: 'Tag', slug })
       }
       return tag
     },
@@ -255,7 +255,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async updateTag(id, data) {
       const tag = tags.get(id)
       if (!tag) {
-        throw new NotFoundError('Tag', id)
+        throw new NotFoundError(`Tag with id '${id}' not found`, { resource: 'Tag', id })
       }
       const updated = { 
         ...tag, 
@@ -269,7 +269,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     
     async deleteTag(id) {
       if (!tags.has(id)) {
-        throw new NotFoundError('Tag', id)
+        throw new NotFoundError(`Tag with id '${id}' not found`, { resource: 'Tag', id })
       }
       tags.delete(id)
     },
@@ -304,7 +304,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getArticleStatistics(id): Promise<ArticleStatistics> {
       const article = articles.get(id)
       if (!article) {
-        throw new NotFoundError('Article', id)
+        throw new NotFoundError(`Article with id '${id}' not found`, { resource: 'Article', id })
       }
       
       return {
@@ -320,7 +320,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     async getTagStatistics(id): Promise<TagStatistics> {
       const tag = tags.get(id)
       if (!tag) {
-        throw new NotFoundError('Tag', id)
+        throw new NotFoundError(`Tag with id '${id}' not found`, { resource: 'Tag', id })
       }
       
       const tagArticles = Array.from(articles.values()).filter(a => 

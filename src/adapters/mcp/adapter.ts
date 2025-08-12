@@ -8,6 +8,7 @@ import type { MCPAdapterConfig, MCPTool } from './types.js'
 import type { AuthContext } from '../../protocols/common/index.js'
 import { createProjectManagementTools } from './project-management-tools.js'
 import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
+import { generateCommunicationTools } from './communication-tools.js'
 
 export class MCPAdapter {
   private tools: MCPTool[] = []
@@ -41,6 +42,12 @@ export class MCPAdapter {
         () => this.authContext,
       )
       this.tools.push(...kbTools)
+    }
+    
+    // Register communication tools if available
+    if (provider.communication) {
+      const commTools = generateCommunicationTools(provider.communication)
+      this.tools.push(...commTools)
     }
     
     if (this.config.debug) {
@@ -111,5 +118,21 @@ export class MCPAdapter {
       default:
         throw new Error(`Unsupported method: ${method}`)
     }
+  }
+  
+  /**
+   * Serve the MCP adapter (for stdio or other transports)
+   */
+  async serve(options?: { transport?: 'stdio' | 'http' }): Promise<void> {
+    const transport = options?.transport || 'stdio'
+    
+    if (transport === 'stdio') {
+      // For stdio transport, we would normally set up stdin/stdout handling
+      // This is a placeholder implementation for testing
+      return Promise.resolve()
+    }
+    
+    // For HTTP or other transports, additional implementation would go here
+    return Promise.resolve()
   }
 }

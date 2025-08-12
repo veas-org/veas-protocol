@@ -32,7 +32,11 @@ export interface MCPClientConfig {
 export class MCPClient {
   private requestId = 1
   
-  constructor(private config: MCPClientConfig) {}
+  constructor(private config: MCPClientConfig) {
+    if (!config || !config.endpoint) {
+      throw new Error('Endpoint is required')
+    }
+  }
   
   async callTool(toolName: string, args: any, authContext?: AuthContext): Promise<any> {
     const request: MCPRequest = {
@@ -40,7 +44,7 @@ export class MCPClient {
       method: 'tools/call',
       params: {
         name: toolName,
-        arguments: args,
+        ...(args !== undefined && Object.keys(args).length > 0 ? { arguments: args } : {}),
       },
       id: this.requestId++,
     }
@@ -68,7 +72,7 @@ export class MCPClient {
     const result = await response.json() as MCPResponse
     
     if (result.error) {
-      throw new Error(`MCP error: ${result.error.message}`)
+      throw new Error(`MCP error ${result.error.code}: ${result.error.message}`)
     }
     
     // Extract data from MCP response format
@@ -113,7 +117,7 @@ export class MCPClient {
     const result = await response.json() as MCPResponse
     
     if (result.error) {
-      throw new Error(`MCP error: ${result.error.message}`)
+      throw new Error(`MCP error ${result.error.code}: ${result.error.message}`)
     }
     
     return result.result?.tools || []

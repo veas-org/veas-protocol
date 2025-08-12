@@ -12,13 +12,13 @@ export function createKnowledgeBaseTools(
   toolPrefix: string,
   getAuthContext: () => AuthContext | null, // Reserved for future context-aware operations
 ): MCPTool[] {
-  const domain = 'articles'
+  const domain = 'knowledge-base'
   // Validate auth context is available
   const hasAuth = !!getAuthContext
   if (!hasAuth) {
     console.warn('Knowledge base tools created without auth context provider')
   }
-  
+
   return [
     // Article tools
     {
@@ -60,7 +60,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'get_article'),
       description: 'Get an article by ID',
@@ -81,7 +81,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_article'),
       description: 'Create a new article',
@@ -107,7 +107,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'update_article'),
       description: 'Update an existing article',
@@ -134,7 +134,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'search_articles'),
       description: 'Search for articles',
@@ -166,7 +166,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     // Folder tools
     {
       name: createToolName(toolPrefix, domain, 'list_folders'),
@@ -194,7 +194,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_folder'),
       description: 'Create a new folder',
@@ -217,7 +217,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     // Tag tools
     {
       name: createToolName(toolPrefix, domain, 'list_tags'),
@@ -245,7 +245,7 @@ export function createKnowledgeBaseTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_tag'),
       description: 'Create a new tag',

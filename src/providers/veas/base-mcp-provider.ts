@@ -11,8 +11,11 @@ export abstract class BaseMCPProvider {
   protected auth: VeasAuthProvider
   protected mcpClient: MCPClient
   
-  constructor(protected config: { mcpEndpoint: string; apiUrl?: string }) {
-    this.auth = new VeasAuthProvider({ apiUrl: config.apiUrl || config.mcpEndpoint })
+  constructor(
+    protected config: { mcpEndpoint: string; apiUrl?: string },
+    sharedAuth?: VeasAuthProvider
+  ) {
+    this.auth = sharedAuth || new VeasAuthProvider({ apiUrl: config.apiUrl || config.mcpEndpoint })
     this.mcpClient = new MCPClient({ endpoint: config.mcpEndpoint })
   }
   
@@ -27,7 +30,7 @@ export abstract class BaseMCPProvider {
    * Get current auth context, throwing if not authenticated
    */
   protected getAuthContext(): AuthContext {
-    const context = this.auth.getContext()
+    const context = this.auth.getAuthContext()
     if (!context) {
       throw new AuthenticationError()
     }

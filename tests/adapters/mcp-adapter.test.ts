@@ -55,16 +55,16 @@ describe('MCPAdapter', () => {
     
     it('should register knowledge base tools', () => {
       const tools = adapter.getTools()
-      const articleTools = tools.filter(t => t.name.includes('articles'))
+      const kbTools = tools.filter(t => t.name.includes('knowledge-base'))
       
-      expect(articleTools.length).toBeGreaterThan(0)
+      expect(kbTools.length).toBeGreaterThan(0)
       
       const expectedTools = [
-        'mcp_test_articles_list_articles',
-        'mcp_test_articles_get_article',
-        'mcp_test_articles_create_article',
-        'mcp_test_articles_search_articles',
-        'mcp_test_articles_list_tags',
+        'mcp_test_knowledge-base_list_articles',
+        'mcp_test_knowledge-base_get_article',
+        'mcp_test_knowledge-base_create_article',
+        'mcp_test_knowledge-base_search_articles',
+        'mcp_test_knowledge-base_list_tags',
       ]
       
       expectedTools.forEach(toolName => {

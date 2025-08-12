@@ -264,6 +264,36 @@ yarn add @veas/protocol
 pnpm add @veas/protocol
 ```
 
+## 🧪 Testing
+
+The protocol implementation includes comprehensive test coverage with a minimum threshold of 90% for all metrics.
+
+```bash
+# Run tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage report
+pnpm test -- --coverage
+```
+
+### Coverage Requirements
+
+| Metric | Threshold |
+|--------|-----------|
+| Statements | 90% |
+| Branches | 90% |
+| Functions | 90% |
+| Lines | 90% |
+
+Tests are written using Vitest and include:
+- Unit tests for all protocol implementations
+- Integration tests for provider adapters
+- End-to-end tests for MCP server functionality
+- Mock implementations for testing consumer code
+
 ## 📦 What's Included
 
 ```

@@ -64,19 +64,19 @@
     "release:major": "npm run version:major && npm run release"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.1",
-    "axios": "^1.7.2",
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "axios": "^1.11.0",
     "node-cache": "^5.1.2",
     "picocolors": "^1.1.1",
-    "zod": "^4.0.15"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@types/node": "^22.17.0",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
+    "@types/node": "^22.17.1",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
     "@vitest/coverage-v8": "^2.1.9",
     "@vitest/ui": "^2.1.9",
-    "eslint": "^9.18.0",
+    "eslint": "^9.33.0",
     "rimraf": "^5.0.10",
     "typescript": "^5.9.2",
     "vitest": "^2.1.9"
