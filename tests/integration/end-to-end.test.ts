@@ -12,11 +12,11 @@ import { MockProvider } from '../utils/mock-provider'
 describe('End-to-End Integration', () => {
   describe('Mock Provider with MCP Adapter', () => {
     let provider: MockProvider
-    let adapter: MCPAdapter
+    let _adapter: MCPAdapter
     
     beforeEach(async () => {
       provider = new MockProvider()
-      adapter = new MCPAdapter({
+      _adapter = new MCPAdapter({
         provider,
         toolPrefix: 'mcp_test',
       })

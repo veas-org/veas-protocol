@@ -5,17 +5,17 @@
 import type {
   ProjectManagementProtocol,
   Project,
-  CreateProjectData,
-  UpdateProjectData,
+  CreateProjectData as _CreateProjectData,
+  UpdateProjectData as _UpdateProjectData,
   Issue,
-  CreateIssueData,
-  UpdateIssueData,
+  CreateIssueData as _CreateIssueData,
+  UpdateIssueData as _UpdateIssueData,
   Sprint,
-  CreateSprintData,
-  UpdateSprintData,
+  CreateSprintData as _CreateSprintData,
+  UpdateSprintData as _UpdateSprintData,
   Comment,
-  CreateCommentData,
-  UpdateCommentData,
+  CreateCommentData as _CreateCommentData,
+  UpdateCommentData as _UpdateCommentData,
 } from '../../src'
 // import type { ListParams, ListResponse } from '../../src'
 import { NotFoundError } from '../../src'
