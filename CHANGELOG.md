@@ -1,6 +1,14 @@
-## [0.1.8] - 2025-08-08
+# Changelog
 
-### Changes
+All notable changes to @veas/protocol will be documented in this file.
+
+- fix: Update tests (051922f)
+- fix: Update CI (deda8db)
+- fix: Build issues (fc2c482)
+- fix: Add tests to readme (20905ca)
+- fix: lint (e8f2bae)
+- fix: lint (2e82e5c)
+- fix: type check (d28748d)
 
 - fix: Fix CLI compilation issue
 
