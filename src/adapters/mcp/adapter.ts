@@ -4,7 +4,7 @@
  * Converts protocol interfaces to MCP tools
  */
 
-import type { MCPAdapterConfig, MCPTool, MCPRequest, MCPResponse } from './types.js'
+import type { MCPAdapterConfig, MCPTool, MCPAdapterRequest, MCPAdapterResponse } from './types.js'
 import type { AuthContext, AuthCredentials } from '../../protocols/common/index.js'
 import { createProjectManagementTools } from './project-management-tools.js'
 import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
@@ -91,7 +91,7 @@ export class MCPAdapter {
   /**
    * List all available tools (MCP format)
    */
-  listTools(): MCPResponse {
+  listTools(): MCPAdapterResponse {
     return {
       tools: this.tools.map(tool => ({
         name: tool.name,
@@ -104,7 +104,7 @@ export class MCPAdapter {
   /**
    * Handle MCP request
    */
-  async handleRequest(request: MCPRequest): Promise<MCPResponse> {
+  async handleRequest(request: MCPAdapterRequest): Promise<MCPAdapterResponse> {
     const { method, params } = request
     
     switch (method) {
@@ -112,8 +112,11 @@ export class MCPAdapter {
         return this.listTools()
         
       case 'tools/call': {
-        const { name, arguments: args } = params
-        return this.executeTool(name, args)
+        if (!params?.name) {
+          throw new Error('Tool name is required')
+        }
+        const result = await this.executeTool(params.name, params.arguments || {})
+        return { result }
       }
         
       default:

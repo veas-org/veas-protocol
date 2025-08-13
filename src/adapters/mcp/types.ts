@@ -38,12 +38,16 @@ export interface MCPToolCollection {
   namespace: string
 }
 
-export interface MCPRequest {
+export interface MCPAdapterRequest {
   method: string
-  params?: Record<string, unknown>
+  params?: {
+    name?: string
+    arguments?: Record<string, unknown>
+    [key: string]: unknown
+  }
 }
 
-export interface MCPResponse {
+export interface MCPAdapterResponse {
   tools?: Array<{
     name: string
     description: string
