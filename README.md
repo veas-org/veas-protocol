@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/veas-org/veas-protocol/actions/workflows/ci.yml/badge.svg)](https://github.com/veas-org/veas-protocol/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/github/actions/workflow/status/veas-org/veas-protocol/ci.yml?label=tests)](https://github.com/veas-org/veas-protocol/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/badge/coverage-%3E70%25-green)](https://github.com/veas-org/veas-protocol/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/veas-org/veas-protocol/branch/main/graph/badge.svg)](https://codecov.io/gh/veas-org/veas-protocol)
 [![npm version](https://img.shields.io/npm/v/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![npm downloads](https://img.shields.io/npm/dm/@veas/protocol.svg)](https://www.npmjs.com/package/@veas/protocol)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -376,18 +376,26 @@ npm run lint
 
 ### Test Coverage
 
-This project maintains high test coverage standards:
-- **Minimum threshold**: 70% for statements and lines
-- **Automated reporting**: Coverage reports are generated in GitHub Actions
-- **Local coverage**: Run `npm run test:coverage` to view coverage locally
-- **GitHub integration**: Coverage summaries appear in PR checks and workflow runs
-- **Artifacts**: Coverage reports are saved as workflow artifacts for 30 days
+This project maintains high test coverage standards with automated reporting via Codecov:
 
-Coverage is enforced automatically:
+- **Current Coverage**: See badge above (automatically updated via CI)
+- **Minimum threshold**: 70% for statements and lines
+- **Automated reporting**: Coverage reports are uploaded to Codecov on every push
+- **Local coverage**: Run `npm run test:coverage` to view coverage locally
+- **Pull Request checks**: Codecov comments on PRs with coverage changes
+
+**Running Tests Locally**:
+```bash
+npm test              # Run all tests
+npm run test:watch    # Run tests in watch mode  
+npm run test:coverage # Generate coverage report with detailed breakdown
+```
+
+**CI Integration**:
 - Tests run with coverage on every push and PR
+- Coverage reports are automatically uploaded to Codecov
 - Build fails if coverage drops below 70%
-- Coverage summary is displayed in GitHub Actions job summary
-- HTML coverage reports are available as downloadable artifacts
+- Detailed reports available at [codecov.io/gh/veas-org/veas-protocol](https://codecov.io/gh/veas-org/veas-protocol)
 
 ## 📄 License
 
