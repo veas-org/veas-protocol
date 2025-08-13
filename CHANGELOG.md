@@ -2,6 +2,16 @@
 
 All notable changes to @veas/protocol will be documented in this file.
 
+- fix: test badge (8a18df0)
+- fix: add tests (59478d7)
+- fix: linter (bff7fc0)
+- fix: types (5d62f23)
+- fix: tests (1e20e2e)
+
+### Other Changes
+
+- Merge branch 'main' of https://github.com/veas-org/veas-protocol (b0fe8d7)
+
 - fix: Update tests (051922f)
 - fix: Update CI (deda8db)
 - fix: Build issues (fc2c482)
