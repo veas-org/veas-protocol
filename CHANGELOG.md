@@ -2,6 +2,13 @@
 
 All notable changes to @veas/protocol will be documented in this file.
 
+- fix: readme (efa1a1f)
+- fix: coverage badge (ef5bb5a)
+
+### Other Changes
+
+- Merge branch 'main' of https://github.com/veas-org/veas-protocol (e0db938)
+
 - fix: test badge (8a18df0)
 - fix: add tests (59478d7)
 - fix: linter (bff7fc0)
