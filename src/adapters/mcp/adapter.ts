@@ -4,8 +4,8 @@
  * Converts protocol interfaces to MCP tools
  */
 
-import type { MCPAdapterConfig, MCPTool } from './types.js'
-import type { AuthContext } from '../../protocols/common/index.js'
+import type { MCPAdapterConfig, MCPTool, MCPRequest, MCPResponse } from './types.js'
+import type { AuthContext, AuthCredentials } from '../../protocols/common/index.js'
 import { createProjectManagementTools } from './project-management-tools.js'
 import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
 import { generateCommunicationTools } from './communication-tools.js'
@@ -58,7 +58,7 @@ export class MCPAdapter {
   /**
    * Set authentication context
    */
-  async authenticate(credentials: any): Promise<void> {
+  async authenticate(credentials: AuthCredentials): Promise<void> {
     this.authContext = await this.config.provider.authenticate(credentials)
   }
   
@@ -79,7 +79,7 @@ export class MCPAdapter {
   /**
    * Execute a tool by name
    */
-  async executeTool(name: string, params: any): Promise<any> {
+  async executeTool(name: string, params: Record<string, unknown>): Promise<unknown> {
     const tool = this.getTool(name)
     if (!tool) {
       throw new Error(`Tool '${name}' not found`)
@@ -91,7 +91,7 @@ export class MCPAdapter {
   /**
    * List all available tools (MCP format)
    */
-  listTools(): any {
+  listTools(): MCPResponse {
     return {
       tools: this.tools.map(tool => ({
         name: tool.name,
@@ -104,7 +104,7 @@ export class MCPAdapter {
   /**
    * Handle MCP request
    */
-  async handleRequest(request: any): Promise<any> {
+  async handleRequest(request: MCPRequest): Promise<MCPResponse> {
     const { method, params } = request
     
     switch (method) {

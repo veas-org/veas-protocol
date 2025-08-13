@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { VeasKnowledgeBaseMCPProvider } from './knowledge-base-mcp.js'
 import { NotFoundError } from '../../protocols/common/index.js'
-import type { MCPClient } from './mcp-client.js'
 
 describe('VeasKnowledgeBaseMCPProvider', () => {
   let provider: VeasKnowledgeBaseMCPProvider

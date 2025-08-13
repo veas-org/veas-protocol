@@ -1,15 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { VeasCommunicationMCP } from './communication-mcp.js'
 import { MCPClient } from './mcp-client.js'
+// Importing types for testing - currently unused but may be needed for future test assertions
 import type {
-  Workspace,
-  Channel,
-  Message,
-  Thread,
-  Reaction,
-  ChannelMember,
-  WorkspaceMember,
-  MessageSearchResult,
+  // Workspace,
+  // Channel,
+  // Message,
+  // Thread,
+  // Reaction,
+  // ChannelMember,
+  // WorkspaceMember,
+  // MessageSearchResult,
 } from '../../protocols/communication/index.js'
 
 vi.mock('./mcp-client.js')
@@ -440,7 +441,7 @@ describe('VeasCommunicationMCP', () => {
       ]
       vi.spyOn(client, 'callTool').mockResolvedValue(mockMessages)
 
-      const result = await communication.listThreadReplies('thread-1', {
+      await communication.listThreadReplies('thread-1', {
         limit: 10,
         outputFormat: 'json'
       })
