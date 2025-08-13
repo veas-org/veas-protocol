@@ -116,7 +116,8 @@ export class MCPAdapter {
           throw new Error('Tool name is required')
         }
         const result = await this.executeTool(params.name, params.arguments || {})
-        return { result }
+        // The executeTool already returns the properly formatted response
+        return result as MCPAdapterResponse
       }
         
       default:
