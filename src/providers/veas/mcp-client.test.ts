@@ -4,6 +4,7 @@ import type { AuthContext } from '../../protocols/common'
 
 // Mock fetch globally
 global.fetch = vi.fn()
+;(globalThis as any).fetch = global.fetch
 
 describe('MCPClient', () => {
   let client: MCPClient
