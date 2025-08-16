@@ -69,22 +69,22 @@
     "format:check": "biome format ."
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@modelcontextprotocol/sdk": "^1.17.3",
     "axios": "^1.11.0",
     "node-cache": "^5.1.2",
     "picocolors": "^1.1.1",
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@types/node": "^22.17.1",
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.17.2",
+    "@veas/biome-config": "workspace:*",
     "@vitest/coverage-v8": "^2.1.9",
     "@vitest/ui": "^2.1.9",
     "globals": "^16.3.0",
     "rimraf": "^5.0.10",
     "typescript": "^5.9.2",
-    "vitest": "^2.1.9",
-    "@biomejs/biome": "^1.9.4",
-    "@veas/biome-config": "workspace:*"
+    "vitest": "^2.1.9"
   },
   "peerDependencies": {
     "@clack/prompts": "^0.8.0"

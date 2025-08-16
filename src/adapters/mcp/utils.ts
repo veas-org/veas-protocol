@@ -84,7 +84,7 @@ function isListResponse(data: unknown): data is ListResponse<unknown> {
 
 function formatListResponseAsMarkdown(response: ListResponse<unknown>): string {
   const { items, total, hasMore } = response
-  let markdown = `## Results`
+  let markdown = '## Results'
 
   if (total !== undefined) {
     markdown += `\n\nFound ${total} items`

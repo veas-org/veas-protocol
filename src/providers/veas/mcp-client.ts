@@ -80,7 +80,8 @@ export class MCPClient {
       const content = result.result.content[0]
       if (content.type === 'json' && content.data) {
         return content.data
-      } else if (content.type === 'text' && content.text) {
+      }
+      if (content.type === 'text' && content.text) {
         // Try to parse as JSON if possible
         try {
           return JSON.parse(content.text)
