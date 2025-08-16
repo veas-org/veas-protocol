@@ -8,13 +8,13 @@ global.fetch = vi.fn()
 
 describe('MCPClient Extended Tests', () => {
   let client: MCPClient
-  
+
   beforeEach(() => {
     client = new MCPClient({
       endpoint: 'http://localhost:3000/api/mcp',
       headers: {
-        'X-Custom-Header': 'test-value'
-      }
+        'X-Custom-Header': 'test-value',
+      },
     })
     vi.clearAllMocks()
   })
@@ -27,15 +27,17 @@ describe('MCPClient Extended Tests', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {
-            content: [{
-              type: 'text',
-              text: JSON.stringify(mockData)
-            }]
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(mockData),
+              },
+            ],
           },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       const result = await client.callTool('test-tool', {})
       expect(result).toEqual(mockData)
     })
@@ -46,15 +48,17 @@ describe('MCPClient Extended Tests', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {
-            content: [{
-              type: 'text',
-              text: 'plain text response'
-            }]
+            content: [
+              {
+                type: 'text',
+                text: 'plain text response',
+              },
+            ],
           },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       const result = await client.callTool('test-tool', {})
       expect(result).toBe('plain text response')
     })
@@ -66,15 +70,17 @@ describe('MCPClient Extended Tests', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {
-            content: [{
-              type: 'json',
-              data: mockData
-            }]
+            content: [
+              {
+                type: 'json',
+                data: mockData,
+              },
+            ],
           },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       const result = await client.callTool('test-tool', {})
       expect(result).toEqual(mockData)
     })
@@ -83,35 +89,34 @@ describe('MCPClient Extended Tests', () => {
       const authContext: AuthContext = {
         userId: 'user-123',
         scopes: ['read', 'write'],
-        email: 'test@example.com'
+        email: 'test@example.com',
       }
-      
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 })
+        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 }),
       })
-      
+
       await client.callTool('test-tool', { param: 'value' }, authContext)
-      
+
       expect(global.fetch).toHaveBeenCalledWith(
         'http://localhost:3000/api/mcp',
         expect.objectContaining({
           headers: expect.objectContaining({
             'X-User-Id': 'user-123',
-            'X-Scopes': 'read,write'
-          })
-        })
+            'X-Scopes': 'read,write',
+          }),
+        }),
       )
     })
 
     it('should handle empty args object', async () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 })
+        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 }),
       })
-      
+
       await client.callTool('test-tool', {})
-      
+
       const body = JSON.parse((global.fetch as any).mock.calls[0][1].body)
       expect(body.params).toEqual({ name: 'test-tool' })
     })
@@ -119,26 +124,26 @@ describe('MCPClient Extended Tests', () => {
     it('should handle args with values', async () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 })
+        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 }),
       })
-      
+
       await client.callTool('test-tool', { key: 'value' })
-      
+
       const body = JSON.parse((global.fetch as any).mock.calls[0][1].body)
-      expect(body.params).toEqual({ 
+      expect(body.params).toEqual({
         name: 'test-tool',
-        arguments: { key: 'value' }
+        arguments: { key: 'value' },
       })
     })
 
     it('should handle undefined args', async () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 })
+        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 }),
       })
-      
+
       await client.callTool('test-tool', undefined)
-      
+
       const body = JSON.parse((global.fetch as any).mock.calls[0][1].body)
       expect(body.params).toEqual({ name: 'test-tool' })
     })
@@ -146,9 +151,9 @@ describe('MCPClient Extended Tests', () => {
     it('should throw error when response is not ok', async () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: false,
-        statusText: 'Internal Server Error'
+        statusText: 'Internal Server Error',
       })
-      
+
       await expect(client.callTool('test-tool', {})).rejects.toThrow('MCP request failed: Internal Server Error')
     })
 
@@ -159,12 +164,12 @@ describe('MCPClient Extended Tests', () => {
           jsonrpc: '2.0',
           error: {
             code: -32601,
-            message: 'Method not found'
+            message: 'Method not found',
           },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       await expect(client.callTool('test-tool', {})).rejects.toThrow('MCP error -32601: Method not found')
     })
   })
@@ -173,27 +178,26 @@ describe('MCPClient Extended Tests', () => {
     it('should list available tools', async () => {
       const mockTools = [
         { name: 'tool1', description: 'Tool 1' },
-        { name: 'tool2', description: 'Tool 2' }
+        { name: 'tool2', description: 'Tool 2' },
       ]
-      
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           jsonrpc: '2.0',
           result: { tools: mockTools },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       const result = await client.listTools()
-      
+
       expect(result).toEqual(mockTools)
       expect(global.fetch).toHaveBeenCalledWith(
         'http://localhost:3000/api/mcp',
         expect.objectContaining({
           method: 'POST',
-          body: expect.stringContaining('"method":"tools/list"')
-        })
+          body: expect.stringContaining('"method":"tools/list"'),
+        }),
       )
     })
 
@@ -203,10 +207,10 @@ describe('MCPClient Extended Tests', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {},
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       const result = await client.listTools()
       expect(result).toEqual([])
     })
@@ -214,9 +218,9 @@ describe('MCPClient Extended Tests', () => {
     it('should handle listTools error response', async () => {
       ;(global.fetch as any).mockResolvedValueOnce({
         ok: false,
-        statusText: 'Bad Request'
+        statusText: 'Bad Request',
       })
-      
+
       await expect(client.listTools()).rejects.toThrow('MCP request failed: Bad Request')
     })
 
@@ -227,12 +231,12 @@ describe('MCPClient Extended Tests', () => {
           jsonrpc: '2.0',
           error: {
             code: -32600,
-            message: 'Invalid Request'
+            message: 'Invalid Request',
           },
-          id: 1
-        })
+          id: 1,
+        }),
       })
-      
+
       await expect(client.listTools()).rejects.toThrow('MCP error -32600: Invalid Request')
     })
   })
@@ -260,18 +264,18 @@ describe('MCPClient Extended Tests', () => {
     it('should increment request ID for each call', async () => {
       ;(global.fetch as any).mockResolvedValue({
         ok: true,
-        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 })
+        json: async () => ({ jsonrpc: '2.0', result: {}, id: 1 }),
       })
-      
+
       await client.callTool('test1', {})
       await client.callTool('test2', {})
       await client.listTools()
-      
+
       const calls = (global.fetch as any).mock.calls
       const body1 = JSON.parse(calls[0][1].body)
       const body2 = JSON.parse(calls[1][1].body)
       const body3 = JSON.parse(calls[2][1].body)
-      
+
       expect(body1.id).toBe(1)
       expect(body2.id).toBe(2)
       expect(body3.id).toBe(3)

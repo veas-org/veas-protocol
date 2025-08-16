@@ -275,7 +275,10 @@ export class VeasProjectManagementMCPProvider extends BaseMCPProvider implements
     }
   }
 
-  async searchIssues?(query: string, params?: ListParams & { filters?: IssueFilters } & OutputFormat): Promise<ListResponse<Issue>> {
+  async searchIssues?(
+    query: string,
+    params?: ListParams & { filters?: IssueFilters } & OutputFormat,
+  ): Promise<ListResponse<Issue>> {
     this.requireScopes(['projects:read'])
 
     const result = await this.callMCPTool<any>('mcp-project-manager_search_issues', {

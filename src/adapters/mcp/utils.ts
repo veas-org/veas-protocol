@@ -21,7 +21,7 @@ export function formatMCPError(error: unknown): any {
       ],
     }
   }
-  
+
   return {
     content: [
       {
@@ -37,7 +37,7 @@ export function formatMCPError(error: unknown): any {
  */
 export function formatMCPResponse(data: unknown, format?: 'json' | 'markdown'): any {
   const outputFormat = format || 'json'
-  
+
   if (outputFormat === 'markdown') {
     return {
       content: [
@@ -48,7 +48,7 @@ export function formatMCPResponse(data: unknown, format?: 'json' | 'markdown'): 
       ],
     }
   }
-  
+
   return {
     content: [
       {
@@ -66,15 +66,15 @@ function formatAsMarkdown(data: unknown): string {
   if (Array.isArray(data)) {
     return formatArrayAsMarkdown(data)
   }
-  
+
   if (isListResponse(data)) {
     return formatListResponseAsMarkdown(data)
   }
-  
+
   if (typeof data === 'object' && data !== null) {
     return formatObjectAsMarkdown(data)
   }
-  
+
   return String(data)
 }
 
@@ -85,7 +85,7 @@ function isListResponse(data: unknown): data is ListResponse<unknown> {
 function formatListResponseAsMarkdown(response: ListResponse<unknown>): string {
   const { items, total, hasMore } = response
   let markdown = `## Results`
-  
+
   if (total !== undefined) {
     markdown += `\n\nFound ${total} items`
   } else {
@@ -95,14 +95,14 @@ function formatListResponseAsMarkdown(response: ListResponse<unknown>): string {
     }
     markdown += ')'
   }
-  
+
   markdown += '\n\n'
   markdown += formatArrayAsMarkdown(items)
-  
+
   if (hasMore) {
     markdown += '\n*More results available*'
   }
-  
+
   return markdown
 }
 
@@ -110,25 +110,27 @@ function formatArrayAsMarkdown(items: unknown[]): string {
   if (items.length === 0) {
     return '*No items found*'
   }
-  
-  return items.map((item, index) => {
-    if (typeof item === 'object' && item !== null) {
-      return `### Item ${index + 1}\n\n${formatObjectAsMarkdown(item)}`
-    }
-    return `- ${item}`
-  }).join('\n\n')
+
+  return items
+    .map((item, index) => {
+      if (typeof item === 'object' && item !== null) {
+        return `### Item ${index + 1}\n\n${formatObjectAsMarkdown(item)}`
+      }
+      return `- ${item}`
+    })
+    .join('\n\n')
 }
 
 function formatObjectAsMarkdown(obj: any): string {
   const lines: string[] = []
-  
+
   for (const [key, value] of Object.entries(obj)) {
     const formattedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')
-    
+
     if (value === null || value === undefined) {
       continue
     }
-    
+
     if (Array.isArray(value)) {
       lines.push(`**${formattedKey}**: ${value.join(', ')}`)
     } else if (typeof value === 'object') {
@@ -137,7 +139,7 @@ function formatObjectAsMarkdown(obj: any): string {
       lines.push(`**${formattedKey}**: ${value}`)
     }
   }
-  
+
   return lines.join('\n')
 }
 

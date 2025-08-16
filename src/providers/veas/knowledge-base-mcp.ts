@@ -236,7 +236,10 @@ export class VeasKnowledgeBaseMCPProvider extends BaseMCPProvider implements Kno
   }
 
   // Search operations
-  async searchArticles(query: string, params?: ListParams & { filters?: ArticleFilters } & OutputFormat): Promise<ListResponse<Article>> {
+  async searchArticles(
+    query: string,
+    params?: ListParams & { filters?: ArticleFilters } & OutputFormat,
+  ): Promise<ListResponse<Article>> {
     this.requireScopes(['articles:read'])
 
     const result = await this.callMCPTool<any>('mcp-articles_search_articles', {

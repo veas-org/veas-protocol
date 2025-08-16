@@ -19,28 +19,22 @@ import type {
 } from '../../src'
 // import type { ListParams, ListResponse } from '../../src'
 import { NotFoundError } from '../../src'
-import {
-  mockProject,
-  mockIssue,
-  mockSprint,
-  mockComment,
-  mockListResponse,
-} from './mock-data'
+import { mockProject, mockIssue, mockSprint, mockComment, mockListResponse } from './mock-data'
 
 export function createMockProjectManagement(): ProjectManagementProtocol {
   const projects = new Map<string, Project>()
   const issues = new Map<string, Issue>()
   const sprints = new Map<string, Sprint>()
   const comments = new Map<string, Comment>()
-  
+
   // Add some initial data
   projects.set('1', mockProject())
   issues.set('1', mockIssue())
   sprints.set('1', mockSprint())
   comments.set('1', mockComment())
-  
+
   let nextId = 2
-  
+
   return {
     // Project operations
     async listProjects(params) {
@@ -48,10 +42,10 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       const start = params.offset || 0
       const limit = params.limit || 10
       const items = allProjects.slice(start, start + limit)
-      
+
       return mockListResponse(items, allProjects.length)
     },
-    
+
     async getProject(id) {
       const project = projects.get(id)
       if (!project) {
@@ -59,7 +53,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       }
       return project
     },
-    
+
     async createProject(data) {
       const id = String(nextId++)
       const project: Project = {
@@ -74,7 +68,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       projects.set(id, project)
       return project
     },
-    
+
     async updateProject(id, data) {
       const project = projects.get(id)
       if (!project) {
@@ -84,38 +78,38 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       projects.set(id, updated)
       return updated
     },
-    
+
     async deleteProject(id) {
       if (!projects.has(id)) {
         throw new NotFoundError(`Project with id '${id}' not found`, { resource: 'Project', id })
       }
       projects.delete(id)
     },
-    
+
     // Issue operations
     async listIssues(params) {
       let allIssues = Array.from(issues.values())
-      
+
       // Apply filters
       if (params.filters?.projectId) {
-        allIssues = allIssues.filter(i => i.projectId === params.filters!.projectId)
+        allIssues = allIssues.filter((i) => i.projectId === params.filters!.projectId)
       }
       if (params.filters?.type) {
         const types = Array.isArray(params.filters.type) ? params.filters.type : [params.filters.type]
-        allIssues = allIssues.filter(i => types.includes(i.type))
+        allIssues = allIssues.filter((i) => types.includes(i.type))
       }
       if (params.filters?.status) {
         const statuses = Array.isArray(params.filters.status) ? params.filters.status : [params.filters.status]
-        allIssues = allIssues.filter(i => statuses.includes(i.status))
+        allIssues = allIssues.filter((i) => statuses.includes(i.status))
       }
-      
+
       const start = params.offset || 0
       const limit = params.limit || 10
       const items = allIssues.slice(start, start + limit)
-      
+
       return mockListResponse(items, allIssues.length)
     },
-    
+
     async getIssue(id) {
       const issue = issues.get(id)
       if (!issue) {
@@ -123,7 +117,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       }
       return issue
     },
-    
+
     async createIssue(data) {
       const id = String(nextId++)
       const issue: Issue = {
@@ -138,7 +132,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       issues.set(id, issue)
       return issue
     },
-    
+
     async updateIssue(id, data) {
       const issue = issues.get(id)
       if (!issue) {
@@ -148,24 +142,24 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       issues.set(id, updated)
       return updated
     },
-    
+
     async deleteIssue(id) {
       if (!issues.has(id)) {
         throw new NotFoundError(`Issue with id '${id}' not found`, { resource: 'Issue', id })
       }
       issues.delete(id)
     },
-    
+
     // Sprint operations
     async listSprints(projectId, params) {
-      const projectSprints = Array.from(sprints.values()).filter(s => s.projectId === projectId)
+      const projectSprints = Array.from(sprints.values()).filter((s) => s.projectId === projectId)
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = projectSprints.slice(start, start + limit)
-      
+
       return mockListResponse(items, projectSprints.length)
     },
-    
+
     async getSprint(id) {
       const sprint = sprints.get(id)
       if (!sprint) {
@@ -173,7 +167,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       }
       return sprint
     },
-    
+
     async createSprint(data) {
       const id = String(nextId++)
       const sprint: Sprint = {
@@ -186,7 +180,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       sprints.set(id, sprint)
       return sprint
     },
-    
+
     async updateSprint(id, data) {
       const sprint = sprints.get(id)
       if (!sprint) {
@@ -196,24 +190,24 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       sprints.set(id, updated)
       return updated
     },
-    
+
     async deleteSprint(id) {
       if (!sprints.has(id)) {
         throw new NotFoundError(`Sprint with id '${id}' not found`, { resource: 'Sprint', id })
       }
       sprints.delete(id)
     },
-    
+
     // Comment operations
     async listComments(issueId, params) {
-      const issueComments = Array.from(comments.values()).filter(c => c.issueId === issueId)
+      const issueComments = Array.from(comments.values()).filter((c) => c.issueId === issueId)
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = issueComments.slice(start, start + limit)
-      
+
       return mockListResponse(items, issueComments.length)
     },
-    
+
     async createComment(data) {
       const id = String(nextId++)
       const comment: Comment = {
@@ -226,7 +220,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       comments.set(id, comment)
       return comment
     },
-    
+
     async updateComment(id, data) {
       const comment = comments.get(id)
       if (!comment) {
@@ -236,36 +230,38 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
       comments.set(id, updated)
       return updated
     },
-    
+
     async deleteComment(id) {
       if (!comments.has(id)) {
         throw new NotFoundError(`Comment with id '${id}' not found`, { resource: 'Comment', id })
       }
       comments.delete(id)
     },
-    
+
     // Optional operations
     async searchProjects(query, params) {
-      const filtered = Array.from(projects.values()).filter(p =>
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        p.description?.toLowerCase().includes(query.toLowerCase())
+      const filtered = Array.from(projects.values()).filter(
+        (p) =>
+          p.name.toLowerCase().includes(query.toLowerCase()) ||
+          p.description?.toLowerCase().includes(query.toLowerCase()),
       )
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = filtered.slice(start, start + limit)
-      
+
       return mockListResponse(items, filtered.length)
     },
-    
+
     async searchIssues(query, params) {
-      const filtered = Array.from(issues.values()).filter(i =>
-        i.title.toLowerCase().includes(query.toLowerCase()) ||
-        i.description?.toLowerCase().includes(query.toLowerCase())
+      const filtered = Array.from(issues.values()).filter(
+        (i) =>
+          i.title.toLowerCase().includes(query.toLowerCase()) ||
+          i.description?.toLowerCase().includes(query.toLowerCase()),
       )
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = filtered.slice(start, start + limit)
-      
+
       return mockListResponse(items, filtered.length)
     },
   }

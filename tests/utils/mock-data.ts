@@ -2,17 +2,7 @@
  * Mock data generators for testing
  */
 
-import type {
-  Project,
-  Issue,
-  Sprint,
-  Comment,
-  Article,
-  Folder,
-  Tag,
-  Publication,
-  EditorCommand,
-} from '../../src'
+import type { Project, Issue, Sprint, Comment, Article, Folder, Tag, Publication, EditorCommand } from '../../src'
 
 export const mockProject = (overrides?: Partial<Project>): Project => ({
   id: '1',

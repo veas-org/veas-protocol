@@ -36,7 +36,8 @@ export const ChannelContextTypeSchema = z.enum(['project', 'issue', 'article', '
 
 export const CreateChannelSchema = z.object({
   workspaceId: z.string(),
-  name: z.string()
+  name: z
+    .string()
     .min(1)
     .max(21)
     .regex(/^[a-z0-9-_]+$/, 'Channel name must be lowercase alphanumeric with hyphens or underscores'),

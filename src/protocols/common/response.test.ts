@@ -7,13 +7,13 @@ describe('Response Types', () => {
       const response: ListResponse<{ id: string; name: string }> = {
         items: [
           { id: '1', name: 'Item 1' },
-          { id: '2', name: 'Item 2' }
+          { id: '2', name: 'Item 2' },
         ],
         total: 10,
         limit: 2,
-        offset: 0
+        offset: 0,
       }
-      
+
       expect(response.items).toHaveLength(2)
       expect(response.total).toBe(10)
       expect(response.limit).toBe(2)
@@ -24,9 +24,9 @@ describe('Response Types', () => {
       const response: ListResponse<string> = {
         items: ['a', 'b', 'c'],
         total: 5,
-        hasMore: true
+        hasMore: true,
       }
-      
+
       expect(response.hasMore).toBe(true)
       expect(response.limit).toBeUndefined()
       expect(response.offset).toBeUndefined()
@@ -36,18 +36,18 @@ describe('Response Types', () => {
       const response: ListResponse<number> = {
         items: [1, 2, 3],
         total: 100,
-        nextCursor: 'next-page-token'
+        nextCursor: 'next-page-token',
       }
-      
+
       expect(response.nextCursor).toBe('next-page-token')
     })
 
     it('should handle empty list response', () => {
       const response: ListResponse<any> = {
         items: [],
-        total: 0
+        total: 0,
       }
-      
+
       expect(response.items).toHaveLength(0)
       expect(response.total).toBe(0)
     })
@@ -60,9 +60,9 @@ describe('Response Types', () => {
         offset: 20,
         cursor: 'cursor-token',
         sortBy: 'created_at',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
       }
-      
+
       expect(params.limit).toBe(10)
       expect(params.offset).toBe(20)
       expect(params.cursor).toBe('cursor-token')
@@ -72,7 +72,7 @@ describe('Response Types', () => {
 
     it('should handle minimal list params', () => {
       const params: ListParams = {}
-      
+
       expect(params.limit).toBeUndefined()
       expect(params.offset).toBeUndefined()
       expect(params.cursor).toBeUndefined()
@@ -83,9 +83,9 @@ describe('Response Types', () => {
     it('should handle pagination with limit and offset', () => {
       const params: ListParams = {
         limit: 50,
-        offset: 100
+        offset: 100,
       }
-      
+
       expect(params.limit).toBe(50)
       expect(params.offset).toBe(100)
     })
@@ -93,9 +93,9 @@ describe('Response Types', () => {
     it('should handle cursor-based pagination', () => {
       const params: ListParams = {
         limit: 25,
-        cursor: 'eyJpZCI6MTAwfQ=='
+        cursor: 'eyJpZCI6MTAwfQ==',
       }
-      
+
       expect(params.limit).toBe(25)
       expect(params.cursor).toBe('eyJpZCI6MTAwfQ==')
     })
@@ -104,23 +104,23 @@ describe('Response Types', () => {
   describe('OutputFormat', () => {
     it('should handle json output format', () => {
       const format: OutputFormat = {
-        outputFormat: 'json'
+        outputFormat: 'json',
       }
-      
+
       expect(format.outputFormat).toBe('json')
     })
 
     it('should handle markdown output format', () => {
       const format: OutputFormat = {
-        outputFormat: 'markdown'
+        outputFormat: 'markdown',
       }
-      
+
       expect(format.outputFormat).toBe('markdown')
     })
 
     it('should handle undefined output format', () => {
       const format: OutputFormat = {}
-      
+
       expect(format.outputFormat).toBeUndefined()
     })
   })

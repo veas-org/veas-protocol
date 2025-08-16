@@ -15,10 +15,13 @@ export default defineConfig({
         '*.config.js',
         '**/*.test.ts',
         '**/*.spec.ts',
-        '**/index.ts'
+        '**/index.ts',
       ],
-      reportsDirectory: './coverage'
+      reportsDirectory: './coverage',
     },
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}']
-  }
+    include: [
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+    ],
+  },
 })

@@ -12,7 +12,7 @@ import {
   // MessageFiltersSchema,
   SearchMessagesSchema,
   ListChannelsSchema,
-  ListMessagesSchema
+  ListMessagesSchema,
 } from './schemas'
 
 describe('Communication Schemas', () => {
@@ -24,9 +24,9 @@ describe('Communication Schemas', () => {
         allowDirectMessages: true,
         allowThreads: true,
         allowReactions: false,
-        maxMessageLength: 10000
+        maxMessageLength: 10000,
       }
-      
+
       const result = WorkspaceSettingsSchema.safeParse(settings)
       expect(result.success).toBe(true)
     })
@@ -34,18 +34,18 @@ describe('Communication Schemas', () => {
     it('should allow partial settings', () => {
       const settings = {
         allowPublicChannels: true,
-        maxMessageLength: 5000
+        maxMessageLength: 5000,
       }
-      
+
       const result = WorkspaceSettingsSchema.safeParse(settings)
       expect(result.success).toBe(true)
     })
 
     it('should reject invalid message length', () => {
       const settings = {
-        maxMessageLength: -100
+        maxMessageLength: -100,
       }
-      
+
       const result = WorkspaceSettingsSchema.safeParse(settings)
       expect(result.success).toBe(false)
     })
@@ -59,22 +59,22 @@ describe('Communication Schemas', () => {
         description: 'A test workspace',
         organizationId: 'org-123',
         settings: {
-          allowPublicChannels: true
+          allowPublicChannels: true,
         },
         metadata: {
-          customField: 'value'
-        }
+          customField: 'value',
+        },
       }
-      
+
       const result = CreateWorkspaceSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
 
     it('should require name and organizationId', () => {
       const data = {
-        displayName: 'Test'
+        displayName: 'Test',
       }
-      
+
       const result = CreateWorkspaceSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -82,9 +82,9 @@ describe('Communication Schemas', () => {
     it('should reject empty name', () => {
       const data = {
         name: '',
-        organizationId: 'org-123'
+        organizationId: 'org-123',
       }
-      
+
       const result = CreateWorkspaceSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -92,9 +92,9 @@ describe('Communication Schemas', () => {
     it('should reject name longer than 100 characters', () => {
       const data = {
         name: 'a'.repeat(101),
-        organizationId: 'org-123'
+        organizationId: 'org-123',
       }
-      
+
       const result = CreateWorkspaceSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -113,20 +113,20 @@ describe('Communication Schemas', () => {
         contextType: 'general' as const,
         contextId: 'ctx-456',
         initialMembers: ['user-1', 'user-2'],
-        metadata: { custom: 'data' }
+        metadata: { custom: 'data' },
       }
-      
+
       const result = CreateChannelSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
 
     it('should validate channel name format', () => {
       const validNames = ['general', 'team-chat', 'project_123', 'test-123-abc']
-      
-      validNames.forEach(name => {
+
+      validNames.forEach((name) => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
-          name
+          name,
         })
         expect(result.success).toBe(true)
       })
@@ -138,13 +138,13 @@ describe('Communication Schemas', () => {
         'general chat', // space
         'general@chat', // special char
         '', // empty
-        'a'.repeat(22) // too long
+        'a'.repeat(22), // too long
       ]
-      
-      invalidNames.forEach(name => {
+
+      invalidNames.forEach((name) => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
-          name
+          name,
         })
         expect(result.success).toBe(false)
       })
@@ -152,12 +152,12 @@ describe('Communication Schemas', () => {
 
     it('should validate channel types', () => {
       const validTypes = ['public', 'private', 'direct_message', 'group_direct_message', 'shared']
-      
-      validTypes.forEach(type => {
+
+      validTypes.forEach((type) => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name: 'test',
-          type
+          type,
         })
         expect(result.success).toBe(true)
       })
@@ -165,12 +165,12 @@ describe('Communication Schemas', () => {
 
     it('should validate context types', () => {
       const validContextTypes = ['project', 'issue', 'article', 'team', 'general']
-      
-      validContextTypes.forEach(contextType => {
+
+      validContextTypes.forEach((contextType) => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name: 'test',
-          contextType
+          contextType,
         })
         expect(result.success).toBe(true)
       })
@@ -192,21 +192,21 @@ describe('Communication Schemas', () => {
             mimeType: 'application/pdf',
             size: 1024000,
             url: 'https://example.com/doc.pdf',
-            thumbnailUrl: 'https://example.com/thumb.jpg'
-          }
+            thumbnailUrl: 'https://example.com/thumb.jpg',
+          },
         ],
-        metadata: { custom: 'field' }
+        metadata: { custom: 'field' },
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
 
     it('should require channelId and text', () => {
       const data = {
-        title: 'Test'
+        title: 'Test',
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -214,9 +214,9 @@ describe('Communication Schemas', () => {
     it('should reject empty text', () => {
       const data = {
         channelId: 'ch-123',
-        text: ''
+        text: '',
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -224,21 +224,21 @@ describe('Communication Schemas', () => {
     it('should reject text longer than 40000 characters', () => {
       const data = {
         channelId: 'ch-123',
-        text: 'a'.repeat(40001)
+        text: 'a'.repeat(40001),
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
 
     it('should validate message types', () => {
       const validTypes = ['text', 'code', 'bot', 'app_message', 'system']
-      
-      validTypes.forEach(type => {
+
+      validTypes.forEach((type) => {
         const result = CreateMessageSchema.safeParse({
           channelId: 'ch-123',
           text: 'test',
-          type
+          type,
         })
         expect(result.success).toBe(true)
       })
@@ -253,11 +253,11 @@ describe('Communication Schemas', () => {
             filename: 'test.txt',
             mimeType: 'text/plain',
             size: 100,
-            url: 'https://example.com/test.txt'
-          }
-        ]
+            url: 'https://example.com/test.txt',
+          },
+        ],
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
@@ -271,11 +271,11 @@ describe('Communication Schemas', () => {
             filename: 'test.txt',
             mimeType: 'text/plain',
             size: 100,
-            url: 'not-a-url'
-          }
-        ]
+            url: 'not-a-url',
+          },
+        ],
       }
-      
+
       const result = CreateMessageSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -285,9 +285,9 @@ describe('Communication Schemas', () => {
     it('should validate valid reaction data', () => {
       const data = {
         messageId: 'msg-123',
-        emoji: '👍'
+        emoji: '👍',
       }
-      
+
       const result = AddReactionSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
@@ -295,9 +295,9 @@ describe('Communication Schemas', () => {
     it('should accept emoji shortcodes', () => {
       const data = {
         messageId: 'msg-123',
-        emoji: ':thumbsup:'
+        emoji: ':thumbsup:',
       }
-      
+
       const result = AddReactionSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
@@ -305,9 +305,9 @@ describe('Communication Schemas', () => {
     it('should reject empty emoji', () => {
       const data = {
         messageId: 'msg-123',
-        emoji: ''
+        emoji: '',
       }
-      
+
       const result = AddReactionSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -315,9 +315,9 @@ describe('Communication Schemas', () => {
     it('should reject emoji longer than 50 characters', () => {
       const data = {
         messageId: 'msg-123',
-        emoji: 'a'.repeat(51)
+        emoji: 'a'.repeat(51),
       }
-      
+
       const result = AddReactionSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -337,48 +337,48 @@ describe('Communication Schemas', () => {
         hasReactions: false,
         inThread: true,
         limit: 50,
-        offset: 10
+        offset: 10,
       }
-      
+
       const result = SearchMessagesSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
 
     it('should require query', () => {
       const data = {
-        workspaceId: 'ws-123'
+        workspaceId: 'ws-123',
       }
-      
+
       const result = SearchMessagesSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
 
     it('should reject query shorter than 2 characters', () => {
       const data = {
-        query: 'a'
+        query: 'a',
       }
-      
+
       const result = SearchMessagesSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
 
     it('should validate limit bounds', () => {
       const validLimits = [1, 50, 100]
-      
-      validLimits.forEach(limit => {
+
+      validLimits.forEach((limit) => {
         const result = SearchMessagesSchema.safeParse({
           query: 'test',
-          limit
+          limit,
         })
         expect(result.success).toBe(true)
       })
-      
+
       const invalidLimits = [0, 101, -1]
-      
-      invalidLimits.forEach(limit => {
+
+      invalidLimits.forEach((limit) => {
         const result = SearchMessagesSchema.safeParse({
           query: 'test',
-          limit
+          limit,
         })
         expect(result.success).toBe(false)
       })
@@ -396,15 +396,15 @@ describe('Communication Schemas', () => {
           isArchived: false,
           contextType: 'project' as const,
           contextId: 'ctx-123',
-          userIsMember: true
+          userIsMember: true,
         },
         limit: 25,
         offset: 0,
         sortBy: 'name' as const,
         sortOrder: 'asc' as const,
-        outputFormat: 'json' as const
+        outputFormat: 'json' as const,
       }
-      
+
       const result = ListChannelsSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
@@ -412,17 +412,17 @@ describe('Communication Schemas', () => {
     it('should accept empty filters', () => {
       const data = {
         filters: {},
-        limit: 10
+        limit: 10,
       }
-      
+
       const result = ListChannelsSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
 
     it('should validate sort options', () => {
       const validSortBy = ['name', 'created_at', 'member_count']
-      
-      validSortBy.forEach(sortBy => {
+
+      validSortBy.forEach((sortBy) => {
         const result = ListChannelsSchema.safeParse({ sortBy })
         expect(result.success).toBe(true)
       })
@@ -430,8 +430,8 @@ describe('Communication Schemas', () => {
 
     it('should validate output formats', () => {
       const validFormats = ['json', 'markdown']
-      
-      validFormats.forEach(outputFormat => {
+
+      validFormats.forEach((outputFormat) => {
         const result = ListChannelsSchema.safeParse({ outputFormat })
         expect(result.success).toBe(true)
       })
@@ -450,15 +450,15 @@ describe('Communication Schemas', () => {
           afterTs: 'ts-after',
           hasReactions: true,
           hasAttachments: false,
-          search: 'keyword'
+          search: 'keyword',
         },
         limit: 100,
         offset: 50,
         sortBy: 'created_at' as const,
         sortOrder: 'desc' as const,
-        outputFormat: 'markdown' as const
+        outputFormat: 'markdown' as const,
       }
-      
+
       const result = ListMessagesSchema.safeParse(data)
       expect(result.success).toBe(true)
     })
@@ -466,9 +466,9 @@ describe('Communication Schemas', () => {
     it('should require channelId', () => {
       const data = {
         filters: {},
-        limit: 10
+        limit: 10,
       }
-      
+
       const result = ListMessagesSchema.safeParse(data)
       expect(result.success).toBe(false)
     })
@@ -476,17 +476,17 @@ describe('Communication Schemas', () => {
     it('should validate limit bounds for messages', () => {
       const data = {
         channelId: 'ch-123',
-        limit: 1000 // max allowed
+        limit: 1000, // max allowed
       }
-      
+
       const result = ListMessagesSchema.safeParse(data)
       expect(result.success).toBe(true)
-      
+
       const invalidData = {
         channelId: 'ch-123',
-        limit: 1001 // exceeds max
+        limit: 1001, // exceeds max
       }
-      
+
       const invalidResult = ListMessagesSchema.safeParse(invalidData)
       expect(invalidResult.success).toBe(false)
     })

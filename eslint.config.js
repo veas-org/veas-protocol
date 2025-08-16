@@ -1,7 +1,7 @@
-import js from '@eslint/js';
-import typescript from '@typescript-eslint/eslint-plugin';
-import typescriptParser from '@typescript-eslint/parser';
-import globals from 'globals';
+import js from '@eslint/js'
+import typescript from '@typescript-eslint/eslint-plugin'
+import typescriptParser from '@typescript-eslint/parser'
+import globals from 'globals'
 
 export default [
   js.configs.recommended,
@@ -12,22 +12,25 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        project: './tsconfig.eslint.json'
+        project: './tsconfig.eslint.json',
       },
       globals: {
         ...globals.node,
-        ...globals.es2021
-      }
+        ...globals.es2021,
+      },
     },
     plugins: {
-      '@typescript-eslint': typescript
+      '@typescript-eslint': typescript,
     },
     rules: {
       ...typescript.configs.recommended.rules,
-      '@typescript-eslint/no-unused-vars': ['error', { 
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -36,15 +39,15 @@ export default [
       'prefer-const': 'error',
       'no-var': 'error',
       'object-shorthand': 'error',
-      'quote-props': ['error', 'as-needed']
-    }
+      'quote-props': ['error', 'as-needed'],
+    },
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'no-console': 'off'
-    }
+      'no-console': 'off',
+    },
   },
   {
     ignores: [
@@ -54,7 +57,7 @@ export default [
       '*.config.js',
       '*.config.ts',
       '*.config.mjs',
-      '*.config.mts'
-    ]
-  }
-];
+      '*.config.mts',
+    ],
+  },
+]

@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { 
-  ProtocolError, 
-  ValidationError, 
-  NotFoundError, 
+import {
+  ProtocolError,
+  ValidationError,
+  NotFoundError,
   UnauthorizedError,
   ForbiddenError,
   ConflictError,
   RateLimitError,
-  ServerError
+  ServerError,
 } from './errors'
 
 describe('Protocol Errors', () => {

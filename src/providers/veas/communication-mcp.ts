@@ -24,13 +24,15 @@ import type {
   MessageSearchResult,
   SearchMessagesParams,
 } from '../../protocols/communication/index.js'
-import { MCPClient } from './mcp-client.js'
+import type { MCPClient } from './mcp-client.js'
 
 export class VeasCommunicationMCP implements CommunicationProtocol {
   constructor(private client: MCPClient) {}
 
   // Workspace operations
-  async listWorkspaces(params: ListParams & { filters?: WorkspaceFilters } & OutputFormat): Promise<ListResponse<Workspace>> {
+  async listWorkspaces(
+    params: ListParams & { filters?: WorkspaceFilters } & OutputFormat,
+  ): Promise<ListResponse<Workspace>> {
     const result = await this.client.callTool('mcp-chat_list_workspaces', params)
     return result as ListResponse<Workspace>
   }
@@ -65,28 +67,33 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
     return result as Channel
   }
 
-  async getChannelByContext(contextType: string, contextId: string, workspaceId: string, params?: OutputFormat): Promise<Channel | null> {
+  async getChannelByContext(
+    contextType: string,
+    contextId: string,
+    workspaceId: string,
+    params?: OutputFormat,
+  ): Promise<Channel | null> {
     // Special case for project context
     if (contextType === 'project') {
       const result = await this.client.callTool('mcp-chat_get_channel_by_project', {
         project_identifier: contextId,
         workspace_id: workspaceId,
-        ...params
+        ...params,
       })
       return result as Channel | null
     }
-    
+
     // For other context types, use list with filters
     const response = await this.listChannels({
       filters: {
         contextType: contextType as any,
         contextId,
-        workspaceId
+        workspaceId,
       },
       limit: 1,
-      ...params
+      ...params,
     })
-    
+
     return response.items[0] ?? null
   }
 
@@ -98,18 +105,18 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
       description: data.description,
       topic: data.topic,
       is_private: data.isPrivate,
-      initial_members: data.initialMembers
+      initial_members: data.initialMembers,
     })
     return result as Channel
   }
 
   async updateChannel(id: string, data: UpdateChannelData): Promise<Channel> {
-    const result = await this.client.callTool('mcp-chat_update_channel', { 
+    const result = await this.client.callTool('mcp-chat_update_channel', {
       channel_id: id,
       display_name: data.displayName,
       description: data.description,
       topic: data.topic,
-      is_archived: data.isArchived
+      is_archived: data.isArchived,
     })
     return result as Channel
   }
@@ -127,7 +134,10 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   }
 
   // Message operations
-  async listMessages(channelId: string, params: ListParams & { filters?: MessageFilters } & OutputFormat): Promise<ListResponse<Message>> {
+  async listMessages(
+    channelId: string,
+    params: ListParams & { filters?: MessageFilters } & OutputFormat,
+  ): Promise<ListResponse<Message>> {
     const result = await this.client.callTool('mcp-chat_get_messages', {
       channel_id: channelId,
       limit: params.limit,
@@ -136,17 +146,17 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
       after_ts: params.filters?.afterTs,
       include_reactions: params.filters?.hasReactions,
       include_thread_info: true,
-      output_format: params.outputFormat
+      output_format: params.outputFormat,
     })
-    
+
     // Transform result to ListResponse format
     if (Array.isArray(result)) {
       return {
         items: result as Message[],
-        total: result.length
+        total: result.length,
       } as ListResponse<Message>
     }
-    
+
     return result as ListResponse<Message>
   }
 
@@ -155,23 +165,27 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
     return result as Message
   }
 
-  async getMessagesByIssue(channelId: string, issueId: string, params?: ListParams & OutputFormat): Promise<ListResponse<Message>> {
+  async getMessagesByIssue(
+    channelId: string,
+    issueId: string,
+    params?: ListParams & OutputFormat,
+  ): Promise<ListResponse<Message>> {
     const result = await this.client.callTool('mcp-chat_get_messages_by_issue', {
       channel_id: channelId,
       issue_identifier: issueId,
       limit: params?.limit,
       include_replies: true,
-      output_format: params?.outputFormat
+      output_format: params?.outputFormat,
     })
-    
+
     // Transform result to ListResponse format
     if (Array.isArray(result)) {
       return {
         items: result as Message[],
-        total: result.length
+        total: result.length,
       } as ListResponse<Message>
     }
-    
+
     return result as ListResponse<Message>
   }
 
@@ -181,22 +195,22 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
       text: data.text,
       title: data.title,
       thread_ts: data.threadTs,
-      message_type: data.type
+      message_type: data.type,
     })
-    
+
     // Extract the message from the response
     if (result && typeof result === 'object' && 'message' in result) {
       return (result as any).message as Message
     }
-    
+
     return result as Message
   }
 
   async updateMessage(id: string, data: UpdateMessageData): Promise<Message> {
-    const result = await this.client.callTool('mcp-chat_update_message', { 
+    const result = await this.client.callTool('mcp-chat_update_message', {
       message_id: id,
       text: data.text,
-      title: data.title
+      title: data.title,
     })
     return result as Message
   }
@@ -214,7 +228,7 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async listThreadReplies(threadTs: string, params?: ListParams & OutputFormat): Promise<ListResponse<Message>> {
     return this.listMessages(threadTs, {
       filters: { threadTs },
-      ...params
+      ...params,
     })
   }
 
@@ -222,7 +236,7 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async addReaction(data: AddReactionData): Promise<Reaction> {
     const result = await this.client.callTool('mcp-chat_add_reaction', {
       message_id: data.messageId,
-      emoji: data.emoji
+      emoji: data.emoji,
     })
     return result as Reaction
   }
@@ -230,25 +244,28 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async removeReaction(messageId: string, emoji: string): Promise<void> {
     await this.client.callTool('mcp-chat_remove_reaction', {
       message_id: messageId,
-      emoji
+      emoji,
     })
   }
 
   async listReactions(messageId: string, params?: OutputFormat): Promise<Reaction[]> {
-    const result = await this.client.callTool('mcp-chat_list_reactions', { 
+    const result = await this.client.callTool('mcp-chat_list_reactions', {
       message_id: messageId,
-      ...params
+      ...params,
     })
     return result as Reaction[]
   }
 
   // Member operations
-  async listChannelMembers(channelId: string, params?: ListParams & OutputFormat): Promise<ListResponse<ChannelMember>> {
+  async listChannelMembers(
+    channelId: string,
+    params?: ListParams & OutputFormat,
+  ): Promise<ListResponse<ChannelMember>> {
     const result = await this.client.callTool('mcp-chat_list_channel_members', {
       channel_id: channelId,
       limit: params?.limit,
       offset: params?.offset,
-      output_format: params?.outputFormat
+      output_format: params?.outputFormat,
     })
     return result as ListResponse<ChannelMember>
   }
@@ -265,7 +282,7 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async inviteToChannel(channelId: string, userIds: string[]): Promise<ChannelMember[]> {
     const result = await this.client.callTool('mcp-chat_invite_to_channel', {
       channel_id: channelId,
-      user_ids: userIds
+      user_ids: userIds,
     })
     return result as ChannelMember[]
   }
@@ -273,17 +290,20 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async removeFromChannel(channelId: string, userId: string): Promise<void> {
     await this.client.callTool('mcp-chat_remove_from_channel', {
       channel_id: channelId,
-      user_id: userId
+      user_id: userId,
     })
   }
 
   // Workspace member operations
-  async listWorkspaceMembers(workspaceId: string, params?: ListParams & OutputFormat): Promise<ListResponse<WorkspaceMember>> {
+  async listWorkspaceMembers(
+    workspaceId: string,
+    params?: ListParams & OutputFormat,
+  ): Promise<ListResponse<WorkspaceMember>> {
     const result = await this.client.callTool('mcp-chat_list_workspace_members', {
       workspace_id: workspaceId,
       limit: params?.limit,
       offset: params?.offset,
-      output_format: params?.outputFormat
+      output_format: params?.outputFormat,
     })
     return result as ListResponse<WorkspaceMember>
   }
@@ -292,16 +312,20 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
     const result = await this.client.callTool('mcp-chat_add_workspace_member', {
       workspace_id: workspaceId,
       user_id: userId,
-      role: role || 'member'
+      role: role || 'member',
     })
     return result as WorkspaceMember
   }
 
-  async updateWorkspaceMember(workspaceId: string, userId: string, updates: Partial<WorkspaceMember>): Promise<WorkspaceMember> {
+  async updateWorkspaceMember(
+    workspaceId: string,
+    userId: string,
+    updates: Partial<WorkspaceMember>,
+  ): Promise<WorkspaceMember> {
     const result = await this.client.callTool('mcp-chat_update_workspace_member', {
       workspace_id: workspaceId,
       user_id: userId,
-      ...updates
+      ...updates,
     })
     return result as WorkspaceMember
   }
@@ -309,12 +333,14 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
   async removeWorkspaceMember(workspaceId: string, userId: string): Promise<void> {
     await this.client.callTool('mcp-chat_remove_workspace_member', {
       workspace_id: workspaceId,
-      user_id: userId
+      user_id: userId,
     })
   }
 
   // Search operations
-  async searchMessages(params: SearchMessagesParams & ListParams & OutputFormat): Promise<ListResponse<MessageSearchResult>> {
+  async searchMessages(
+    params: SearchMessagesParams & ListParams & OutputFormat,
+  ): Promise<ListResponse<MessageSearchResult>> {
     const result = await this.client.callTool('mcp-chat_search_messages', {
       query: params.query,
       workspace_id: params.workspaceId,
@@ -326,11 +352,11 @@ export class VeasCommunicationMCP implements CommunicationProtocol {
         after_date: params.afterDate?.toISOString(),
         has_files: params.hasAttachments,
         has_reactions: params.hasReactions,
-        in_thread: params.inThread
+        in_thread: params.inThread,
       },
       limit: params.limit,
       offset: params.offset,
-      output_format: params.outputFormat
+      output_format: params.outputFormat,
     })
     return result as ListResponse<MessageSearchResult>
   }

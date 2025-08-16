@@ -1,6 +1,6 @@
 /**
  * Veas Protocol - Formal interfaces for provider-agnostic MCP servers
- * 
+ *
  * @packageDocumentation
  */
 

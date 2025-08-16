@@ -1,6 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { MCPAdapter } from './adapter'
-import type { ProtocolProvider, ProjectManagementProtocol, KnowledgeBaseProtocol, CommunicationProtocol } from '../../protocols'
+import type {
+  ProtocolProvider,
+  ProjectManagementProtocol,
+  KnowledgeBaseProtocol,
+  CommunicationProtocol,
+} from '../../protocols'
 
 describe('MCPAdapter', () => {
   let mockProvider: ProtocolProvider
@@ -29,7 +34,7 @@ describe('MCPAdapter', () => {
       listComments: vi.fn().mockResolvedValue({ items: [], total: 0 }),
       createComment: vi.fn(),
       updateComment: vi.fn(),
-      deleteComment: vi.fn()
+      deleteComment: vi.fn(),
     } as ProjectManagementProtocol
 
     mockKnowledgeBase = {
@@ -47,7 +52,7 @@ describe('MCPAdapter', () => {
       getTag: vi.fn(),
       createTag: vi.fn(),
       updateTag: vi.fn(),
-      deleteTag: vi.fn()
+      deleteTag: vi.fn(),
     } as KnowledgeBaseProtocol
 
     mockCommunication = {
@@ -84,7 +89,7 @@ describe('MCPAdapter', () => {
       addWorkspaceMember: vi.fn(),
       updateWorkspaceMember: vi.fn(),
       removeWorkspaceMember: vi.fn(),
-      searchMessages: vi.fn().mockResolvedValue({ items: [], total: 0 })
+      searchMessages: vi.fn().mockResolvedValue({ items: [], total: 0 }),
     } as CommunicationProtocol
 
     mockProvider = {
@@ -93,22 +98,22 @@ describe('MCPAdapter', () => {
       description: 'Test provider',
       authenticate: vi.fn().mockResolvedValue({
         userId: 'user-123',
-        scopes: ['read', 'write']
+        scopes: ['read', 'write'],
       }),
       isConnected: vi.fn().mockReturnValue(true),
       disconnect: vi.fn().mockResolvedValue(undefined),
       projectManagement: mockProjectManagement,
       knowledgeBase: mockKnowledgeBase,
-      communication: mockCommunication
+      communication: mockCommunication,
     }
   })
 
   describe('initialization', () => {
     it('should initialize with a provider', () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       expect(adapter).toBeDefined()
       expect(adapter.getTools()).toBeDefined()
     })
@@ -116,35 +121,35 @@ describe('MCPAdapter', () => {
     it('should register project management tools', () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'test'
+        toolPrefix: 'test',
       })
-      
+
       const tools = adapter.getTools()
-      const pmTool = tools.find(t => t.name.includes('projects'))
-      
+      const pmTool = tools.find((t) => t.name.includes('projects'))
+
       expect(pmTool).toBeDefined()
     })
 
     it('should register knowledge base tools', () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'test'
+        toolPrefix: 'test',
       })
-      
+
       const tools = adapter.getTools()
-      const kbTool = tools.find(t => t.name.includes('articles'))
-      
+      const kbTool = tools.find((t) => t.name.includes('articles'))
+
       expect(kbTool).toBeDefined()
     })
 
     it('should register communication tools', () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       const tools = adapter.getTools()
-      const commTool = tools.find(t => t.name.includes('chat'))
-      
+      const commTool = tools.find((t) => t.name.includes('chat'))
+
       expect(commTool).toBeDefined()
     })
 
@@ -153,13 +158,13 @@ describe('MCPAdapter', () => {
         ...mockProvider,
         projectManagement: undefined,
         knowledgeBase: undefined,
-        communication: undefined
+        communication: undefined,
       }
-      
+
       const adapter = new MCPAdapter({
-        provider: minimalProvider
+        provider: minimalProvider,
       })
-      
+
       const tools = adapter.getTools()
       expect(tools).toHaveLength(0)
     })
@@ -169,7 +174,7 @@ describe('MCPAdapter', () => {
       expect(() => {
         new MCPAdapter({
           provider: mockProvider,
-          debug: true
+          debug: true,
         })
       }).not.toThrow()
     })
@@ -178,21 +183,21 @@ describe('MCPAdapter', () => {
   describe('authentication', () => {
     it('should authenticate with credentials', async () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       await adapter.authenticate({ token: 'test-token' })
-      
+
       expect(mockProvider.authenticate).toHaveBeenCalledWith({ token: 'test-token' })
     })
 
     it('should store auth context after authentication', async () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       await adapter.authenticate({ token: 'test-token' })
-      
+
       // The auth context should be available to tools
       const tools = adapter.getTools()
       expect(tools.length).toBeGreaterThan(0)
@@ -203,12 +208,12 @@ describe('MCPAdapter', () => {
     it('should get a tool by name', () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'test'
+        toolPrefix: 'test',
       })
-      
+
       const tools = adapter.getTools()
       const toolName = tools[0]?.name
-      
+
       if (toolName) {
         const tool = adapter.getTool(toolName)
         expect(tool).toBeDefined()
@@ -218,9 +223,9 @@ describe('MCPAdapter', () => {
 
     it('should return undefined for non-existent tool', () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       const tool = adapter.getTool('non-existent-tool')
       expect(tool).toBeUndefined()
     })
@@ -230,15 +235,15 @@ describe('MCPAdapter', () => {
     it('should execute a tool by name', async () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'test'
+        toolPrefix: 'test',
       })
-      
+
       await adapter.authenticate({ token: 'test-token' })
-      
+
       // Find a project management tool
       const tools = adapter.getTools()
-      const listProjectsTool = tools.find(t => t.name.includes('list') && t.name.includes('projects'))
-      
+      const listProjectsTool = tools.find((t) => t.name.includes('list') && t.name.includes('projects'))
+
       if (listProjectsTool) {
         const result = await adapter.executeTool(listProjectsTool.name, {})
         expect(result).toBeDefined()
@@ -248,36 +253,34 @@ describe('MCPAdapter', () => {
 
     it('should throw error for non-existent tool', async () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
-      await expect(
-        adapter.executeTool('non-existent-tool', {})
-      ).rejects.toThrow("Tool 'non-existent-tool' not found")
+
+      await expect(adapter.executeTool('non-existent-tool', {})).rejects.toThrow("Tool 'non-existent-tool' not found")
     })
 
     it('should pass parameters to tool handler', async () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'test'
+        toolPrefix: 'test',
       })
-      
+
       await adapter.authenticate({ token: 'test-token' })
-      
+
       const tools = adapter.getTools()
-      const listProjectsTool = tools.find(t => t.name.includes('list') && t.name.includes('projects'))
-      
+      const listProjectsTool = tools.find((t) => t.name.includes('list') && t.name.includes('projects'))
+
       if (listProjectsTool) {
         await adapter.executeTool(listProjectsTool.name, {
           limit: 10,
-          offset: 20
+          offset: 20,
         })
-        
+
         expect(mockProjectManagement.listProjects).toHaveBeenCalledWith(
           expect.objectContaining({
             limit: 10,
-            offset: 20
-          })
+            offset: 20,
+          }),
         )
       }
     })
@@ -286,9 +289,9 @@ describe('MCPAdapter', () => {
   describe('getTools', () => {
     it('should return all registered tools', () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       const tools = adapter.getTools()
       expect(Array.isArray(tools)).toBe(true)
       expect(tools.length).toBeGreaterThan(0)
@@ -297,12 +300,12 @@ describe('MCPAdapter', () => {
     it('should return tools with correct structure', () => {
       const adapter = new MCPAdapter({
         provider: mockProvider,
-        toolPrefix: 'custom'
+        toolPrefix: 'custom',
       })
-      
+
       const tools = adapter.getTools()
       const firstTool = tools[0]
-      
+
       if (firstTool) {
         expect(firstTool).toHaveProperty('name')
         expect(firstTool).toHaveProperty('description')
@@ -315,18 +318,18 @@ describe('MCPAdapter', () => {
   describe('serve', () => {
     it('should have serve method for starting server', async () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       expect(adapter.serve).toBeDefined()
       expect(typeof adapter.serve).toBe('function')
     })
 
     it('should support stdio transport', async () => {
       const adapter = new MCPAdapter({
-        provider: mockProvider
+        provider: mockProvider,
       })
-      
+
       // Note: We can't actually test stdio without mocking process.stdin/stdout
       // This just ensures the method accepts the correct parameters
       const servePromise = adapter.serve({ transport: 'stdio' })

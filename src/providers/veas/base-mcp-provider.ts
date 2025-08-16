@@ -10,22 +10,22 @@ import { MCPClient } from './mcp-client.js'
 export abstract class BaseMCPProvider {
   protected auth: VeasAuthProvider
   protected mcpClient: MCPClient
-  
+
   constructor(
     protected config: { mcpEndpoint: string; apiUrl?: string },
-    sharedAuth?: VeasAuthProvider
+    sharedAuth?: VeasAuthProvider,
   ) {
     this.auth = sharedAuth || new VeasAuthProvider({ apiUrl: config.apiUrl || config.mcpEndpoint })
     this.mcpClient = new MCPClient({ endpoint: config.mcpEndpoint })
   }
-  
+
   /**
    * Authenticate with credentials
    */
   async authenticate(credentials: AuthCredentials): Promise<AuthContext> {
     return this.auth.authenticate(credentials)
   }
-  
+
   /**
    * Get current auth context, throwing if not authenticated
    */
@@ -36,18 +36,18 @@ export abstract class BaseMCPProvider {
     }
     return context
   }
-  
+
   /**
    * Check if user has required scopes
    */
   protected requireScopes(scopes: string[]): void {
     const context = this.getAuthContext()
-    const hasScopes = scopes.every(scope => context.scopes.includes(scope))
+    const hasScopes = scopes.every((scope) => context.scopes.includes(scope))
     if (!hasScopes) {
       throw new AuthorizationError(`Missing required scopes: ${scopes.join(', ')}`)
     }
   }
-  
+
   /**
    * Call an MCP tool with authentication
    */

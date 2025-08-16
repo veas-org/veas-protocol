@@ -19,7 +19,7 @@ describe('VeasMCPProtocolProvider', () => {
     mockFetch.mockReset()
     mockFetch.mockResolvedValue({
       ok: true,
-      json: async () => ({ userId: 'test', scopes: [] })
+      json: async () => ({ userId: 'test', scopes: [] }),
     })
     provider = new VeasMCPProtocolProvider({
       mcpEndpoint: 'http://localhost:3000/api/mcp/http',
@@ -87,7 +87,7 @@ describe('VeasMCPProtocolProvider', () => {
           headers: expect.objectContaining({
             Authorization: 'Bearer mya_valid_token',
           }),
-        })
+        }),
       )
     })
 
@@ -101,7 +101,7 @@ describe('VeasMCPProtocolProvider', () => {
       await expect(
         provider.authenticate({
           token: 'mya_invalid_token',
-        })
+        }),
       ).rejects.toThrow('Authentication failed: 401 Unauthorized')
     })
 
@@ -136,7 +136,7 @@ describe('VeasMCPProtocolProvider', () => {
           scopes: ['projects:read', 'projects:write', 'articles:read', 'articles:write'],
         }),
       })
-      
+
       await provider.authenticate({
         token: 'tes_user123',
       })
@@ -149,15 +149,15 @@ describe('VeasMCPProtocolProvider', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {
-            content: [{
-              type: 'json',
-              data: {
-                items: [
-                  { id: '1', name: 'Test Project' },
-                ],
-                total: 1,
+            content: [
+              {
+                type: 'json',
+                data: {
+                  items: [{ id: '1', name: 'Test Project' }],
+                  total: 1,
+                },
               },
-            }],
+            ],
           },
           id: 1,
         }),
@@ -180,7 +180,7 @@ describe('VeasMCPProtocolProvider', () => {
             'X-User-Id': 'user123',
           }),
           body: expect.stringContaining('mcp-project-manager_list_my_projects'),
-        })
+        }),
       )
     })
 
@@ -191,15 +191,15 @@ describe('VeasMCPProtocolProvider', () => {
         json: async () => ({
           jsonrpc: '2.0',
           result: {
-            content: [{
-              type: 'json',
-              data: {
-                items: [
-                  { id: '1', title: 'Test Article' },
-                ],
-                total: 1,
+            content: [
+              {
+                type: 'json',
+                data: {
+                  items: [{ id: '1', title: 'Test Article' }],
+                  total: 1,
+                },
               },
-            }],
+            ],
           },
           id: 1,
         }),
@@ -226,30 +226,28 @@ describe('VeasMCPProtocolProvider', () => {
         }),
       })
 
-      await expect(
-        provider.projectManagement.getProject('999')
-      ).rejects.toThrow('MCP error -32603: Internal error')
+      await expect(provider.projectManagement.getProject('999')).rejects.toThrow('MCP error -32603: Internal error')
     })
 
     it('should require authentication for operations', async () => {
       await provider.disconnect()
 
       // Mock fetch for the MCP call that will fail due to no auth
-      mockFetch.mockImplementationOnce(() => Promise.resolve({
-        ok: true,
-        json: async () => ({
-          jsonrpc: '2.0',
-          error: {
-            code: -32603,
-            message: 'Authentication required',
-          },
-          id: 1,
+      mockFetch.mockImplementationOnce(() =>
+        Promise.resolve({
+          ok: true,
+          json: async () => ({
+            jsonrpc: '2.0',
+            error: {
+              code: -32603,
+              message: 'Authentication required',
+            },
+            id: 1,
+          }),
         }),
-      }))
+      )
 
-      await expect(
-        provider.projectManagement.listProjects({})
-      ).rejects.toThrow()
+      await expect(provider.projectManagement.listProjects({})).rejects.toThrow()
     })
   })
 
@@ -263,7 +261,7 @@ describe('VeasMCPProtocolProvider', () => {
           scopes: ['projects:read', 'projects:write', 'articles:read', 'articles:write'],
         }),
       })
-      
+
       await provider.authenticate({
         token: 'tes_user123',
       })
@@ -272,9 +270,7 @@ describe('VeasMCPProtocolProvider', () => {
     it('should handle network errors', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'))
 
-      await expect(
-        provider.projectManagement.listProjects({})
-      ).rejects.toThrow('Network error')
+      await expect(provider.projectManagement.listProjects({})).rejects.toThrow('Network error')
     })
 
     it('should handle invalid responses', async () => {
@@ -283,9 +279,7 @@ describe('VeasMCPProtocolProvider', () => {
         statusText: 'Bad Request',
       })
 
-      await expect(
-        provider.projectManagement.listProjects({})
-      ).rejects.toThrow('MCP request failed: Bad Request')
+      await expect(provider.projectManagement.listProjects({})).rejects.toThrow('MCP request failed: Bad Request')
     })
 
     it('should handle missing content in response', async () => {

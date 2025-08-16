@@ -18,7 +18,7 @@ export function createProjectManagementTools(
   if (!hasAuth) {
     console.warn('Project management tools created without auth context provider')
   }
-  
+
   return [
     // Project tools
     {
@@ -54,7 +54,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'get_project'),
       description: 'Get a project by ID',
@@ -75,7 +75,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_project'),
       description: 'Create a new project',
@@ -100,7 +100,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     // Issue tools
     {
       name: createToolName(toolPrefix, domain, 'list_issues'),
@@ -116,16 +116,22 @@ export function createProjectManagementTools(
             type: 'object',
             properties: {
               projectId: { type: 'string' },
-              type: { 
+              type: {
                 oneOf: [
                   { type: 'string', enum: ['epic', 'story', 'task', 'bug', 'feature', 'custom'] },
-                  { type: 'array', items: { type: 'string', enum: ['epic', 'story', 'task', 'bug', 'feature', 'custom'] } },
+                  {
+                    type: 'array',
+                    items: { type: 'string', enum: ['epic', 'story', 'task', 'bug', 'feature', 'custom'] },
+                  },
                 ],
               },
               status: {
                 oneOf: [
                   { type: 'string', enum: ['todo', 'in_progress', 'done', 'cancelled', 'custom'] },
-                  { type: 'array', items: { type: 'string', enum: ['todo', 'in_progress', 'done', 'cancelled', 'custom'] } },
+                  {
+                    type: 'array',
+                    items: { type: 'string', enum: ['todo', 'in_progress', 'done', 'cancelled', 'custom'] },
+                  },
                 ],
               },
               priority: {
@@ -151,7 +157,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_issue'),
       description: 'Create a new issue',
@@ -178,7 +184,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     // Sprint tools
     {
       name: createToolName(toolPrefix, domain, 'list_sprints'),
@@ -203,7 +209,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     {
       name: createToolName(toolPrefix, domain, 'create_sprint'),
       description: 'Create a new sprint',
@@ -232,7 +238,7 @@ export function createProjectManagementTools(
         }
       },
     },
-    
+
     // Comment tools
     {
       name: createToolName(toolPrefix, domain, 'add_comment'),

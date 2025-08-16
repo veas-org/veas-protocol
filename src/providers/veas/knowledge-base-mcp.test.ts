@@ -10,11 +10,11 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
   beforeEach(() => {
     mockCallMCPTool = vi.fn()
     mockRequireScopes = vi.fn()
-    
+
     provider = new VeasKnowledgeBaseMCPProvider({
-      mcpEndpoint: 'http://test'
+      mcpEndpoint: 'http://test',
     })
-    
+
     // Mock the protected methods
     ;(provider as any).callMCPTool = mockCallMCPTool
     ;(provider as any).requireScopes = mockRequireScopes
@@ -24,19 +24,19 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should list articles', async () => {
       const mockArticles = [
         { id: '1', title: 'Article 1' },
-        { id: '2', title: 'Article 2' }
+        { id: '2', title: 'Article 2' },
       ]
       mockCallMCPTool.mockResolvedValue({
         articles: mockArticles,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listArticles({
         limit: 10,
         offset: 0,
         outputFormat: 'json',
-        filters: { status: 'published' }
+        filters: { status: 'published' },
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
@@ -45,30 +45,30 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
         offset: 0,
         outputFormat: 'json',
         output_format: 'json',
-        filters: { status: 'published' }
+        filters: { status: 'published' },
       })
       expect(result).toEqual({
         items: mockArticles,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
     })
 
     it('should handle empty article list', async () => {
       mockCallMCPTool.mockResolvedValue({
         total: 0,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listArticles({
         limit: 10,
-        outputFormat: 'json'
+        outputFormat: 'json',
       })
 
       expect(result).toEqual({
         items: [],
         total: 0,
-        hasMore: false
+        hasMore: false,
       })
     })
 
@@ -81,7 +81,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_article', {
         id: '1',
-        output_format: 'markdown'
+        output_format: 'markdown',
       })
       expect(result).toEqual(mockArticle)
     })
@@ -89,9 +89,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should throw NotFoundError when article not found', async () => {
       mockCallMCPTool.mockResolvedValue(null)
 
-      await expect(provider.getArticle('nonexistent')).rejects.toThrow(
-        new NotFoundError('Article', 'nonexistent')
-      )
+      await expect(provider.getArticle('nonexistent')).rejects.toThrow(new NotFoundError('Article', 'nonexistent'))
     })
 
     it('should get article by slug', async () => {
@@ -103,7 +101,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_article_by_slug', {
         slug: 'test-article',
-        output_format: undefined
+        output_format: undefined,
       })
       expect(result).toEqual(mockArticle)
     })
@@ -112,7 +110,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       mockCallMCPTool.mockResolvedValue({})
 
       await expect(provider.getArticleBySlug('nonexistent')).rejects.toThrow(
-        new NotFoundError('Article', 'nonexistent')
+        new NotFoundError('Article', 'nonexistent'),
       )
     })
 
@@ -123,14 +121,14 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       const result = await provider.createArticle({
         title: 'New Article',
         content: 'Content',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_create_article', {
         title: 'New Article',
         content: 'Content',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
       expect(result).toEqual(mockArticle)
     })
@@ -141,14 +139,14 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
 
       const result = await provider.updateArticle('1', {
         title: 'Updated Article',
-        content: 'Updated content'
+        content: 'Updated content',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_update_article', {
         id: '1',
         title: 'Updated Article',
-        content: 'Updated content'
+        content: 'Updated content',
       })
       expect(result).toEqual(mockArticle)
     })
@@ -189,19 +187,19 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should list folders', async () => {
       const mockFolders = [
         { id: '1', name: 'Folder 1' },
-        { id: '2', name: 'Folder 2' }
+        { id: '2', name: 'Folder 2' },
       ]
       mockCallMCPTool.mockResolvedValue({
         folders: mockFolders,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listFolders({
         limit: 10,
         offset: 0,
         outputFormat: 'json',
-        filters: { parentId: 'parent-1' }
+        filters: { parentId: 'parent-1' },
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
@@ -210,12 +208,12 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
         offset: 0,
         outputFormat: 'json',
         output_format: 'json',
-        filters: { parentId: 'parent-1' }
+        filters: { parentId: 'parent-1' },
       })
       expect(result).toEqual({
         items: mockFolders,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
     })
 
@@ -228,7 +226,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_folder', {
         id: '1',
-        output_format: undefined
+        output_format: undefined,
       })
       expect(result).toEqual(mockFolder)
     })
@@ -236,9 +234,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should throw NotFoundError when folder not found', async () => {
       mockCallMCPTool.mockResolvedValue(null)
 
-      await expect(provider.getFolder('nonexistent')).rejects.toThrow(
-        new NotFoundError('Folder', 'nonexistent')
-      )
+      await expect(provider.getFolder('nonexistent')).rejects.toThrow(new NotFoundError('Folder', 'nonexistent'))
     })
 
     it('should create a folder', async () => {
@@ -247,13 +243,13 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
 
       const result = await provider.createFolder({
         name: 'New Folder',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_create_folder', {
         name: 'New Folder',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
       expect(result).toEqual(mockFolder)
     })
@@ -263,13 +259,13 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       mockCallMCPTool.mockResolvedValue({ folder: mockFolder })
 
       const result = await provider.updateFolder('1', {
-        name: 'Updated Folder'
+        name: 'Updated Folder',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_update_folder', {
         id: '1',
-        name: 'Updated Folder'
+        name: 'Updated Folder',
       })
       expect(result).toEqual(mockFolder)
     })
@@ -288,18 +284,18 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should list tags', async () => {
       const mockTags = [
         { id: '1', name: 'Tag 1' },
-        { id: '2', name: 'Tag 2' }
+        { id: '2', name: 'Tag 2' },
       ]
       mockCallMCPTool.mockResolvedValue({
         tags: mockTags,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listTags({
         limit: 10,
         offset: 0,
-        outputFormat: 'json'
+        outputFormat: 'json',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
@@ -307,12 +303,12 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
         limit: 10,
         offset: 0,
         outputFormat: 'json',
-        output_format: 'json'
+        output_format: 'json',
       })
       expect(result).toEqual({
         items: mockTags,
         total: 2,
-        hasMore: false
+        hasMore: false,
       })
     })
 
@@ -325,7 +321,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_tag', {
         id: '1',
-        output_format: undefined
+        output_format: undefined,
       })
       expect(result).toEqual(mockTag)
     })
@@ -333,9 +329,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should throw NotFoundError when tag not found', async () => {
       mockCallMCPTool.mockResolvedValue({})
 
-      await expect(provider.getTag('nonexistent')).rejects.toThrow(
-        new NotFoundError('Tag', 'nonexistent')
-      )
+      await expect(provider.getTag('nonexistent')).rejects.toThrow(new NotFoundError('Tag', 'nonexistent'))
     })
 
     it('should get tag by slug', async () => {
@@ -347,7 +341,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_tag_by_slug', {
         slug: 'test-tag',
-        output_format: undefined
+        output_format: undefined,
       })
       expect(result).toEqual(mockTag)
     })
@@ -358,13 +352,13 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
 
       const result = await provider.createTag({
         name: 'New Tag',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_create_tag', {
         name: 'New Tag',
-        publicationId: 'pub-1'
+        publicationId: 'pub-1',
       })
       expect(result).toEqual(mockTag)
     })
@@ -374,13 +368,13 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       mockCallMCPTool.mockResolvedValue({ tag: mockTag })
 
       const result = await provider.updateTag('1', {
-        name: 'Updated Tag'
+        name: 'Updated Tag',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_update_tag', {
         id: '1',
-        name: 'Updated Tag'
+        name: 'Updated Tag',
       })
       expect(result).toEqual(mockTag)
     })
@@ -397,19 +391,17 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
 
   describe('Search operations', () => {
     it('should search articles', async () => {
-      const mockArticles = [
-        { id: '1', title: 'Search Result 1' }
-      ]
+      const mockArticles = [{ id: '1', title: 'Search Result 1' }]
       mockCallMCPTool.mockResolvedValue({
         articles: mockArticles,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.searchArticles('test query', {
         limit: 10,
         outputFormat: 'json',
-        filters: { status: 'published' }
+        filters: { status: 'published' },
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
@@ -418,28 +410,26 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
         limit: 10,
         outputFormat: 'json',
         output_format: 'json',
-        filters: { status: 'published' }
+        filters: { status: 'published' },
       })
       expect(result).toEqual({
         items: mockArticles,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
     })
 
     it('should search tags', async () => {
-      const mockTags = [
-        { id: '1', name: 'Search Tag' }
-      ]
+      const mockTags = [{ id: '1', name: 'Search Tag' }]
       mockCallMCPTool.mockResolvedValue({
         tags: mockTags,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.searchTags?.('test query', {
         limit: 10,
-        outputFormat: 'json'
+        outputFormat: 'json',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
@@ -447,42 +437,40 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
         query: 'test query',
         limit: 10,
         outputFormat: 'json',
-        output_format: 'json'
+        output_format: 'json',
       })
       expect(result).toEqual({
         items: mockTags,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
     })
   })
 
   describe('Optional operations', () => {
     it('should list publications', async () => {
-      const mockPublications = [
-        { id: '1', name: 'Publication 1' }
-      ]
+      const mockPublications = [{ id: '1', name: 'Publication 1' }]
       mockCallMCPTool.mockResolvedValue({
         publications: mockPublications,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listPublications?.({
         limit: 10,
-        outputFormat: 'json'
+        outputFormat: 'json',
       })
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_list_publications', {
         limit: 10,
         outputFormat: 'json',
-        output_format: 'json'
+        output_format: 'json',
       })
       expect(result).toEqual({
         items: mockPublications,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
     })
 
@@ -495,7 +483,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:read'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_get_publication', {
         id: '1',
-        output_format: undefined
+        output_format: undefined,
       })
       expect(result).toEqual(mockPublication)
     })
@@ -504,29 +492,27 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       mockCallMCPTool.mockResolvedValue(null)
 
       await expect(provider.getPublication?.('nonexistent')).rejects.toThrow(
-        new NotFoundError('Publication', 'nonexistent')
+        new NotFoundError('Publication', 'nonexistent'),
       )
     })
 
     it('should list editor commands', async () => {
-      const mockCommands = [
-        { id: '1', name: 'Command 1' }
-      ]
+      const mockCommands = [{ id: '1', name: 'Command 1' }]
       mockCallMCPTool.mockResolvedValue({
         commands: mockCommands,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
 
       const result = await provider.listEditorCommands?.({
         limit: 10,
-        outputFormat: 'json'
+        outputFormat: 'json',
       })
 
       expect(result).toEqual({
         items: mockCommands,
         total: 1,
-        hasMore: false
+        hasMore: false,
       })
     })
 
@@ -536,7 +522,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
 
       const result = await provider.createEditorCommand?.({
         name: 'New Command',
-        command: 'test-command'
+        command: 'test-command',
       })
 
       expect(result).toEqual(mockCommand)
@@ -547,7 +533,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       mockCallMCPTool.mockResolvedValue({ command: mockCommand })
 
       const result = await provider.updateEditorCommand?.('1', {
-        name: 'Updated Command'
+        name: 'Updated Command',
       })
 
       expect(result).toEqual(mockCommand)
@@ -601,21 +587,21 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
     it('should bulk update articles', async () => {
       const mockArticles = [
         { id: '1', title: 'Updated 1' },
-        { id: '2', title: 'Updated 2' }
+        { id: '2', title: 'Updated 2' },
       ]
       mockCallMCPTool.mockResolvedValue({ articles: mockArticles })
 
       const result = await provider.bulkUpdateArticles?.([
         { id: '1', data: { title: 'Updated 1' } },
-        { id: '2', data: { title: 'Updated 2' } }
+        { id: '2', data: { title: 'Updated 2' } },
       ])
 
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_bulk_update_articles', {
         updates: [
           { id: '1', data: { title: 'Updated 1' } },
-          { id: '2', data: { title: 'Updated 2' } }
-        ]
+          { id: '2', data: { title: 'Updated 2' } },
+        ],
       })
       expect(result).toEqual(mockArticles)
     })
@@ -628,7 +614,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_bulk_add_tags', {
         article_ids: ['article-1', 'article-2'],
-        tag_ids: ['tag-1', 'tag-2']
+        tag_ids: ['tag-1', 'tag-2'],
       })
     })
 
@@ -640,7 +626,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_bulk_remove_tags', {
         article_ids: ['article-1', 'article-2'],
-        tag_ids: ['tag-1', 'tag-2']
+        tag_ids: ['tag-1', 'tag-2'],
       })
     })
 
@@ -652,7 +638,7 @@ describe('VeasKnowledgeBaseMCPProvider', () => {
       expect(mockRequireScopes).toHaveBeenCalledWith(['articles:write'])
       expect(mockCallMCPTool).toHaveBeenCalledWith('mcp-articles_move_articles_to_folder', {
         article_ids: ['article-1', 'article-2'],
-        folder_id: 'folder-1'
+        folder_id: 'folder-1',
       })
     })
   })

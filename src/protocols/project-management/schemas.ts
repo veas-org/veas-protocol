@@ -15,7 +15,10 @@ const sprintStatusSchema = z.enum(['planned', 'active', 'completed', 'cancelled'
 // Project schemas
 export const createProjectSchema = z.object({
   name: z.string().min(1).max(255),
-  key: z.string().regex(/^[A-Z][A-Z0-9]*$/).optional(),
+  key: z
+    .string()
+    .regex(/^[A-Z][A-Z0-9]*$/)
+    .optional(),
   description: z.string().max(1000).optional(),
   status: projectStatusSchema.optional(),
   visibility: projectVisibilitySchema.optional(),
@@ -62,15 +65,17 @@ export const updateIssueSchema = z.object({
 })
 
 // Sprint schemas
-export const createSprintSchema = z.object({
-  projectId: z.string().uuid(),
-  name: z.string().min(1).max(255),
-  goal: z.string().max(1000).optional(),
-  startDate: z.date(),
-  endDate: z.date(),
-}).refine((data: { startDate: Date; endDate: Date }) => data.endDate > data.startDate, {
-  message: 'End date must be after start date',
-})
+export const createSprintSchema = z
+  .object({
+    projectId: z.string().uuid(),
+    name: z.string().min(1).max(255),
+    goal: z.string().max(1000).optional(),
+    startDate: z.date(),
+    endDate: z.date(),
+  })
+  .refine((data: { startDate: Date; endDate: Date }) => data.endDate > data.startDate, {
+    message: 'End date must be after start date',
+  })
 
 export const updateSprintSchema = z.object({
   name: z.string().min(1).max(255).optional(),

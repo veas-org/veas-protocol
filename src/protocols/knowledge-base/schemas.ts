@@ -19,12 +19,14 @@ export const createArticleSchema = z.object({
   publicationId: z.string().uuid().optional(),
   folderId: z.string().uuid().optional(),
   tags: z.array(z.string().uuid()).optional(),
-  metadata: z.object({
-    featuredImage: z.string().url().optional(),
-    seoTitle: z.string().max(60).optional(),
-    seoDescription: z.string().max(160).optional(),
-    customData: z.record(z.string(), z.unknown()).optional(),
-  }).optional(),
+  metadata: z
+    .object({
+      featuredImage: z.string().url().optional(),
+      seoTitle: z.string().max(60).optional(),
+      seoDescription: z.string().max(160).optional(),
+      customData: z.record(z.string(), z.unknown()).optional(),
+    })
+    .optional(),
 })
 
 export const updateArticleSchema = z.object({
@@ -35,12 +37,14 @@ export const updateArticleSchema = z.object({
   status: articleStatusSchema.optional(),
   folderId: z.string().uuid().optional(),
   tags: z.array(z.string().uuid()).optional(),
-  metadata: z.object({
-    featuredImage: z.string().url().optional(),
-    seoTitle: z.string().max(60).optional(),
-    seoDescription: z.string().max(160).optional(),
-    customData: z.record(z.string(), z.unknown()).optional(),
-  }).optional(),
+  metadata: z
+    .object({
+      featuredImage: z.string().url().optional(),
+      seoTitle: z.string().max(60).optional(),
+      seoDescription: z.string().max(160).optional(),
+      customData: z.record(z.string(), z.unknown()).optional(),
+    })
+    .optional(),
 })
 
 // Folder schemas
