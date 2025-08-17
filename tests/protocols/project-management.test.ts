@@ -105,14 +105,14 @@ describe('ProjectManagementProtocol', () => {
         filters: { type: 'bug' },
       })
 
-      expect(bugs.items.every((i) => i.type === 'bug')).toBe(true)
+      expect(bugs.items.every(i => i.type === 'bug')).toBe(true)
 
       // Test filtering by status
       const inProgress = await protocol.listIssues({
         filters: { status: 'in_progress' },
       })
 
-      expect(inProgress.items.every((i) => i.status === 'in_progress')).toBe(true)
+      expect(inProgress.items.every(i => i.status === 'in_progress')).toBe(true)
     })
 
     it('should create an issue', async () => {

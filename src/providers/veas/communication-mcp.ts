@@ -2,28 +2,28 @@
  * Veas Communication protocol implementation using MCP
  */
 
-import type { CommunicationProtocol, ListParams, ListResponse, OutputFormat } from '../../protocols/index.js'
 import type {
-  Workspace,
-  CreateWorkspaceData,
-  UpdateWorkspaceData,
-  WorkspaceFilters,
-  Channel,
-  CreateChannelData,
-  UpdateChannelData,
-  ChannelFilters,
-  Message,
-  CreateMessageData,
-  UpdateMessageData,
-  MessageFilters,
-  Thread,
-  Reaction,
   AddReactionData,
+  Channel,
+  ChannelFilters,
   ChannelMember,
-  WorkspaceMember,
+  CreateChannelData,
+  CreateMessageData,
+  CreateWorkspaceData,
+  Message,
+  MessageFilters,
   MessageSearchResult,
+  Reaction,
   SearchMessagesParams,
+  Thread,
+  UpdateChannelData,
+  UpdateMessageData,
+  UpdateWorkspaceData,
+  Workspace,
+  WorkspaceFilters,
+  WorkspaceMember,
 } from '../../protocols/communication/index.js'
+import type { CommunicationProtocol, ListParams, ListResponse, OutputFormat } from '../../protocols/index.js'
 import type { MCPClient } from './mcp-client.js'
 
 export class VeasCommunicationMCP implements CommunicationProtocol {

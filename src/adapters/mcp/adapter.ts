@@ -4,11 +4,11 @@
  * Converts protocol interfaces to MCP tools
  */
 
-import type { MCPAdapterConfig, MCPTool, MCPAdapterRequest, MCPAdapterResponse } from './types.js'
 import type { AuthContext, AuthCredentials } from '../../protocols/common/index.js'
-import { createProjectManagementTools } from './project-management-tools.js'
-import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
 import { generateCommunicationTools } from './communication-tools.js'
+import { createKnowledgeBaseTools } from './knowledge-base-tools.js'
+import { createProjectManagementTools } from './project-management-tools.js'
+import type { MCPAdapterConfig, MCPAdapterRequest, MCPAdapterResponse, MCPTool } from './types.js'
 
 export class MCPAdapter {
   private tools: MCPTool[] = []
@@ -65,7 +65,7 @@ export class MCPAdapter {
    * Get a specific tool by name
    */
   getTool(name: string): MCPTool | undefined {
-    return this.tools.find((tool) => tool.name === name)
+    return this.tools.find(tool => tool.name === name)
   }
 
   /**
@@ -85,7 +85,7 @@ export class MCPAdapter {
    */
   listTools(): MCPAdapterResponse {
     return {
-      tools: this.tools.map((tool) => ({
+      tools: this.tools.map(tool => ({
         name: tool.name,
         description: tool.description,
         inputSchema: tool.inputSchema,

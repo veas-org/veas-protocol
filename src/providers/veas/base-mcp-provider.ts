@@ -4,7 +4,7 @@
 
 import type { AuthContext } from '../../protocols/common/index.js'
 import { AuthenticationError, AuthorizationError } from '../../protocols/common/index.js'
-import { VeasAuthProvider, type AuthCredentials } from './auth.js'
+import { type AuthCredentials, VeasAuthProvider } from './auth.js'
 import { MCPClient } from './mcp-client.js'
 
 export abstract class BaseMCPProvider {
@@ -42,7 +42,7 @@ export abstract class BaseMCPProvider {
    */
   protected requireScopes(scopes: string[]): void {
     const context = this.getAuthContext()
-    const hasScopes = scopes.every((scope) => context.scopes.includes(scope))
+    const hasScopes = scopes.every(scope => context.scopes.includes(scope))
     if (!hasScopes) {
       throw new AuthorizationError(`Missing required scopes: ${scopes.join(', ')}`)
     }

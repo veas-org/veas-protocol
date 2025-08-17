@@ -1,18 +1,18 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import {
-  WorkspaceSettingsSchema,
-  CreateWorkspaceSchema,
+  // UpdateMessageSchema,
+  AddReactionSchema,
   // UpdateWorkspaceSchema,
   CreateChannelSchema,
   // UpdateChannelSchema,
   CreateMessageSchema,
-  // UpdateMessageSchema,
-  AddReactionSchema,
+  CreateWorkspaceSchema,
+  ListChannelsSchema,
+  ListMessagesSchema,
   // ChannelFiltersSchema,
   // MessageFiltersSchema,
   SearchMessagesSchema,
-  ListChannelsSchema,
-  ListMessagesSchema,
+  WorkspaceSettingsSchema,
 } from './schemas'
 
 describe('Communication Schemas', () => {
@@ -123,7 +123,7 @@ describe('Communication Schemas', () => {
     it('should validate channel name format', () => {
       const validNames = ['general', 'team-chat', 'project_123', 'test-123-abc']
 
-      validNames.forEach((name) => {
+      validNames.forEach(name => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name,
@@ -141,7 +141,7 @@ describe('Communication Schemas', () => {
         'a'.repeat(22), // too long
       ]
 
-      invalidNames.forEach((name) => {
+      invalidNames.forEach(name => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name,
@@ -153,7 +153,7 @@ describe('Communication Schemas', () => {
     it('should validate channel types', () => {
       const validTypes = ['public', 'private', 'direct_message', 'group_direct_message', 'shared']
 
-      validTypes.forEach((type) => {
+      validTypes.forEach(type => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name: 'test',
@@ -166,7 +166,7 @@ describe('Communication Schemas', () => {
     it('should validate context types', () => {
       const validContextTypes = ['project', 'issue', 'article', 'team', 'general']
 
-      validContextTypes.forEach((contextType) => {
+      validContextTypes.forEach(contextType => {
         const result = CreateChannelSchema.safeParse({
           workspaceId: 'ws-123',
           name: 'test',
@@ -234,7 +234,7 @@ describe('Communication Schemas', () => {
     it('should validate message types', () => {
       const validTypes = ['text', 'code', 'bot', 'app_message', 'system']
 
-      validTypes.forEach((type) => {
+      validTypes.forEach(type => {
         const result = CreateMessageSchema.safeParse({
           channelId: 'ch-123',
           text: 'test',
@@ -365,7 +365,7 @@ describe('Communication Schemas', () => {
     it('should validate limit bounds', () => {
       const validLimits = [1, 50, 100]
 
-      validLimits.forEach((limit) => {
+      validLimits.forEach(limit => {
         const result = SearchMessagesSchema.safeParse({
           query: 'test',
           limit,
@@ -375,7 +375,7 @@ describe('Communication Schemas', () => {
 
       const invalidLimits = [0, 101, -1]
 
-      invalidLimits.forEach((limit) => {
+      invalidLimits.forEach(limit => {
         const result = SearchMessagesSchema.safeParse({
           query: 'test',
           limit,
@@ -422,7 +422,7 @@ describe('Communication Schemas', () => {
     it('should validate sort options', () => {
       const validSortBy = ['name', 'created_at', 'member_count']
 
-      validSortBy.forEach((sortBy) => {
+      validSortBy.forEach(sortBy => {
         const result = ListChannelsSchema.safeParse({ sortBy })
         expect(result.success).toBe(true)
       })
@@ -431,7 +431,7 @@ describe('Communication Schemas', () => {
     it('should validate output formats', () => {
       const validFormats = ['json', 'markdown']
 
-      validFormats.forEach((outputFormat) => {
+      validFormats.forEach(outputFormat => {
         const result = ListChannelsSchema.safeParse({ outputFormat })
         expect(result.success).toBe(true)
       })

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { VeasProjectManagementMCPProvider } from './project-management-mcp.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NotFoundError } from '../../protocols/common/index.js'
+import { VeasProjectManagementMCPProvider } from './project-management-mcp.js'
 
 describe('VeasProjectManagementMCPProvider', () => {
   let provider: VeasProjectManagementMCPProvider

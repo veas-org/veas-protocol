@@ -4,7 +4,7 @@
 
 import type { CommunicationProtocol } from '../../protocols/index.js'
 import type { MCPTool } from './types.js'
-import { createTool, createPaginatedTool } from './utils.js'
+import { createPaginatedTool, createTool } from './utils.js'
 
 export function generateCommunicationTools(protocol: CommunicationProtocol): MCPTool[] {
   const tools: MCPTool[] = []
@@ -14,7 +14,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createPaginatedTool({
       name: 'mcp-chat_list_channels',
       description: 'List chat channels with optional filtering',
-      handler: async (params) => protocol.listChannels(params),
+      handler: async params => protocol.listChannels(params),
       inputSchema: {
         filters: {
           type: 'object',
@@ -42,7 +42,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_get_channel',
       description: 'Get details of a specific channel',
-      handler: async (params) => protocol.getChannel(params.channel_id, params),
+      handler: async params => protocol.getChannel(params.channel_id, params),
       inputSchema: {
         channel_id: { type: 'string', description: 'Channel ID' },
         output_format: { type: 'string', enum: ['json', 'markdown'] },
@@ -54,7 +54,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_get_channel_by_project',
       description: 'Get the chat channel associated with a project',
-      handler: async (params) =>
+      handler: async params =>
         protocol.getChannelByContext('project', params.project_identifier, params.workspace_id, params),
       inputSchema: {
         project_identifier: { type: 'string', description: 'Project ID or key' },
@@ -68,7 +68,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_create_channel',
       description: 'Create a new chat channel',
-      handler: async (params) =>
+      handler: async params =>
         protocol.createChannel({
           workspaceId: params.workspace_id,
           name: params.name,
@@ -100,7 +100,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_join_channel',
       description: 'Join a chat channel',
-      handler: async (params) => protocol.joinChannel(params.channel_id),
+      handler: async params => protocol.joinChannel(params.channel_id),
       inputSchema: {
         channel_id: { type: 'string', description: 'Channel ID' },
         output_format: { type: 'string', enum: ['json', 'markdown'] },
@@ -113,7 +113,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_leave_channel',
       description: 'Leave a chat channel',
-      handler: async (params) => protocol.leaveChannel(params.channel_id),
+      handler: async params => protocol.leaveChannel(params.channel_id),
       inputSchema: {
         channel_id: { type: 'string', description: 'Channel ID' },
         output_format: { type: 'string', enum: ['json', 'markdown'] },
@@ -127,7 +127,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_send_message',
       description: 'Send a message to a chat channel',
-      handler: async (params) => {
+      handler: async params => {
         const message = await protocol.sendMessage({
           channelId: params.channel_id,
           text: params.text,
@@ -161,7 +161,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_get_messages',
       description: 'Get messages from a chat channel',
-      handler: async (params) => {
+      handler: async params => {
         const response = await protocol.listMessages(params.channel_id, {
           limit: params.limit,
           filters: {
@@ -193,7 +193,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_get_messages_by_issue',
       description: 'Get messages related to a specific issue',
-      handler: async (params) => {
+      handler: async params => {
         const response = await protocol.getMessagesByIssue(params.channel_id, params.issue_identifier, {
           limit: params.limit,
           outputFormat: params.output_format,
@@ -216,7 +216,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createPaginatedTool({
       name: 'mcp-chat_search_messages',
       description: 'Search for messages across channels',
-      handler: async (params) =>
+      handler: async params =>
         protocol.searchMessages({
           query: params.query,
           workspaceId: params.workspace_id,
@@ -269,7 +269,7 @@ export function generateCommunicationTools(protocol: CommunicationProtocol): MCP
     createTool({
       name: 'mcp-chat_add_reaction',
       description: 'Add an emoji reaction to a message',
-      handler: async (params) =>
+      handler: async params =>
         protocol.addReaction({
           messageId: params.message_id,
           emoji: params.emoji,

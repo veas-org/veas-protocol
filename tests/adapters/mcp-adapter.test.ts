@@ -26,7 +26,7 @@ describe('MCPAdapter', () => {
       expect(tools.length).toBeGreaterThan(0)
 
       // Check tool naming convention
-      tools.forEach((tool) => {
+      tools.forEach(tool => {
         expect(tool.name).toMatch(/^mcp_test_/)
         expect(tool).toHaveProperty('description')
         expect(tool).toHaveProperty('inputSchema')
@@ -36,7 +36,7 @@ describe('MCPAdapter', () => {
 
     it('should register project management tools', () => {
       const tools = adapter.getTools()
-      const projectTools = tools.filter((t) => t.name.includes('projects'))
+      const projectTools = tools.filter(t => t.name.includes('projects'))
 
       expect(projectTools.length).toBeGreaterThan(0)
 
@@ -48,14 +48,14 @@ describe('MCPAdapter', () => {
         'mcp_test_projects_list_sprints',
       ]
 
-      expectedTools.forEach((toolName) => {
-        expect(tools.some((t) => t.name === toolName)).toBe(true)
+      expectedTools.forEach(toolName => {
+        expect(tools.some(t => t.name === toolName)).toBe(true)
       })
     })
 
     it('should register knowledge base tools', () => {
       const tools = adapter.getTools()
-      const kbTools = tools.filter((t) => t.name.includes('knowledge-base'))
+      const kbTools = tools.filter(t => t.name.includes('knowledge-base'))
 
       expect(kbTools.length).toBeGreaterThan(0)
 
@@ -67,8 +67,8 @@ describe('MCPAdapter', () => {
         'mcp_test_knowledge-base_list_tags',
       ]
 
-      expectedTools.forEach((toolName) => {
-        expect(tools.some((t) => t.name === toolName)).toBe(true)
+      expectedTools.forEach(toolName => {
+        expect(tools.some(t => t.name === toolName)).toBe(true)
       })
     })
   })

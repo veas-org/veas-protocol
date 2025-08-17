@@ -2,12 +2,12 @@
  * Veas MCP protocol provider implementation
  */
 
-import type { ProtocolProvider, ProviderConfig, AuthContext } from '../../protocols/index.js'
-import { VeasAuthProvider, type AuthCredentials } from './auth.js'
-import { VeasProjectManagementMCPProvider } from './project-management-mcp.js'
-import { VeasKnowledgeBaseMCPProvider } from './knowledge-base-mcp.js'
+import type { AuthContext, ProtocolProvider, ProviderConfig } from '../../protocols/index.js'
+import { type AuthCredentials, VeasAuthProvider } from './auth.js'
 import { VeasCommunicationMCP } from './communication-mcp.js'
+import { VeasKnowledgeBaseMCPProvider } from './knowledge-base-mcp.js'
 import { MCPClient } from './mcp-client.js'
+import { VeasProjectManagementMCPProvider } from './project-management-mcp.js'
 
 export interface VeasMCPProviderConfig extends ProviderConfig {
   /**

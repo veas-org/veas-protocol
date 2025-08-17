@@ -3,14 +3,14 @@
  */
 
 import type { AuthContext } from './common/index.js'
-import type { ProjectManagementProtocol } from './project-management/index.js'
-import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
 import type { CommunicationProtocol } from './communication/index.js'
+import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
+import type { ProjectManagementProtocol } from './project-management/index.js'
 
 export * from './common/index.js'
-export * from './project-management/index.js'
-export * from './knowledge-base/index.js'
 export * from './communication/index.js'
+export * from './knowledge-base/index.js'
+export * from './project-management/index.js'
 
 /**
  * Protocol provider interface

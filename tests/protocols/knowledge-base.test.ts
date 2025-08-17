@@ -43,7 +43,7 @@ describe('KnowledgeBaseProtocol', () => {
         filters: { status: 'published' },
       })
 
-      expect(published.items.every((a) => a.status === 'published')).toBe(true)
+      expect(published.items.every(a => a.status === 'published')).toBe(true)
     })
 
     it('should get an article by ID', async () => {
@@ -138,7 +138,7 @@ describe('KnowledgeBaseProtocol', () => {
       expect(result).toHaveProperty('items')
       expect(
         result.items.some(
-          (a) => a.title.toLowerCase().includes('typescript') || a.content.toLowerCase().includes('typescript'),
+          a => a.title.toLowerCase().includes('typescript') || a.content.toLowerCase().includes('typescript'),
         ),
       ).toBe(true)
     })
@@ -219,7 +219,7 @@ describe('KnowledgeBaseProtocol', () => {
         filters: { minArticleCount: 5 },
       })
 
-      expect(result.items.every((t) => (t.articleCount || 0) >= 5)).toBe(true)
+      expect(result.items.every(t => (t.articleCount || 0) >= 5)).toBe(true)
     })
 
     it('should get a tag by ID and slug', async () => {

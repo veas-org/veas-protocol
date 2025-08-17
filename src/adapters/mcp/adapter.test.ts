@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { MCPAdapter } from './adapter'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type {
-  ProtocolProvider,
-  ProjectManagementProtocol,
-  KnowledgeBaseProtocol,
   CommunicationProtocol,
+  KnowledgeBaseProtocol,
+  ProjectManagementProtocol,
+  ProtocolProvider,
 } from '../../protocols'
+import { MCPAdapter } from './adapter'
 
 describe('MCPAdapter', () => {
   let mockProvider: ProtocolProvider
@@ -125,7 +125,7 @@ describe('MCPAdapter', () => {
       })
 
       const tools = adapter.getTools()
-      const pmTool = tools.find((t) => t.name.includes('projects'))
+      const pmTool = tools.find(t => t.name.includes('projects'))
 
       expect(pmTool).toBeDefined()
     })
@@ -137,7 +137,7 @@ describe('MCPAdapter', () => {
       })
 
       const tools = adapter.getTools()
-      const kbTool = tools.find((t) => t.name.includes('articles'))
+      const kbTool = tools.find(t => t.name.includes('articles'))
 
       expect(kbTool).toBeDefined()
     })
@@ -148,7 +148,7 @@ describe('MCPAdapter', () => {
       })
 
       const tools = adapter.getTools()
-      const commTool = tools.find((t) => t.name.includes('chat'))
+      const commTool = tools.find(t => t.name.includes('chat'))
 
       expect(commTool).toBeDefined()
     })
@@ -242,7 +242,7 @@ describe('MCPAdapter', () => {
 
       // Find a project management tool
       const tools = adapter.getTools()
-      const listProjectsTool = tools.find((t) => t.name.includes('list') && t.name.includes('projects'))
+      const listProjectsTool = tools.find(t => t.name.includes('list') && t.name.includes('projects'))
 
       if (listProjectsTool) {
         const result = await adapter.executeTool(listProjectsTool.name, {})
@@ -268,7 +268,7 @@ describe('MCPAdapter', () => {
       await adapter.authenticate({ token: 'test-token' })
 
       const tools = adapter.getTools()
-      const listProjectsTool = tools.find((t) => t.name.includes('list') && t.name.includes('projects'))
+      const listProjectsTool = tools.find(t => t.name.includes('list') && t.name.includes('projects'))
 
       if (listProjectsTool) {
         await adapter.executeTool(listProjectsTool.name, {

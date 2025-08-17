@@ -1,13 +1,13 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { ProtocolError, ValidationError } from '../../protocols/common/errors'
 import {
+  createPaginatedTool,
+  createTool,
+  createToolName,
   formatMCPError,
   formatMCPResponse,
   getOutputFormat,
-  createToolName,
-  createTool,
-  createPaginatedTool,
 } from './utils'
-import { ProtocolError, ValidationError } from '../../protocols/common/errors'
 
 describe('MCP Utils', () => {
   describe('formatMCPError', () => {
@@ -206,7 +206,7 @@ describe('MCP Utils', () => {
       const tool = createTool({
         name: 'test_tool',
         description: 'Test tool description',
-        handler: async (params) => ({ result: params.input }),
+        handler: async params => ({ result: params.input }),
         inputSchema: {
           input: { type: 'string', description: 'Input value' },
         },
@@ -243,7 +243,7 @@ describe('MCP Utils', () => {
         name: 'async_tool',
         description: 'Async tool',
         handler: async (params: any) => {
-          await new Promise((resolve) => setTimeout(resolve, 10))
+          await new Promise(resolve => setTimeout(resolve, 10))
           return { doubled: params.value * 2 }
         },
         inputSchema: {
@@ -290,7 +290,7 @@ describe('MCP Utils', () => {
       const tool = createPaginatedTool({
         name: 'list_tool',
         description: 'List tool',
-        handler: async (params) => ({
+        handler: async params => ({
           items: [],
           total: 0,
           limit: params.limit || 10,

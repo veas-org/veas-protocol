@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import type { AuthContext, AuthCredentials, TokenCredentials, ApiKeyCredentials, OAuthCredentials } from './auth'
+import { describe, expect, it } from 'vitest'
+import type { ApiKeyCredentials, AuthContext, AuthCredentials, OAuthCredentials, TokenCredentials } from './auth'
 
 describe('Auth Types', () => {
   describe('AuthCredentials', () => {

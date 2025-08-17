@@ -4,20 +4,20 @@
 
 import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
 import type {
-  Project,
-  CreateProjectData,
-  UpdateProjectData,
-  ProjectFilters,
-  Issue,
-  CreateIssueData,
-  UpdateIssueData,
-  IssueFilters,
-  Sprint,
-  CreateSprintData,
-  UpdateSprintData,
   Comment,
   CreateCommentData,
+  CreateIssueData,
+  CreateProjectData,
+  CreateSprintData,
+  Issue,
+  IssueFilters,
+  Project,
+  ProjectFilters,
+  Sprint,
   UpdateCommentData,
+  UpdateIssueData,
+  UpdateProjectData,
+  UpdateSprintData,
 } from './types.js'
 
 export interface ProjectManagementProtocol {

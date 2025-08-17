@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { MCPClient } from './mcp-client'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { AuthContext } from '../../protocols/common'
+import { MCPClient } from './mcp-client'
 
 // Mock fetch globally
 global.fetch = vi.fn()

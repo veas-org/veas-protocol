@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { ApiKeyCredentials, TokenCredentials } from '../../protocols/common/auth'
 import { VeasAuthProvider } from './auth'
-import type { TokenCredentials, ApiKeyCredentials } from '../../protocols/common/auth'
 
 // Mock fetch globally
 global.fetch = vi.fn()

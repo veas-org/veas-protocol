@@ -2,8 +2,7 @@
  * MCP adapter utility functions
  */
 
-import type { ProtocolError } from '../../protocols/common/index.js'
-import type { ListResponse } from '../../protocols/common/index.js'
+import type { ListResponse, ProtocolError } from '../../protocols/common/index.js'
 import type { MCPTool } from './types.js'
 
 /**

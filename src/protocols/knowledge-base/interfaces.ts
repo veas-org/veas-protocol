@@ -5,21 +5,21 @@
 import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
 import type {
   Article,
-  CreateArticleData,
-  UpdateArticleData,
   ArticleFilters,
-  Folder,
-  CreateFolderData,
-  UpdateFolderData,
-  FolderFilters,
-  Tag,
-  CreateTagData,
-  UpdateTagData,
-  TagFilters,
-  Publication,
-  EditorCommand,
+  CreateArticleData,
   CreateEditorCommandData,
+  CreateFolderData,
+  CreateTagData,
+  EditorCommand,
+  Folder,
+  FolderFilters,
+  Publication,
+  Tag,
+  TagFilters,
+  UpdateArticleData,
   UpdateEditorCommandData,
+  UpdateFolderData,
+  UpdateTagData,
 } from './types.js'
 
 export interface KnowledgeBaseProtocol {

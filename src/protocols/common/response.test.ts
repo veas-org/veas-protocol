@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import type { ListResponse, ListParams, OutputFormat, SortOrder } from './response'
+import { describe, expect, it } from 'vitest'
+import type { ListParams, ListResponse, OutputFormat, SortOrder } from './response'
 
 describe('Response Types', () => {
   describe('ListResponse', () => {

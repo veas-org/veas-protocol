@@ -92,15 +92,15 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
 
       // Apply filters
       if (params.filters?.projectId) {
-        allIssues = allIssues.filter((i) => i.projectId === params.filters!.projectId)
+        allIssues = allIssues.filter(i => i.projectId === params.filters!.projectId)
       }
       if (params.filters?.type) {
         const types = Array.isArray(params.filters.type) ? params.filters.type : [params.filters.type]
-        allIssues = allIssues.filter((i) => types.includes(i.type))
+        allIssues = allIssues.filter(i => types.includes(i.type))
       }
       if (params.filters?.status) {
         const statuses = Array.isArray(params.filters.status) ? params.filters.status : [params.filters.status]
-        allIssues = allIssues.filter((i) => statuses.includes(i.status))
+        allIssues = allIssues.filter(i => statuses.includes(i.status))
       }
 
       const start = params.offset || 0
@@ -152,7 +152,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
 
     // Sprint operations
     async listSprints(projectId, params) {
-      const projectSprints = Array.from(sprints.values()).filter((s) => s.projectId === projectId)
+      const projectSprints = Array.from(sprints.values()).filter(s => s.projectId === projectId)
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = projectSprints.slice(start, start + limit)
@@ -200,7 +200,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
 
     // Comment operations
     async listComments(issueId, params) {
-      const issueComments = Array.from(comments.values()).filter((c) => c.issueId === issueId)
+      const issueComments = Array.from(comments.values()).filter(c => c.issueId === issueId)
       const start = params?.offset || 0
       const limit = params?.limit || 10
       const items = issueComments.slice(start, start + limit)
@@ -241,7 +241,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
     // Optional operations
     async searchProjects(query, params) {
       const filtered = Array.from(projects.values()).filter(
-        (p) =>
+        p =>
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           p.description?.toLowerCase().includes(query.toLowerCase()),
       )
@@ -254,7 +254,7 @@ export function createMockProjectManagement(): ProjectManagementProtocol {
 
     async searchIssues(query, params) {
       const filtered = Array.from(issues.values()).filter(
-        (i) =>
+        i =>
           i.title.toLowerCase().includes(query.toLowerCase()) ||
           i.description?.toLowerCase().includes(query.toLowerCase()),
       )

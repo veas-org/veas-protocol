@@ -2,10 +2,10 @@
  * MCP tools for Knowledge Base protocol
  */
 
-import type { KnowledgeBaseProtocol } from '../../protocols/knowledge-base/index.js'
 import type { AuthContext } from '../../protocols/common/index.js'
+import type { KnowledgeBaseProtocol } from '../../protocols/knowledge-base/index.js'
 import type { MCPTool } from './types.js'
-import { createToolName, formatMCPResponse, formatMCPError, getOutputFormat } from './utils.js'
+import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils.js'
 
 export function createKnowledgeBaseTools(
   protocol: KnowledgeBaseProtocol,
@@ -50,7 +50,7 @@ export function createKnowledgeBaseTools(
           outputFormat: { type: 'string', enum: ['json', 'markdown'] },
         },
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           // Auth context available via getAuthContext() for future use
           const result = await protocol.listArticles(params)
@@ -72,7 +72,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['id'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.getArticle(params.id, params)
           return formatMCPResponse(result, getOutputFormat(params))
@@ -98,7 +98,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['title', 'content'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createArticle(params)
           return formatMCPResponse(result, 'json')
@@ -124,7 +124,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['id'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const { id, ...data } = params
           const result = await protocol.updateArticle(id, data)
@@ -156,7 +156,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['query'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const { query, ...listParams } = params
           const result = await protocol.searchArticles(query, listParams)
@@ -185,7 +185,7 @@ export function createKnowledgeBaseTools(
           outputFormat: { type: 'string', enum: ['json', 'markdown'] },
         },
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.listFolders(params)
           return formatMCPResponse(result, getOutputFormat(params))
@@ -208,7 +208,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['name'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createFolder(params)
           return formatMCPResponse(result, 'json')
@@ -236,7 +236,7 @@ export function createKnowledgeBaseTools(
           outputFormat: { type: 'string', enum: ['json', 'markdown'] },
         },
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.listTags(params)
           return formatMCPResponse(result, getOutputFormat(params))
@@ -259,7 +259,7 @@ export function createKnowledgeBaseTools(
         },
         required: ['name'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createTag(params)
           return formatMCPResponse(result, 'json')

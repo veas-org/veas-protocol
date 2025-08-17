@@ -46,13 +46,13 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
       // Apply filters
       if (params.filters?.status) {
         const statuses = Array.isArray(params.filters.status) ? params.filters.status : [params.filters.status]
-        allArticles = allArticles.filter((a) => statuses.includes(a.status))
+        allArticles = allArticles.filter(a => statuses.includes(a.status))
       }
       if (params.filters?.folderId) {
-        allArticles = allArticles.filter((a) => a.folderId === params.filters!.folderId)
+        allArticles = allArticles.filter(a => a.folderId === params.filters!.folderId)
       }
       if (params.filters?.authorId) {
-        allArticles = allArticles.filter((a) => a.authorId === params.filters!.authorId)
+        allArticles = allArticles.filter(a => a.authorId === params.filters!.authorId)
       }
 
       const start = params.offset || 0
@@ -71,7 +71,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     },
 
     async getArticleBySlug(slug) {
-      const article = Array.from(articles.values()).find((a) => a.slug === slug)
+      const article = Array.from(articles.values()).find(a => a.slug === slug)
       if (!article) {
         throw new NotFoundError(`Article with slug '${slug}' not found`, { resource: 'Article', slug })
       }
@@ -150,7 +150,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
 
       // Apply filters
       if (params.filters?.parentId) {
-        allFolders = allFolders.filter((f) => f.parentId === params.filters!.parentId)
+        allFolders = allFolders.filter(f => f.parentId === params.filters!.parentId)
       }
 
       const start = params.offset || 0
@@ -209,7 +209,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
 
       // Apply filters
       if (params.filters?.minArticleCount) {
-        allTags = allTags.filter((t) => (t.articleCount || 0) >= params.filters!.minArticleCount!)
+        allTags = allTags.filter(t => (t.articleCount || 0) >= params.filters!.minArticleCount!)
       }
 
       const start = params.offset || 0
@@ -228,7 +228,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     },
 
     async getTagBySlug(slug) {
-      const tag = Array.from(tags.values()).find((t) => t.slug === slug)
+      const tag = Array.from(tags.values()).find(t => t.slug === slug)
       if (!tag) {
         throw new NotFoundError(`Tag with slug '${slug}' not found`, { resource: 'Tag', slug })
       }
@@ -275,7 +275,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
     // Search operations
     async searchArticles(query, params) {
       const filtered = Array.from(articles.values()).filter(
-        (a) =>
+        a =>
           a.title.toLowerCase().includes(query.toLowerCase()) ||
           a.content.toLowerCase().includes(query.toLowerCase()) ||
           a.excerpt?.toLowerCase().includes(query.toLowerCase()),
@@ -289,7 +289,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
 
     async searchTags(query, params) {
       const filtered = Array.from(tags.values()).filter(
-        (t) =>
+        t =>
           t.name.toLowerCase().includes(query.toLowerCase()) ||
           t.description?.toLowerCase().includes(query.toLowerCase()),
       )
@@ -323,7 +323,7 @@ export function createMockKnowledgeBase(): KnowledgeBaseProtocol {
         throw new NotFoundError(`Tag with id '${id}' not found`, { resource: 'Tag', id })
       }
 
-      const tagArticles = Array.from(articles.values()).filter((a) => a.tags?.some((t) => t.id === id))
+      const tagArticles = Array.from(articles.values()).filter(a => a.tags?.some(t => t.id === id))
 
       return {
         articleCount: tagArticles.length,

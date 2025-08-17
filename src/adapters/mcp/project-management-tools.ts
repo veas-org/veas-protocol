@@ -2,10 +2,10 @@
  * MCP tools for Project Management protocol
  */
 
-import type { ProjectManagementProtocol } from '../../protocols/project-management/index.js'
 import type { AuthContext } from '../../protocols/common/index.js'
+import type { ProjectManagementProtocol } from '../../protocols/project-management/index.js'
 import type { MCPTool } from './types.js'
-import { createToolName, formatMCPResponse, formatMCPError, getOutputFormat } from './utils.js'
+import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils.js'
 
 export function createProjectManagementTools(
   protocol: ProjectManagementProtocol,
@@ -44,7 +44,7 @@ export function createProjectManagementTools(
           outputFormat: { type: 'string', enum: ['json', 'markdown'] },
         },
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           // Auth context available via getAuthContext() for future use
           const result = await protocol.listProjects(params)
@@ -66,7 +66,7 @@ export function createProjectManagementTools(
         },
         required: ['id'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.getProject(params.id, params)
           return formatMCPResponse(result, getOutputFormat(params))
@@ -91,7 +91,7 @@ export function createProjectManagementTools(
         },
         required: ['name'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createProject(params)
           return formatMCPResponse(result, 'json')
@@ -148,7 +148,7 @@ export function createProjectManagementTools(
           outputFormat: { type: 'string', enum: ['json', 'markdown'] },
         },
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.listIssues(params)
           return formatMCPResponse(result, getOutputFormat(params))
@@ -175,7 +175,7 @@ export function createProjectManagementTools(
         },
         required: ['projectId', 'title', 'type'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createIssue(params)
           return formatMCPResponse(result, 'json')
@@ -199,7 +199,7 @@ export function createProjectManagementTools(
         },
         required: ['projectId'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const { projectId, ...listParams } = params
           const result = await protocol.listSprints(projectId, listParams)
@@ -224,7 +224,7 @@ export function createProjectManagementTools(
         },
         required: ['projectId', 'name', 'startDate', 'endDate'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const data = {
             ...params,
@@ -251,7 +251,7 @@ export function createProjectManagementTools(
         },
         required: ['issueId', 'content'],
       },
-      handler: async (params) => {
+      handler: async params => {
         try {
           const result = await protocol.createComment(params)
           return formatMCPResponse(result, 'json')

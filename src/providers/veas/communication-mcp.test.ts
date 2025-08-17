@@ -1,6 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { VeasCommunicationMCP } from './communication-mcp.js'
-import { MCPClient } from './mcp-client.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 // Importing types for testing - currently unused but may be needed for future test assertions
 import type {
   // Workspace,
@@ -12,6 +10,8 @@ import type {
   // WorkspaceMember,
   // MessageSearchResult,
 } from '../../protocols/communication/index.js'
+import { VeasCommunicationMCP } from './communication-mcp.js'
+import { MCPClient } from './mcp-client.js'
 
 vi.mock('./mcp-client.js')
 
