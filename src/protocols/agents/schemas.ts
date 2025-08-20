@@ -1,0 +1,236 @@
+/**
+ * Agents protocol JSON schemas for validation
+ */
+
+export const agentSchema = {
+  type: 'object',
+  required: ['id', 'createdBy', 'name', 'agentType', 'isActive', 'createdAt', 'updatedAt'],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    organizationId: { type: 'string', format: 'uuid' },
+    createdBy: { type: 'string', format: 'uuid' },
+    name: { type: 'string', minLength: 1 },
+    description: { type: 'string' },
+    avatarUrl: { type: 'string', format: 'uri' },
+    agentType: { type: 'string', enum: ['system', 'user', 'organization', 'template'] },
+    capabilities: { type: 'object' },
+    tools: { type: 'array', items: { type: 'string' } },
+    modelPreferences: { type: 'object' },
+    systemPrompt: { type: 'string' },
+    temperature: { type: 'number', minimum: 0, maximum: 2 },
+    maxTokens: { type: 'integer', minimum: 1 },
+    isActive: { type: 'boolean' },
+    tags: { type: 'array', items: { type: 'string' } },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+  },
+} as const
+
+export const agentTaskSchema = {
+  type: 'object',
+  required: ['id', 'organizationId', 'createdBy', 'name', 'taskType', 'status', 'createdAt', 'updatedAt'],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    organizationId: { type: 'string', format: 'uuid' },
+    agentId: { type: 'string', format: 'uuid' },
+    createdBy: { type: 'string', format: 'uuid' },
+    name: { type: 'string', minLength: 1 },
+    description: { type: 'string' },
+    taskType: {
+      type: 'string',
+      enum: ['workflow', 'single', 'batch', 'report', 'monitoring', 'integration', 'custom'],
+    },
+    status: { type: 'string', enum: ['active', 'inactive', 'archived', 'draft'] },
+    configuration: { type: 'object' },
+    tools: { type: 'array' },
+    parameters: { type: 'object' },
+    workflow: { type: 'array' },
+    inputSchema: { type: 'object' },
+    outputSchema: { type: 'object' },
+    webhookSecret: { type: 'string' },
+    allowedIps: { type: 'array', items: { type: 'string' } },
+    requireAuth: { type: 'boolean' },
+    maxRetries: { type: 'integer', minimum: 0 },
+    timeoutSeconds: { type: 'integer', minimum: 1 },
+    maxExecutionsPerDay: { type: 'integer', minimum: 1 },
+    estimatedCostCents: { type: 'integer', minimum: 0 },
+    maxCostCents: { type: 'integer', minimum: 0 },
+    tags: { type: 'array', items: { type: 'string' } },
+    version: { type: 'integer', minimum: 1 },
+    isPublic: { type: 'boolean' },
+    executionCount: { type: 'integer', minimum: 0 },
+    successCount: { type: 'integer', minimum: 0 },
+    failureCount: { type: 'integer', minimum: 0 },
+    avgDurationMs: { type: 'integer', minimum: 0 },
+    lastExecutedAt: { type: 'string', format: 'date-time' },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+  },
+} as const
+
+export const agentScheduleSchema = {
+  type: 'object',
+  required: ['id', 'taskId', 'scheduleType', 'isEnabled', 'createdAt', 'updatedAt'],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    taskId: { type: 'string', format: 'uuid' },
+    scheduleType: { type: 'string', enum: ['cron', 'webhook', 'event', 'manual', 'interval', 'once'] },
+    cronExpression: { type: 'string' },
+    webhookPath: { type: 'string' },
+    eventName: { type: 'string' },
+    intervalSeconds: { type: 'integer', minimum: 1 },
+    isEnabled: { type: 'boolean' },
+    timezone: { type: 'string' },
+    startDate: { type: 'string', format: 'date-time' },
+    endDate: { type: 'string', format: 'date-time' },
+    nextRunAt: { type: 'string', format: 'date-time' },
+    lastRunAt: { type: 'string', format: 'date-time' },
+    runCount: { type: 'integer', minimum: 0 },
+    consecutiveFailures: { type: 'integer', minimum: 0 },
+    retryPolicy: {
+      type: 'object',
+      properties: {
+        maxAttempts: { type: 'integer', minimum: 1 },
+        backoffSeconds: { type: 'integer', minimum: 1 },
+        backoffMultiplier: { type: 'number', minimum: 1 },
+      },
+    },
+    alertOnFailure: { type: 'boolean' },
+    alertEmail: { type: 'string', format: 'email' },
+    alertWebhookUrl: { type: 'string', format: 'uri' },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+  },
+} as const
+
+export const agentExecutionSchema = {
+  type: 'object',
+  required: ['id', 'taskId', 'status', 'trigger', 'createdAt', 'updatedAt'],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    taskId: { type: 'string', format: 'uuid' },
+    scheduleId: { type: 'string', format: 'uuid' },
+    executedBy: { type: 'string', format: 'uuid' },
+    status: {
+      type: 'string',
+      enum: ['pending', 'queued', 'running', 'completed', 'failed', 'cancelled', 'timeout', 'retrying', 'skipped'],
+    },
+    trigger: { type: 'string', enum: ['manual', 'scheduled', 'webhook', 'event', 'api', 'retry', 'test'] },
+    startedAt: { type: 'string', format: 'date-time' },
+    completedAt: { type: 'string', format: 'date-time' },
+    durationMs: { type: 'integer', minimum: 0 },
+    input: { type: ['object', 'array', 'string', 'number', 'boolean', 'null'] },
+    output: { type: ['object', 'array', 'string', 'number', 'boolean', 'null'] },
+    error: { type: 'string' },
+    logs: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['timestamp', 'level', 'message'],
+        properties: {
+          timestamp: { type: 'string', format: 'date-time' },
+          level: { type: 'string', enum: ['info', 'warning', 'error', 'debug'] },
+          message: { type: 'string' },
+          metadata: { type: 'object' },
+        },
+      },
+    },
+    costCents: { type: 'integer', minimum: 0 },
+    retryCount: { type: 'integer', minimum: 0 },
+    parentExecutionId: { type: 'string', format: 'uuid' },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+  },
+} as const
+
+// Create data schemas
+export const createAgentSchema = {
+  type: 'object',
+  required: ['name'],
+  properties: {
+    organizationId: { type: 'string', format: 'uuid' },
+    name: { type: 'string', minLength: 1 },
+    description: { type: 'string' },
+    avatarUrl: { type: 'string', format: 'uri' },
+    agentType: { type: 'string', enum: ['system', 'user', 'organization', 'template'] },
+    capabilities: { type: 'object' },
+    tools: { type: 'array', items: { type: 'string' } },
+    modelPreferences: { type: 'object' },
+    systemPrompt: { type: 'string' },
+    temperature: { type: 'number', minimum: 0, maximum: 2 },
+    maxTokens: { type: 'integer', minimum: 1 },
+    isActive: { type: 'boolean' },
+    tags: { type: 'array', items: { type: 'string' } },
+  },
+} as const
+
+export const createAgentTaskSchema = {
+  type: 'object',
+  required: ['organizationId', 'name'],
+  properties: {
+    organizationId: { type: 'string', format: 'uuid' },
+    agentId: { type: 'string', format: 'uuid' },
+    name: { type: 'string', minLength: 1 },
+    description: { type: 'string' },
+    taskType: {
+      type: 'string',
+      enum: ['workflow', 'single', 'batch', 'report', 'monitoring', 'integration', 'custom'],
+    },
+    status: { type: 'string', enum: ['active', 'inactive', 'archived', 'draft'] },
+    configuration: { type: 'object' },
+    tools: { type: 'array' },
+    parameters: { type: 'object' },
+    workflow: { type: 'array' },
+    inputSchema: { type: 'object' },
+    outputSchema: { type: 'object' },
+    webhookSecret: { type: 'string' },
+    allowedIps: { type: 'array', items: { type: 'string' } },
+    requireAuth: { type: 'boolean' },
+    maxRetries: { type: 'integer', minimum: 0 },
+    timeoutSeconds: { type: 'integer', minimum: 1 },
+    maxExecutionsPerDay: { type: 'integer', minimum: 1 },
+    estimatedCostCents: { type: 'integer', minimum: 0 },
+    maxCostCents: { type: 'integer', minimum: 0 },
+    tags: { type: 'array', items: { type: 'string' } },
+    isPublic: { type: 'boolean' },
+  },
+} as const
+
+export const createAgentScheduleSchema = {
+  type: 'object',
+  required: ['taskId', 'scheduleType'],
+  properties: {
+    taskId: { type: 'string', format: 'uuid' },
+    scheduleType: { type: 'string', enum: ['cron', 'webhook', 'event', 'manual', 'interval', 'once'] },
+    cronExpression: { type: 'string' },
+    webhookPath: { type: 'string' },
+    eventName: { type: 'string' },
+    intervalSeconds: { type: 'integer', minimum: 1 },
+    isEnabled: { type: 'boolean' },
+    timezone: { type: 'string' },
+    startDate: { type: 'string', format: 'date-time' },
+    endDate: { type: 'string', format: 'date-time' },
+    retryPolicy: {
+      type: 'object',
+      properties: {
+        maxAttempts: { type: 'integer', minimum: 1 },
+        backoffSeconds: { type: 'integer', minimum: 1 },
+        backoffMultiplier: { type: 'number', minimum: 1 },
+      },
+    },
+    alertOnFailure: { type: 'boolean' },
+    alertEmail: { type: 'string', format: 'email' },
+    alertWebhookUrl: { type: 'string', format: 'uri' },
+  },
+} as const
+
+export const executeAgentTaskSchema = {
+  type: 'object',
+  required: ['taskId'],
+  properties: {
+    taskId: { type: 'string', format: 'uuid' },
+    input: { type: ['object', 'array', 'string', 'number', 'boolean', 'null'] },
+    trigger: { type: 'string', enum: ['manual', 'scheduled', 'webhook', 'event', 'api', 'retry', 'test'] },
+    webhookSecret: { type: 'string' },
+  },
+} as const

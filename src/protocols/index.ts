@@ -2,11 +2,13 @@
  * Main protocol provider interface
  */
 
+import type { AgentsProtocol } from './agents/index.js'
 import type { AuthContext } from './common/index.js'
 import type { CommunicationProtocol } from './communication/index.js'
 import type { KnowledgeBaseProtocol } from './knowledge-base/index.js'
 import type { ProjectManagementProtocol } from './project-management/index.js'
 
+export * from './agents/index.js'
 export * from './common/index.js'
 export * from './communication/index.js'
 export * from './knowledge-base/index.js'
@@ -58,6 +60,11 @@ export interface ProtocolProvider {
    * Communication protocol implementation
    */
   communication?: CommunicationProtocol
+
+  /**
+   * Agents protocol implementation
+   */
+  agents?: AgentsProtocol
 
   /**
    * Check if provider is connected and authenticated
