@@ -1,6 +1,6 @@
 {
   "name": "@veas/protocol",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Universal protocol for knowledge management and project tracking systems - enabling seamless interoperability between platforms and AI assistants",
   "type": "module",
   "packageManager": "pnpm@10.12.1",
@@ -24,6 +24,10 @@
     "./project-management": {
       "types": "./dist/protocols/project-management/index.d.ts",
       "import": "./dist/protocols/project-management/index.js"
+    },
+    "./agents": {
+      "types": "./dist/protocols/agents/index.d.ts",
+      "import": "./dist/protocols/agents/index.js"
     },
     "./protocols": {
       "types": "./dist/protocols/index.d.ts",
@@ -51,6 +55,7 @@
     "dev": "tsc --watch",
     "type-check": "tsc --noEmit",
     "lint": "biome check . --no-errors-on-unmatched ",
+    "lint:fix": "biome check . --write",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",

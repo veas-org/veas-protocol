@@ -238,3 +238,56 @@ export interface SearchMessagesParams {
   hasReactions?: boolean
   inThread?: boolean
 }
+
+// Destination types
+export type DestinationType = 'user' | 'channel' | 'group' | 'workspace' | 'broadcast' | 'webhook'
+
+export interface MessageDestination {
+  type: DestinationType
+  id: string
+  name?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface DestinationGroup {
+  id: string
+  name: string
+  description?: string
+  destinations: MessageDestination[]
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface RoutingRule {
+  id: string
+  name: string
+  description?: string
+  condition: RoutingCondition
+  destinations: MessageDestination[]
+  priority: number
+  isActive: boolean
+}
+
+export interface RoutingCondition {
+  type: 'message_type' | 'user_role' | 'channel_type' | 'keyword' | 'custom'
+  operator: 'equals' | 'contains' | 'starts_with' | 'ends_with' | 'regex' | 'in' | 'not_in'
+  value: string | string[]
+  metadata?: Record<string, unknown>
+}
+
+export interface DeliveryStatus {
+  destinationId: string
+  destinationType: DestinationType
+  status: 'pending' | 'delivered' | 'failed' | 'retry'
+  attempts: number
+  lastAttemptAt?: Date
+  error?: string
+}
+
+export interface MessageDelivery {
+  messageId: string
+  destinations: MessageDestination[]
+  deliveryStatuses: DeliveryStatus[]
+  createdAt: Date
+  completedAt?: Date
+}
