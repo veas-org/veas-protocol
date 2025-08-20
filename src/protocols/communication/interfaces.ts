@@ -121,50 +121,41 @@ export interface CommunicationProtocol {
   deleteFile?(fileId: string): Promise<void>
 
   // Destination operations
-  sendMessageToDestinations?(
-    message: CreateMessageData,
-    destinations: MessageDestination[],
-  ): Promise<MessageDelivery>
-  
+  sendMessageToDestinations?(message: CreateMessageData, destinations: MessageDestination[]): Promise<MessageDelivery>
+
   listDestinationGroups?(
     workspaceId: string,
     params?: ListParams & OutputFormat,
   ): Promise<ListResponse<DestinationGroup>>
-  
+
   getDestinationGroup?(id: string, params?: OutputFormat): Promise<DestinationGroup>
-  
+
   createDestinationGroup?(
     name: string,
     destinations: MessageDestination[],
     description?: string,
   ): Promise<DestinationGroup>
-  
-  updateDestinationGroup?(
-    id: string,
-    updates: Partial<DestinationGroup>,
-  ): Promise<DestinationGroup>
-  
+
+  updateDestinationGroup?(id: string, updates: Partial<DestinationGroup>): Promise<DestinationGroup>
+
   deleteDestinationGroup?(id: string): Promise<void>
-  
+
   // Routing operations
-  listRoutingRules?(
-    workspaceId: string,
-    params?: ListParams & OutputFormat,
-  ): Promise<ListResponse<RoutingRule>>
-  
+  listRoutingRules?(workspaceId: string, params?: ListParams & OutputFormat): Promise<ListResponse<RoutingRule>>
+
   getRoutingRule?(id: string, params?: OutputFormat): Promise<RoutingRule>
-  
+
   createRoutingRule?(rule: Omit<RoutingRule, 'id'>): Promise<RoutingRule>
-  
+
   updateRoutingRule?(id: string, updates: Partial<RoutingRule>): Promise<RoutingRule>
-  
+
   deleteRoutingRule?(id: string): Promise<void>
-  
+
   // Delivery status operations
   getMessageDeliveryStatus?(messageId: string): Promise<MessageDelivery>
-  
+
   retryFailedDelivery?(messageId: string, destinationId: string): Promise<DeliveryStatus>
-  
+
   getDeliveryMetrics?(
     workspaceId: string,
     params?: { startDate?: Date; endDate?: Date } & OutputFormat,
