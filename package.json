@@ -70,7 +70,8 @@
     "release:major": "npm run version:major && npm run release",
     "format": "biome format . --write",
     "lint:check": "biome check .",
-    "format:check": "biome format ."
+    "format:check": "biome format .",
+    "precommit": "npm run lint:fix && npm run type-check"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.3",
