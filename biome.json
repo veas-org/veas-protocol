@@ -33,54 +33,54 @@
         "noImplicitAnyLet": "off",
         "noArrayIndexKey": "off",
         "noAssignInExpressions": "off",
-        "noThenProperty": "off"
+        "noThenProperty": "error"
       },
       "complexity": {
-        "noBannedTypes": "off",
-        "noForEach": "off",
-        "noStaticOnlyClass": "off",
-        "noUselessSwitchCase": "off",
+        "noBannedTypes": "error",
+        "noForEach": "error",
+        "noStaticOnlyClass": "error",
+        "noUselessSwitchCase": "error",
         "useOptionalChain": "off",
-        "noUselessFragments": "off"
+        "noUselessFragments": "error"
       },
       "style": {
         "noNonNullAssertion": "off",
         "useImportType": "off",
-        "noParameterAssign": "off",
+        "noParameterAssign": "error",
         "useBlockStatements": "off",
         "useCollapsedElseIf": "off",
-        "useTemplate": "off",
+        "useTemplate": "error",
         "noUselessElse": "off",
         "noUnusedTemplateLiteral": "off"
       },
       "correctness": {
-        "noNestedComponentDefinitions": "off",
-        "noUnusedFunctionParameters": "off",
-        "noUnusedVariables": "off",
-        "useExhaustiveDependencies": "off",
-        "useUniqueElementIds": "off"
+        "noNestedComponentDefinitions": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "error",
+        "useUniqueElementIds": "error"
       },
       "a11y": {
-        "useAriaPropsSupportedByRole": "off",
+        "useAriaPropsSupportedByRole": "error",
         "noStaticElementInteractions": "off",
         "useButtonType": "off",
         "useKeyWithClickEvents": "off",
-        "useKeyWithMouseEvents": "off",
-        "useHtmlLang": "off",
-        "useMediaCaption": "off",
-        "noSvgWithoutTitle": "off",
-        "noLabelWithoutControl": "off",
-        "useSemanticElements": "off",
-        "useFocusableInteractive": "off"
+        "useKeyWithMouseEvents": "error",
+        "useHtmlLang": "error",
+        "useMediaCaption": "error",
+        "noSvgWithoutTitle": "error",
+        "noLabelWithoutControl": "error",
+        "useSemanticElements": "error",
+        "useFocusableInteractive": "error"
       },
       "performance": {
-        "noImgElement": "off",
-        "noBarrelFile": "off",
-        "noReExportAll": "off",
-        "noDelete": "off"
+        "noImgElement": "error",
+        "noBarrelFile": "error",
+        "noReExportAll": "error",
+        "noDelete": "error"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "off"
+        "noDangerouslySetInnerHtml": "error"
       }
     }
   },

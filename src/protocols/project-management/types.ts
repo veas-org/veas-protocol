@@ -2,7 +2,7 @@
  * Project Management protocol type definitions
  */
 
-import type { Entity } from '../common/index.js'
+import type { Entity } from '../common/types'
 
 // Project types
 export interface Project extends Entity {

@@ -2,10 +2,10 @@
  * MCP tools for Project Management protocol
  */
 
-import type { AuthContext } from '../../protocols/common/index.js'
-import type { ProjectManagementProtocol } from '../../protocols/project-management/index.js'
-import type { MCPTool } from './types.js'
-import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils.js'
+import type { AuthContext } from '../../protocols/common/auth'
+import type { ProjectManagementProtocol } from '../../protocols/project-management/interfaces'
+import type { MCPTool } from './types'
+import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils'
 
 export function createProjectManagementTools(
   protocol: ProjectManagementProtocol,

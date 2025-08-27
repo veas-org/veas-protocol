@@ -2,7 +2,7 @@
  * MCP Client for communicating with MCP servers
  */
 
-import type { AuthContext } from '../../protocols/common/index.js'
+import type { AuthContext } from '../../protocols/common/auth'
 
 export interface MCPRequest {
   jsonrpc: '2.0'

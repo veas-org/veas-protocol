@@ -2,10 +2,10 @@
  * MCP tools for Knowledge Base protocol
  */
 
-import type { AuthContext } from '../../protocols/common/index.js'
-import type { KnowledgeBaseProtocol } from '../../protocols/knowledge-base/index.js'
-import type { MCPTool } from './types.js'
-import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils.js'
+import type { AuthContext } from '../../protocols/common/auth'
+import type { KnowledgeBaseProtocol } from '../../protocols/knowledge-base/interfaces'
+import type { MCPTool } from './types'
+import { createToolName, formatMCPError, formatMCPResponse, getOutputFormat } from './utils'
 
 export function createKnowledgeBaseTools(
   protocol: KnowledgeBaseProtocol,

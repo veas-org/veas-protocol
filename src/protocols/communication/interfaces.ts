@@ -2,7 +2,7 @@
  * Communication protocol interfaces
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
+import type { ListParams, ListResponse, OutputFormat } from '../common/types'
 import type {
   AddReactionData,
   Channel,
@@ -28,7 +28,7 @@ import type {
   Workspace,
   WorkspaceFilters,
   WorkspaceMember,
-} from './types.js'
+} from './types'
 
 export interface CommunicationProtocol {
   // Workspace operations

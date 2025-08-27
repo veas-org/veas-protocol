@@ -2,9 +2,9 @@
  * MCP tool generation for Communication protocol
  */
 
-import type { CommunicationProtocol } from '../../protocols/index.js'
-import type { MCPTool } from './types.js'
-import { createPaginatedTool, createTool } from './utils.js'
+import type { CommunicationProtocol } from '../../protocols/communication/interfaces'
+import type { MCPTool } from './types'
+import { createPaginatedTool, createTool } from './utils'
 
 export function generateCommunicationTools(protocol: CommunicationProtocol): MCPTool[] {
   const tools: MCPTool[] = []

@@ -2,7 +2,7 @@
  * Communication protocol type definitions
  */
 
-import type { Entity } from '../common/index.js'
+import type { Entity } from '../common/types'
 
 // Workspace types
 export interface Workspace extends Entity {

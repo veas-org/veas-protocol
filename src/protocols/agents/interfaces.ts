@@ -2,7 +2,7 @@
  * Agents protocol interfaces
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../common/index.js'
+import type { ListParams, ListResponse, OutputFormat } from '../common/types'
 import type {
   Agent,
   AgentExecution,
@@ -18,7 +18,7 @@ import type {
   UpdateAgentData,
   UpdateAgentScheduleData,
   UpdateAgentTaskData,
-} from './types.js'
+} from './types'
 
 export interface AgentsProtocol {
   // Agent operations

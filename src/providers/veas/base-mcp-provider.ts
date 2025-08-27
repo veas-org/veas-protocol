@@ -2,10 +2,10 @@
  * Base MCP provider class with common functionality
  */
 
-import type { AuthContext } from '../../protocols/common/index.js'
-import { AuthenticationError, AuthorizationError } from '../../protocols/common/index.js'
-import { type AuthCredentials, VeasAuthProvider } from './auth.js'
-import { MCPClient } from './mcp-client.js'
+import type { AuthContext } from '../../protocols/common/auth'
+import { AuthenticationError, AuthorizationError } from '../../protocols/common/errors'
+import { type AuthCredentials, VeasAuthProvider } from './auth'
+import { MCPClient } from './mcp-client'
 
 export abstract class BaseMCPProvider {
   protected auth: VeasAuthProvider

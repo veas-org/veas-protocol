@@ -22,9 +22,10 @@ import type {
   Workspace,
   WorkspaceFilters,
   WorkspaceMember,
-} from '../../protocols/communication/index.js'
-import type { CommunicationProtocol, ListParams, ListResponse, OutputFormat } from '../../protocols/index.js'
-import type { MCPClient } from './mcp-client.js'
+} from '../../protocols/communication/types'
+import type { CommunicationProtocol } from '../../protocols/communication/interfaces'
+import type { ListParams, ListResponse, OutputFormat } from '../../protocols/common/types'
+import type { MCPClient } from './mcp-client'
 
 export class VeasCommunicationMCP implements CommunicationProtocol {
   constructor(private client: MCPClient) {}

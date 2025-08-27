@@ -2,12 +2,11 @@
  * Veas MCP provider implementation for Knowledge Base protocol
  */
 
-import type { ListParams, ListResponse, OutputFormat } from '../../protocols/common/index.js'
-import { NotFoundError } from '../../protocols/common/index.js'
+import type { ListParams, ListResponse, OutputFormat } from '../../protocols/common/types'
+import { NotFoundError } from '../../protocols/common/errors'
 import type {
   Article,
   ArticleFilters,
-  ArticleStatistics,
   CreateArticleData,
   CreateEditorCommandData,
   CreateFolderData,
@@ -15,18 +14,21 @@ import type {
   EditorCommand,
   Folder,
   FolderFilters,
-  KnowledgeBaseProtocol,
   Publication,
-  PublicationStatistics,
   Tag,
   TagFilters,
-  TagStatistics,
   UpdateArticleData,
   UpdateEditorCommandData,
   UpdateFolderData,
   UpdateTagData,
-} from '../../protocols/knowledge-base/index.js'
-import { BaseMCPProvider } from './base-mcp-provider.js'
+} from '../../protocols/knowledge-base/types'
+import type {
+  ArticleStatistics,
+  KnowledgeBaseProtocol,
+  PublicationStatistics,
+  TagStatistics,
+} from '../../protocols/knowledge-base/interfaces'
+import { BaseMCPProvider } from './base-mcp-provider'
 
 export class VeasKnowledgeBaseMCPProvider extends BaseMCPProvider implements KnowledgeBaseProtocol {
   // Article operations

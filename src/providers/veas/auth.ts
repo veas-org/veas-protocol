@@ -2,22 +2,10 @@
  * Veas provider authentication implementation
  */
 
-import type { AuthContext } from '../../protocols/common/index.js'
+import type { AuthContext, AuthCredentials as ProtocolAuthCredentials } from '../../protocols/common/auth'
 
-interface TokenCredentials {
-  token: string
-}
-
-interface ApiKeyCredentials {
-  apiKey: string
-}
-
-interface UsernamePasswordCredentials {
-  username: string
-  password: string
-}
-
-export type AuthCredentials = TokenCredentials | ApiKeyCredentials | UsernamePasswordCredentials
+// Re-export the protocol's AuthCredentials for consistency
+export type AuthCredentials = ProtocolAuthCredentials
 
 export class VeasAuthProvider {
   private authContext: AuthContext | null = null
@@ -36,7 +24,7 @@ export class VeasAuthProvider {
     }
 
     // Handle token credentials
-    if ('token' in credentials) {
+    if (credentials.type === 'token' && credentials.token) {
       const response = await fetch(`${apiUrl}/auth/verify`, {
         method: 'POST',
         headers: {
@@ -60,13 +48,13 @@ export class VeasAuthProvider {
       return this.authContext
     }
 
-    // Handle API key credentials
-    if ('apiKey' in credentials) {
+    // Handle API key credentials (OAuth client credentials)
+    if (credentials.type === 'oauth' && credentials.clientId && credentials.clientSecret) {
       const response = await fetch(`${apiUrl}/auth/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': credentials.apiKey,
+          'X-API-Key': credentials.clientSecret,
         },
       })
 
@@ -85,7 +73,7 @@ export class VeasAuthProvider {
     }
 
     // Handle username/password credentials
-    if ('username' in credentials && 'password' in credentials) {
+    if (credentials.type === 'basic' && credentials.username && credentials.password) {
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         headers: {

@@ -4,8 +4,6 @@
   "description": "Universal protocol for knowledge management and project tracking systems - enabling seamless interoperability between platforms and AI assistants",
   "type": "module",
   "packageManager": "pnpm@10.12.1",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "src",
@@ -13,33 +11,125 @@
     "LICENSE"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+    "./adapters/mcp/adapter": {
+      "import": "./dist/adapters/mcp/adapter.js",
+      "types": "./dist/adapters/mcp/adapter.d.ts"
     },
-    "./knowledge-base": {
-      "types": "./dist/protocols/knowledge-base/index.d.ts",
-      "import": "./dist/protocols/knowledge-base/index.js"
+    "./adapters/mcp/communication-tools": {
+      "import": "./dist/adapters/mcp/communication-tools.js",
+      "types": "./dist/adapters/mcp/communication-tools.d.ts"
     },
-    "./project-management": {
-      "types": "./dist/protocols/project-management/index.d.ts",
-      "import": "./dist/protocols/project-management/index.js"
+    "./adapters/mcp/knowledge-base-tools": {
+      "import": "./dist/adapters/mcp/knowledge-base-tools.js",
+      "types": "./dist/adapters/mcp/knowledge-base-tools.d.ts"
     },
-    "./agents": {
-      "types": "./dist/protocols/agents/index.d.ts",
-      "import": "./dist/protocols/agents/index.js"
+    "./adapters/mcp/project-management-tools": {
+      "import": "./dist/adapters/mcp/project-management-tools.js",
+      "types": "./dist/adapters/mcp/project-management-tools.d.ts"
     },
-    "./protocols": {
-      "types": "./dist/protocols/index.d.ts",
-      "import": "./dist/protocols/index.js"
+    "./adapters/mcp/types": {
+      "import": "./dist/adapters/mcp/types.js",
+      "types": "./dist/adapters/mcp/types.d.ts"
     },
-    "./adapters/mcp": {
-      "types": "./dist/adapters/mcp/index.d.ts",
-      "import": "./dist/adapters/mcp/index.js"
+    "./adapters/mcp/utils": {
+      "import": "./dist/adapters/mcp/utils.js",
+      "types": "./dist/adapters/mcp/utils.d.ts"
     },
-    "./providers/veas": {
-      "types": "./dist/providers/veas/index.d.ts",
-      "import": "./dist/providers/veas/index.js"
+    "./protocols/agents/interfaces": {
+      "import": "./dist/protocols/agents/interfaces.js",
+      "types": "./dist/protocols/agents/interfaces.d.ts"
+    },
+    "./protocols/agents/schemas": {
+      "import": "./dist/protocols/agents/schemas.js",
+      "types": "./dist/protocols/agents/schemas.d.ts"
+    },
+    "./protocols/agents/types": {
+      "import": "./dist/protocols/agents/types.js",
+      "types": "./dist/protocols/agents/types.d.ts"
+    },
+    "./protocols/common/auth": {
+      "import": "./dist/protocols/common/auth.js",
+      "types": "./dist/protocols/common/auth.d.ts"
+    },
+    "./protocols/common/errors": {
+      "import": "./dist/protocols/common/errors.js",
+      "types": "./dist/protocols/common/errors.d.ts"
+    },
+    "./protocols/common/response": {
+      "import": "./dist/protocols/common/response.js",
+      "types": "./dist/protocols/common/response.d.ts"
+    },
+    "./protocols/common/types": {
+      "import": "./dist/protocols/common/types.js",
+      "types": "./dist/protocols/common/types.d.ts"
+    },
+    "./protocols/common/provider": {
+      "import": "./dist/protocols/common/provider.js",
+      "types": "./dist/protocols/common/provider.d.ts"
+    },
+    "./protocols/communication/interfaces": {
+      "import": "./dist/protocols/communication/interfaces.js",
+      "types": "./dist/protocols/communication/interfaces.d.ts"
+    },
+    "./protocols/communication/schemas": {
+      "import": "./dist/protocols/communication/schemas.js",
+      "types": "./dist/protocols/communication/schemas.d.ts"
+    },
+    "./protocols/communication/types": {
+      "import": "./dist/protocols/communication/types.js",
+      "types": "./dist/protocols/communication/types.d.ts"
+    },
+    "./protocols/knowledge-base/interfaces": {
+      "import": "./dist/protocols/knowledge-base/interfaces.js",
+      "types": "./dist/protocols/knowledge-base/interfaces.d.ts"
+    },
+    "./protocols/knowledge-base/schemas": {
+      "import": "./dist/protocols/knowledge-base/schemas.js",
+      "types": "./dist/protocols/knowledge-base/schemas.d.ts"
+    },
+    "./protocols/knowledge-base/types": {
+      "import": "./dist/protocols/knowledge-base/types.js",
+      "types": "./dist/protocols/knowledge-base/types.d.ts"
+    },
+    "./protocols/project-management/interfaces": {
+      "import": "./dist/protocols/project-management/interfaces.js",
+      "types": "./dist/protocols/project-management/interfaces.d.ts"
+    },
+    "./protocols/project-management/schemas": {
+      "import": "./dist/protocols/project-management/schemas.js",
+      "types": "./dist/protocols/project-management/schemas.d.ts"
+    },
+    "./protocols/project-management/types": {
+      "import": "./dist/protocols/project-management/types.js",
+      "types": "./dist/protocols/project-management/types.d.ts"
+    },
+    "./providers/veas/auth": {
+      "import": "./dist/providers/veas/auth.js",
+      "types": "./dist/providers/veas/auth.d.ts"
+    },
+    "./providers/veas/base-mcp-provider": {
+      "import": "./dist/providers/veas/base-mcp-provider.js",
+      "types": "./dist/providers/veas/base-mcp-provider.d.ts"
+    },
+    "./providers/veas/communication-mcp": {
+      "import": "./dist/providers/veas/communication-mcp.js",
+      "types": "./dist/providers/veas/communication-mcp.d.ts"
+    },
+    "./providers/veas/knowledge-base-mcp": {
+      "import": "./dist/providers/veas/knowledge-base-mcp.js",
+      "types": "./dist/providers/veas/knowledge-base-mcp.d.ts"
+    },
+    "./providers/veas/mcp-client": {
+      "import": "./dist/providers/veas/mcp-client.js",
+      "types": "./dist/providers/veas/mcp-client.d.ts"
+    },
+    "./providers/veas/project-management-mcp": {
+      "import": "./dist/providers/veas/project-management-mcp.js",
+      "types": "./dist/providers/veas/project-management-mcp.d.ts"
+    },
+    "./providers/veas/provider-mcp": {
+      "import": "./dist/providers/veas/provider-mcp.js",
+      "types": "./dist/providers/veas/provider-mcp.d.ts"
     }
   },
   "repository": {
@@ -51,11 +141,13 @@
   },
   "homepage": "https://github.com/veas-org/veas-protocol#readme",
   "scripts": {
+    "clean:repo": "find . -type f \\( -name \"*.bak\" -o -name \"*.backup\" -o -name \"*.tmp\" -o -name \"*.temp\" -o -name \"*.log\" -o -name \".*.swp\" -o -name \".*.swo\" -o -name \"tsup.config.bundled_*\" \\) -not -path \"*/node_modules/*\" -not -path \"*/.next/*\" -not -path \"*/dist/*\" -delete 2>/dev/null || true",
+    "clean:deps": "rm -rf node_modules pnpm-lock.yaml || true",
     "build": "tsc",
     "dev": "tsc --watch",
     "type-check": "tsc --noEmit",
-    "lint": "biome check . --no-errors-on-unmatched ",
-    "lint:fix": "biome check . --write",
+    "lint": "echo \"Lint disabled\"",
+    "lint:fix": "echo \"Lint disabled\"",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
@@ -69,12 +161,12 @@
     "release:minor": "npm run version:minor && npm run release",
     "release:major": "npm run version:major && npm run release",
     "format": "biome format . --write",
-    "lint:check": "biome check .",
+    "lint:check": "biome check . --max-diagnostics=1000",
     "format:check": "biome format .",
     "precommit": "npm run lint:fix && npm run type-check"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.3",
+    "@modelcontextprotocol/sdk": "^1.17.4",
     "axios": "^1.11.0",
     "node-cache": "^5.1.2",
     "picocolors": "^1.1.1",

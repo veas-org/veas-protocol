@@ -9,9 +9,9 @@ import type {
   // ChannelMember,
   // WorkspaceMember,
   // MessageSearchResult,
-} from '../../protocols/communication/index.js'
-import { VeasCommunicationMCP } from './communication-mcp.js'
-import { MCPClient } from './mcp-client.js'
+} from '../../protocols/communication/types'
+import { VeasCommunicationMCP } from './communication-mcp'
+import { MCPClient } from './mcp-client'
 
 vi.mock('./mcp-client.js')
 

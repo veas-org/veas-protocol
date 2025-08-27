@@ -2,7 +2,7 @@
  * MCP adapter type definitions
  */
 
-import type { ProtocolProvider } from '../../protocols/index.js'
+import type { ProtocolProvider } from '../../protocols/common/provider'
 
 export interface MCPAdapterConfig {
   /**

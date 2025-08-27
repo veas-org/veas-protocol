@@ -2,7 +2,7 @@
  * Agents protocol type definitions
  */
 
-import type { Entity } from '../common/index.js'
+import type { Entity } from '../common/types'
 
 // Agent type enums
 export type AgentType = 'system' | 'user' | 'organization' | 'template'
